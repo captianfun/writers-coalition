@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Writers Coalition</title>
+        <style>
+            body {
+                font-family:"comic sans ms", "comic sans", sans-serif;
+                background:linear-gradient(lightskyblue, skyblue, deepskyblue);
+                background-attachment:fixed;
+            }
+            
+            #content {
+                background-color:white;
+                border-radius:8px;
+                border:2px solid black;
+                padding:10px;
+            }
+            
+            .book {
+                margin-top:20px;
+                border-left:4px solid rgb(56, 30, 4);
+                background-color:rgb(102, 64, 4);
+                border-radius:3px 8px 8px 3px;
+                height:170px;
+                width:117px;
+            }
+            
+            .book-title {
+                position:relative;
+                color:gold;
+                top:20px;
+                text-align:center;
+                margin:5px;
+            }
+            
+            #bar {
+                border-bottom:2px solid black;
+                margin:-10px;
+                padding:10px;
+                display:flex;
+                justify-content:space-between;
+            }
+            
+            button {
+                background-color:aliceblue;
+                border-radius:8px;
+                font-family:"comic sans ms", "comic sans", sans-serif;
+                border:2px solid deepskyblue;
+            }
+            
+            button:hover {
+                background-color:deepskyblue;
+                cursor:pointer;
+                border-color:skyblue;
+            }
+            
+            .card {
+                border:2px solid black;
+                background-color:white;
+                border-radius:8px;
+                width:200px;
+                padding:10px;
+                margin-top:20px;
+                height:250px;
+            }
+            
+            .contain {
+                display:flex;
+                justify-content:space-between;
+                flex-wrap:wrap;
+            }
+            
+            #member-data {
+                display:none;
+            }
+            
+            #book-data {
+                display:none;
+            }
+            
+            #res {
+                font-weight:bold;
+                min-height:20px;
+                max-width:400px;
+            }
+            
+            .container {
+                margin-top:15px;
+                padding:10px;
+                background-color:aliceblue;
+                border:2px dashed deepskyblue;
+                border-radius:8px;
+            }
+            
+            #featured {
+                border-radius:8px;
+                display:flex;
+                align-items:center;
+            }
+            
+            #icon {
+                position:relative;
+                width:100px;
+                height:100px;
+                overflow:hidden;
+            }
+            
+            #icon::before {
+                content:"";
+                position:absolute;
+                top:20px;
+                left:50%;
+                transform:translateX(-50%);
+                width:35px;
+                height:35px;
+                background-color:deepskyblue;
+                border-radius:50%;
+            }
+            
+            #icon::after {
+                content:"";
+                position:absolute;
+                bottom:0;
+                left:50%;
+                transform:translateX(-50%);
+                width:65px;
+                height:35px;
+                background-color:deepskyblue;
+                border-radius:35px 35px 0 0; 
+            }
+            
+            #info {
+                font-size:1.1em;
+                margin:0;
+                margin-left:20px;
+            }
+            
+            #count {
+                font-family:"comic sans ms", "comic sans", sans-serif;
+                width:300px;
+                height:150px;
+                resize:none;
+                box-sizing:border-box;
+            }
+
+            body.dark {
+                color:white;
+            }
+            
+            body.dark #content {
+                background-color:#222;
+                border-color:white;
+            }
+            
+            body.dark .card {
+                background-color:#333;
+                border-color: white;
+                color: white;
+            }
+            
+            body.dark #icon::before, body.dark #icon::after {
+                background-color:gold;
+            }
+            
+            body.dark button {
+                color:white;
+                background-color:black;
+                border-color:gray;
+            }
+            
+            body.dark button:hover {
+                cursor:pointer;
+                border-color:black;
+                background-color:gray;
+            }
+        </style>
+    </head>
+    <body>
+    <div id = "content">
+        <div id = "bar">
+            <button class="nav-btn">members</button>
+            <button class="nav-btn">books</button>
+            <button class="nav-btn">home</button>
+            <button id = "toggle">Dark Mode</button>
+        </div>
+        <div id = "home-data">
+            <h2>Featured Writer</h2>
+            <div class = "container" id = "featured">
+                <div id = "icon"></div>
+                <p id = "info"></p>
+            </div>
+            <h1>The Writers Coalition</h1>
+            <p>The writers coaltion is a group of writers that are dedicated to sharing their ideas and creativity with the comunity. There are 4 members so far.</p>
+            <h2>Rules of the Coalition</h2>
+            <p>There aren't that many rules, but the ones there are are followed without complaint. Let's look at all the listed ones.</p>
+            <p>We also have a special writers coalition chat. The first seven rules are specifically for the chat.</p>
+            <ol>
+                <li>No long words</li>
+                <li>No editing someone else's message</li>
+                <li>No inviting other people without the owner’s permission</li>
+                <li>Always add timestamps</li>
+                <li>No changing the font, size, or bold for the words.</li>
+                <li>No swearing</li>
+                <li>Try to talk about writing/story idea related stuff</li>
+                <li>Golden rule: don’t spill the beans about someone else’s story</li> 
+            </ol>
+            <h3>Book Prompt Generator</h3>
+            <button id = "generate">Generate prompt</button>
+            <div class = "container" id = "res"></div>
+            <h3>Word Counter</h3>
+            <textarea class = "container" id = "count" placeholder = "enter your text here to see the word count!"></textarea>
+            <p>Current word count is: <span id = "num">0</span></p>
+        </div>
+        <div id = "member-data">
+            <div class = "contain">
+                <div class = "card">
+                    <h3>Aokai</h3>
+                    <p>Aokai is the founder of the Writers Coalition. He is the author of the World Of Cubes series and Panorama Perspective.</p>
+                </div>
+                <div class = "card">
+                    <h3>Teemo</h3>
+                    <p>Teemo is the author of the well-loved book, Diary of a Needoh. He is currently two books into the series.</p>
+                </div>
+                <div class = "card">
+                    <h3>Oz</h3>
+                    <p>Oz is the author of the PAWS series, Clash of the Gods, A crazy day in the House of Commons, and Diary of a Minecraft Wolf. He is the current record holder for the most mini-novels.</p>
+                </div>
+                <div class = "card">
+                    <h3>Immanuel</h3>
+                    <p>Immanuel is the author of the Space Rabbit series and the Alpha Squad series. He is the record holder for the most books, but he is the only member to write comic books.</p>
+                </div>
+            </div>
+        </div>
+        <div id = "book-data">
+            <div class = "contain">
+                <div class = "book">
+                    <div class = "book-title">
+                        the PAWS series: Mole, Comeback, and Finale
+                    </div>
+                </div>
+                <div class = "book">
+                    <div class = "book-title">
+                        the World of Cubes series: World of Cubes, The Corruption, The Timeline
+                    </div>
+                </div>
+                <div class = "book">
+                    <div class = "book-title">
+                        the Diary of a Needoh series: Diary of a Needoh, Lights out
+                    </div>
+                </div>
+                <div class = "book">
+                    <div class = "book-title">
+                        Alpha Squad series: RECON, *unknown*
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var members = [
+            {name: "Oz", book: "Clash of the Gods"},
+            {name: "Teemo", book: "Diary of a Needoh"},
+            {name: "Aokai", book: "World of Cubes"},
+            {name: "Immanuel", book: "Alpha Squad: RECON"},
+        ];
+        var showSpotlight = function() {
+            var info = document.getElementById("info");
+            var num = Math.floor(Math.random() * members.length);
+            var person = members[num];
+            info.textContent = person.name + " for " + person.book;
+        }
+        showSpotlight();
+        
+        var bookData = document.getElementById("book-data");
+        var memberData = document.getElementById("member-data");
+        var homeData = document.getElementById("home-data");
+        var orig = homeData.innerHTML;
+        
+        var buttons = document.querySelectorAll("#bar .nav-btn");
+        
+        var openMembers = function() {
+            memberData.style.display = "block";
+            homeData.style.display = "none";
+            bookData.style.display = "none";
+        }
+        var openBooks = function() {
+            bookData.style.display = "block";
+            homeData.style.display = "none";
+            memberData.style.display = "none";
+        }
+        var openHome = function() {
+            showSpotlight();
+            homeData.style.display = "block";
+            memberData.style.display = "none";
+            bookData.style.display = "none";
+        }
+        for (var i = 0; i < buttons.length; i++) {
+            if (i === 0) {
+                buttons[i].addEventListener("click", openMembers);
+            } else if (i === 1) {
+                buttons[i].addEventListener("click", openBooks);
+            } else if (i === 2) {
+                buttons[i].addEventListener("click", openHome);
+            }
+        }
+        
+        var res = document.getElementById("res");
+        var gen = document.getElementById("generate");
+        var prevNum = -1;
+        var prompts = [
+            "A detective who can talk to plants",
+            "A spaceship that lands on a planet made of candy",
+            "A cheetah that was born slow",
+            "A dog who gets denied his toys",
+            "A fidget who gets into a fight",
+            "An asteroid that's going to hit Earth"
+        ];
+        var generate = function() {
+            var num = Math.floor(Math.random() * prompts.length);
+            while (num === prevNum) {
+                num = Math.floor(Math.random() * prompts.length);
+            }
+            res.textContent = prompts[num];
+            prevNum = num;
+        }
+        gen.addEventListener("click", generate);
+        
+        var togBtn = document.getElementById("toggle");
+        var contains = document.getElementsByClassName("container");
+        
+        var toggle = function() {
+            if (togBtn.textContent === "Dark Mode") {
+                document.body.style.background = "linear-gradient(darkgray, black)";
+                document.body.style.backgroundAttachment = "fixed";
+                
+                for (var i = 0; i < contains.length; i++) {
+                    contains[i].style.backgroundColor = "gray";
+                    contains[i].style.borderColor = "#444";
+                    contains[i].style.color = "white";
+                }
+                document.getElementById("info").style.color = "white";
+                document.body.classList.add("dark");
+                document.getElementById("bar").style.borderColor = "white";
+                togBtn.textContent = "Light Mode";
+            } else {
+                document.body.style.background = "linear-gradient(lightskyblue, skyblue, deepskyblue)";
+                document.body.style.backgroundAttachment = "fixed";
+                document.getElementById("bar").style.borderColor = "black";
+                
+                for (var i = 0; i < contains.length; i++) {
+                    contains[i].style.backgroundColor = "aliceblue";
+                    contains[i].style.borderColor = "deepskyblue";
+                    contains[i].style.color = "black";
+                }
+                document.getElementById("info").style.color = "black";
+                document.body.classList.remove("dark");
+                togBtn.textContent = "Dark Mode";
+            }
+        }
+        togBtn.addEventListener("click", toggle);
+        
+        var count = document.getElementById("count");
+        var num = document.getElementById("num")
+        var findCount = function() {
+            var cleanedText = count.value.trim();
+            if (cleanedText === "") {
+                num.textContent = 0;
+            } else {
+                var wordCount = cleanedText.split(/\s+/).length;
+                num.textContent = wordCount;
+            }
+        }
+        count.addEventListener("input", findCount)
+    </script>
+    </body>
+</html>
