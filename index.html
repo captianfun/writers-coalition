@@ -48,14 +48,14 @@
                 height:20px;
             }
             
-            button, select {
+            button {
                 background-color:aliceblue;
                 border-radius:8px;
                 font-family:"comic sans ms", "comic sans", sans-serif;
                 border:2px solid deepskyblue;
             }
             
-            button:hover, select:hover {
+            button:hover {
                 background-color:deepskyblue;
                 cursor:pointer;
                 border-color:skyblue;
@@ -150,9 +150,21 @@
                 box-sizing:border-box;
             }
 
+            #quiz-ques-con {
+                min-height:25px;
+                max-width:300px;
+            }
+            
+            .quiz-ques {
+                margin-top:10px;
+                margin-bottom:10px;
+                font-weight:bold;
+            }
+
             body.dark {
                 color:white;
                 background:linear-gradient(darkgray, black);
+                background-attachment:fixed;
             }
             
             body.dark #content {
@@ -170,12 +182,12 @@
                 background-color:orange;
             }
             
-            body.dark button, body.dark select {
+            body.dark button {
                 background-color:gold;
                 border-color:orange;
             }
             
-            body.dark button:hover, body.dark select:hover {
+            body.dark button:hover {
                 cursor:pointer;
                 border-color:gold;
                 background-color:orange;
@@ -201,11 +213,6 @@
             <button class="nav-btn">members</button>
             <button class="nav-btn">books</button>
             <button class="nav-btn">home</button>
-            <select id = "font">
-                <option>Comic Sans MS</option>
-                <option>Gill Sans</option>
-                <option>Arial</option>
-            </select>
             <button id = "toggle">Dark Mode</button>
         </div>
         <div id = "home-data">
@@ -237,6 +244,7 @@
             <p>Current word count is: <span id = "num">0</span></p>
             <p>Time to read: <span id = "len">0</span> seconds</p>
             <div class = "container" id = "announce"></div>
+            <p><strong id = "quiz-res"></strong></p>
         </div>
         <div id = "member-data">
             <div class = "contain">
@@ -386,23 +394,13 @@
                 var ann = document.getElementById("announce");
                 if (annTimes.includes(wordCount)) {
                     ann.textContent = wordCount + " words! You're on a roll!";
-                } else {
+                } 
+                if (wordCount < 30) {
                     ann.textContent = "";
                 }
             }
         }
         count.addEventListener("input", findCount);
-        
-        var dropFont = document.getElementById("font");
-        var changeFont = function() {
-            var chosenFont = dropFont.value;
-            document.body.style.fontFamily = chosenFont + ", sans-serif";
-            var toChange = document.querySelectorAll("button, select, textarea");
-            for (var i = 0; i < toChange.length; i++) {
-                toChange[i].style.fontFamily = chosenFont + ", sans-serif";
-            }
-        }
-        dropFont.addEventListener("change", changeFont)
         
         var readTime;
         var findReadTime = function() {
