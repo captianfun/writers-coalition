@@ -167,7 +167,7 @@
             }
             
             body.dark #icon::before, body.dark #icon::after {
-                background-color:gold;
+                background-color:orange;
             }
             
             body.dark button, body.dark select {
@@ -182,13 +182,12 @@
             }
             
             body.dark .container {
-                border-color:#444;
-                background-color:gray;
-                color:white;
+                border-color:orange;
+                background-color:gold;
             }
             
             body.dark #info {
-                color:white;
+                color:black;
             }
             
             body.dark #bar {
@@ -417,7 +416,20 @@
             var len = document.getElementById("len");
             len.textContent = readTime;
         }
-        count.addEventListener("input", findReadTime)
+        count.addEventListener("input", findReadTime);
+        
+        var checkTimeOfDay = function() {
+            var currentHour = new Date().getHours();
+            var togBtn = document.getElementById("toggle");
+            if (currentHour < 6 || currentHour >= 18) {
+                document.body.classList.add("dark");
+                togBtn.textContent = "Light Mode";
+            } else {
+                document.body.classList.remove("dark");
+                togBtn.textContent = "Dark Mode";
+            }
+        }
+        checkTimeOfDay();
     </script>
     </body>
 </html>
