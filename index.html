@@ -43,14 +43,19 @@
                 justify-content:space-between;
             }
             
-            button {
+            #announce {
+                max-width:400px;
+                height:20px;
+            }
+            
+            button, select {
                 background-color:aliceblue;
                 border-radius:8px;
                 font-family:"comic sans ms", "comic sans", sans-serif;
                 border:2px solid deepskyblue;
             }
             
-            button:hover {
+            button:hover, select:hover {
                 background-color:deepskyblue;
                 cursor:pointer;
                 border-color:skyblue;
@@ -147,6 +152,7 @@
 
             body.dark {
                 color:white;
+                background:linear-gradient(darkgray, black);
             }
             
             body.dark #content {
@@ -164,16 +170,29 @@
                 background-color:gold;
             }
             
-            body.dark button {
-                color:white;
-                background-color:black;
-                border-color:gray;
+            body.dark button, body.dark select {
+                background-color:gold;
+                border-color:orange;
             }
             
-            body.dark button:hover {
+            body.dark button:hover, body.dark select:hover {
                 cursor:pointer;
-                border-color:black;
+                border-color:gold;
+                background-color:orange;
+            }
+            
+            body.dark .container {
+                border-color:#444;
                 background-color:gray;
+                color:white;
+            }
+            
+            body.dark #info {
+                color:white;
+            }
+            
+            body.dark #bar {
+                border-color:white;
             }
         </style>
     </head>
@@ -183,6 +202,11 @@
             <button class="nav-btn">members</button>
             <button class="nav-btn">books</button>
             <button class="nav-btn">home</button>
+            <select id = "font">
+                <option>Comic Sans MS</option>
+                <option>Gill Sans</option>
+                <option>Arial</option>
+            </select>
             <button id = "toggle">Dark Mode</button>
         </div>
         <div id = "home-data">
@@ -212,6 +236,8 @@
             <h3>Word Counter</h3>
             <textarea class = "container" id = "count" placeholder = "enter your text here to see the word count!"></textarea>
             <p>Current word count is: <span id = "num">0</span></p>
+            <p>Time to read: <span id = "len">0</span> seconds</p>
+            <div class = "container" id = "announce"></div>
         </div>
         <div id = "member-data">
             <div class = "contain">
@@ -328,33 +354,11 @@
         gen.addEventListener("click", generate);
         
         var togBtn = document.getElementById("toggle");
-        var contains = document.getElementsByClassName("container");
-        
         var toggle = function() {
             if (togBtn.textContent === "Dark Mode") {
-                document.body.style.background = "linear-gradient(darkgray, black)";
-                document.body.style.backgroundAttachment = "fixed";
-                
-                for (var i = 0; i < contains.length; i++) {
-                    contains[i].style.backgroundColor = "gray";
-                    contains[i].style.borderColor = "#444";
-                    contains[i].style.color = "white";
-                }
-                document.getElementById("info").style.color = "white";
                 document.body.classList.add("dark");
-                document.getElementById("bar").style.borderColor = "white";
                 togBtn.textContent = "Light Mode";
             } else {
-                document.body.style.background = "linear-gradient(lightskyblue, skyblue, deepskyblue)";
-                document.body.style.backgroundAttachment = "fixed";
-                document.getElementById("bar").style.borderColor = "black";
-                
-                for (var i = 0; i < contains.length; i++) {
-                    contains[i].style.backgroundColor = "aliceblue";
-                    contains[i].style.borderColor = "deepskyblue";
-                    contains[i].style.color = "black";
-                }
-                document.getElementById("info").style.color = "black";
                 document.body.classList.remove("dark");
                 togBtn.textContent = "Dark Mode";
             }
@@ -362,17 +366,58 @@
         togBtn.addEventListener("click", toggle);
         
         var count = document.getElementById("count");
-        var num = document.getElementById("num")
+        var num = document.getElementById("num");
+        var wordCount;
         var findCount = function() {
             var cleanedText = count.value.trim();
             if (cleanedText === "") {
                 num.textContent = 0;
+                document.getElementById("announce").textContent = "";
             } else {
-                var wordCount = cleanedText.split(/\s+/).length;
+                wordCount = cleanedText.split(/\s+/).length;
                 num.textContent = wordCount;
+                var annTimes = [
+                    50,
+                    100,
+                    150,
+                    200,
+                    250,
+                    300
+                ];
+                var ann = document.getElementById("announce");
+                if (annTimes.includes(wordCount)) {
+                    ann.textContent = wordCount + " words! You're on a roll!";
+                } else {
+                    ann.textContent = "";
+                }
             }
         }
-        count.addEventListener("input", findCount)
+        count.addEventListener("input", findCount);
+        
+        var dropFont = document.getElementById("font");
+        var changeFont = function() {
+            var chosenFont = dropFont.value;
+            document.body.style.fontFamily = chosenFont + ", sans-serif";
+            var toChange = document.querySelectorAll("button, select, textarea");
+            for (var i = 0; i < toChange.length; i++) {
+                toChange[i].style.fontFamily = chosenFont + ", sans-serif";
+            }
+        }
+        dropFont.addEventListener("change", changeFont)
+        
+        var readTime;
+        var findReadTime = function() {
+            readTime = Math.floor(wordCount / 200);
+            if (readTime < 1) {
+                readTime = "less than 1";
+            }
+            if (count.value === "") {
+                readTime = 0;
+            }
+            var len = document.getElementById("len");
+            len.textContent = readTime;
+        }
+        count.addEventListener("input", findReadTime)
     </script>
     </body>
 </html>
