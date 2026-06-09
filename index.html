@@ -179,30 +179,52 @@
             }
 
             .post-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                background: aliceblue;
-                padding: 8px;
-                border-radius: 8px;
-                border: 1px solid deepskyblue;
-                margin: 5px 0;
-                color: black;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                background:aliceblue;
+                padding:8px;
+                border-radius:8px;
+                border:1px solid deepskyblue;
+                margin:5px 0;
+                color:black;
             }
 
             .delete-btn {
-                background-color: #ffcccb;
-                border: 1px solid red;
-                color: black;
-                border-radius: 4px;
-                padding: 2px 6px;
-                font-size: 12px;
+                background-color:#ffcccb;
+                border:1px solid red;
+                color:black;
+                border-radius:4px;
+                padding:2px 6px;
+                font-size:12px;
             }
 
             .delete-btn:hover {
-                background-color: red;
-                color: white;
-                border-color: darkred;
+                background-color:red;
+                color:white;
+                border-color:darkred;
+            }
+            
+            select {
+                background-color:aliceblue;
+                border:2px solid deepskyblue;
+                border-radius:8px;
+                font-family:"comic sans ms", "comic sans", sans-serif;
+            }
+            
+            select:hover {
+                background-color:deepskyblue;
+                border-color:skyblue;
+            }
+            
+            #sign-in {
+                border:2px solid black;
+                border-radius:8px;
+                background-color:white;
+                text-align:center;
+                padding:10px;
+                display:none;
+                margin-top:20px;
             }
 
             body.dark {
@@ -274,6 +296,22 @@
                 background-color: #ff6666;
                 color: black;
             }
+            
+            body.dark select {
+                background-color:gold;
+                border-color:orange;
+            }
+            
+            body.dark select:hover {
+                background-color:orange;
+                border-color:gold;
+            }
+            
+            body.dark #sign-in {
+                border-color:white;
+                color:white;
+                background-color:black;
+            }
         </style>
     </head>
     <body>
@@ -283,6 +321,7 @@
             <button class="nav-btn">books</button>
             <button class="nav-btn">home</button>
             <button class="nav-btn">chat</button>
+            <button class="nav-btn">sign in</button>
             <button id = "toggle">Dark Mode</button>
         </div>
         <div id = "home-data">
@@ -366,8 +405,20 @@
             <textarea id = "new-post" placeholder="Type your message here..."></textarea><br>
             <button id="submit-post">Send Message</button>
         </div>
+        <div id = "sign-in">
+            <h3>Who Are You?</h3>
+            <select id = "who">
+                <option>Oz</option>
+                <option>Teemo</option>
+                <option>Aokai</option>
+                <option>Immanuel</option>
+            </select>
+            <button id = "sign">Sign In</button>
+        </div>
     </div>
     <script>
+        var writer;
+        var signedIn = false;
         var members = [
             {name: "Oz", book: "Clash of the Gods"},
             {name: "Teemo", book: "Diary of a Needoh"},
@@ -386,6 +437,7 @@
         var memberData = document.getElementById("member-data");
         var homeData = document.getElementById("home-data");
         var chatData = document.getElementById("chat-data");
+        var signData = document.getElementById("sign-in");
         var orig = homeData.innerHTML;
         
         var buttons = document.querySelectorAll("#bar .nav-btn");
@@ -395,12 +447,14 @@
             homeData.style.display = "none";
             bookData.style.display = "none";
             chatData.style.display = "none";
+            signData.style.display = "none";
         }
         var openBooks = function() {
             bookData.style.display = "block";
             homeData.style.display = "none";
             memberData.style.display = "none";
             chatData.style.display = "none";
+            signData.style.display = "none";
         }
         var openHome = function() {
             showSpotlight();
@@ -408,14 +462,28 @@
             memberData.style.display = "none";
             bookData.style.display = "none";
             chatData.style.display = "none";
+            signData.style.display = "none";
         }
         var openChat = function() {
+            if (signedIn) {
+                homeData.style.display = "none";
+                memberData.style.display = "none";
+                bookData.style.display = "none";
+                chatData.style.display = "block";
+                signData.style.display = "none";
+                loadPosts();
+            } else {
+                alert("You have to sign in if you want to chat!");
+            }
+        }
+        var signIn = function() {
             homeData.style.display = "none";
             memberData.style.display = "none";
             bookData.style.display = "none";
-            chatData.style.display = "block";
-            loadPosts();
+            chatData.style.display = "none";
+            signData.style.display = "block";
         }
+        
         for (var i = 0; i < buttons.length; i++) {
             if (i === 0) {
                 buttons[i].addEventListener("click", openMembers);
@@ -425,6 +493,8 @@
                 buttons[i].addEventListener("click", openHome);
             } else if (i === 3) {
                 buttons[i].addEventListener("click", openChat);
+            } else if (i === 4) {
+                buttons[i].addEventListener("click", signIn);
             }
         }
         
@@ -524,7 +594,7 @@
                 var div = document.createElement("div");
                 div.className = "post-item";
                 var textSpan = document.createElement("span");
-                textSpan.innerHTML = "<strong>" + savedPosts[i].time + ":</strong> " + savedPosts[i].text;
+                textSpan.innerHTML = "<strong>" + savedPosts[i].time + ", " + savedPosts[i].name + ":</strong> " + savedPosts[i].text;
                 var deleteBtn = document.createElement("button");
                 deleteBtn.textContent = "Delete";
                 deleteBtn.className = "delete-btn";
@@ -551,7 +621,7 @@
             var currentTime = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             var savedPosts = JSON.parse(localStorage.getItem("coalitionChats")) || [];
             
-            savedPosts.push({ text: text, time: currentTime });
+            savedPosts.push({ text: text, time: currentTime, name: writer});
             localStorage.setItem("coalitionChats", JSON.stringify(savedPosts));
             
             postTextInput.value = "";
@@ -566,7 +636,16 @@
         }
 
         submitPostBtn.addEventListener("click", savePost);
-        loadPosts();
+        
+        var nameSel = document.getElementById("who");
+        var signBtn = document.getElementById("sign")
+        var sign = function() {
+            writer = nameSel.value;
+            signedIn = true;
+            loadPosts();
+            openHome();
+        }
+        signBtn.addEventListener("click", sign);
     </script>
     </body>
 </html>
