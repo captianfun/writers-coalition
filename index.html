@@ -226,6 +226,12 @@
                 display:none;
                 margin-top:20px;
             }
+            
+            #name {
+                height:30px;
+                max-width:400px;
+                font-weight:bold;
+            }
 
             body.dark {
                 color:white;
@@ -353,7 +359,9 @@
             <p>Current word count is: <span id = "num">0</span></p>
             <p>Time to read: <span id = "len">0</span> minutes</p>
             <div class = "container" id = "announce"></div>
-            <p><strong id = "quiz-res"></strong></p>
+            <h3>Character Name Generator</h3>
+            <button id = "name-gen">Generate Name</button>
+            <div class = "container" id = "name"></div>
         </div>
         <div id = "member-data">
             <div class = "contain">
@@ -518,6 +526,7 @@
             prevNum = num;
         }
         gen.addEventListener("click", generate);
+        generate()
         
         var togBtn = document.getElementById("toggle");
         var toggle = function() {
@@ -646,6 +655,38 @@
             openHome();
         }
         signBtn.addEventListener("click", sign);
+        
+        var nameCon = document.getElementById("name");
+        var nameGen = document.getElementById("name-gen");
+        var firstNames = [
+            "Alex",
+            "Rapheil",
+            "Max",
+            "Jack",
+            "Oliver",
+            "Rose",
+            "Angel",
+            "Sarah",
+            "Rafe"
+        ];
+        var lastNames = [
+            "Krosaka",
+            "Masor",
+            "Shawn",
+            "Thomas",
+            "Montomery",
+            "Realtit",
+            "Jobernag",
+            "Halfnet",
+            "Smyth"
+        ];
+        var showNames = function() {
+            var nameNum1 = Math.floor(Math.random() * firstNames.length);
+            var nameNum2 = Math.floor(Math.random() * lastNames.length);
+            nameCon.textContent = firstNames[nameNum1] + " " + lastNames[nameNum2];
+        }
+        nameGen.addEventListener("click", showNames);
+        showNames()
     </script>
     </body>
 </html>
