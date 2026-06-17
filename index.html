@@ -171,6 +171,11 @@
                 max-width:400px;
                 font-weight:bold;
             }
+            
+            #title-con {
+                max-width:400px;
+                height:20px;
+            }
 
             body.dark {
                 color:white;
@@ -276,6 +281,9 @@
             <h3>Character Name Generator</h3>
             <button id = "name-gen">Generate Name</button>
             <div class = "container" id = "name"></div>
+            <h3>Book Title Generator</h3>
+            <button id = "gen-title">Generate Title</button>
+            <div class = "container" id = "title-con"><strong id = "title"></strong></div>
         </div>
         <div id = "member-data">
             <div class = "contain">
@@ -491,6 +499,51 @@
         }
         nameGen.addEventListener("click", showNames);
         showNames()
+        
+        var title = {
+            "nouns" : [
+                "Camel",
+                "Squirrel",
+                "Dog",
+                "Cat",
+                "Table",
+                "Asteroid",
+                "School",
+                "Planet",
+                "Star",
+                "Headphones",
+                "Earth",
+                "Guitar",
+                "Piano",
+                "Buffalo"
+            ],
+            "articles" : [
+                "A",
+                "The",
+            ],
+            "adjectives" : [
+                "Stinky",
+                "Furry",
+                "Secret",
+                "Rabid",
+                "Dangerous",
+                "Scared",
+                "Brave",
+                "Adventurous",
+                "Solitary",
+                "Happy",
+                "Sad",
+                "Angry"
+            ]
+        };
+        
+        var titleGen = document.getElementById("gen-title");
+        var titleEl = document.getElementById("title")
+        var showTitle = function() {
+            titleEl.textContent = title["articles"][Math.floor(Math.random() * title["articles"].length)] + " " + title["adjectives"][Math.floor(Math.random() * title["adjectives"].length)] + " " + title["nouns"][Math.floor(Math.random() * title["nouns"].length)];
+        }
+        titleGen.addEventListener("click", showTitle);
+        showTitle();
     </script>
     </body>
 </html>
