@@ -55,6 +55,7 @@
                 background-color:aliceblue;
                 border-radius:8px;
                 border:2px solid deepskyblue;
+                padding: 5px 10px;
             }
             
             button:hover {
@@ -70,7 +71,8 @@
                 width:200px;
                 padding:10px;
                 margin-top:20px;
-                height:250px;
+                min-height:150px;
+                height: auto;
             }
             
             .contain {
@@ -151,7 +153,6 @@
             #count {
                 width:300px;
                 height:150px;
-                resize:none;
                 box-sizing:border-box;
             }
             
@@ -175,6 +176,25 @@
             #title-con {
                 max-width:400px;
                 height:20px;
+            }
+
+            .sketchpad-input {
+                width: 100%;
+                max-width: 400px;
+                box-sizing: border-box;
+                padding: 6px;
+                margin-bottom: 8px;
+                border: 2px solid deepskyblue;
+                border-radius: 6px;
+                font-family: inherit;
+            }
+            
+            #sketchpad-body {
+                height: 80px;
+            }
+            
+            textarea {
+                resize:none;
             }
 
             body.dark {
@@ -233,11 +253,11 @@
                 background-color:orange;
                 border-color:gold;
             }
-            
-            body.dark #sign-in {
-                border-color:white;
-                color:white;
-                background-color:black;
+
+            body.dark .sketchpad-input {
+                background-color: #333;
+                color: white;
+                border-color: orange;
             }
         </style>
     </head>
@@ -284,6 +304,17 @@
             <h3>Book Title Generator</h3>
             <button id = "gen-title">Generate Title</button>
             <div class = "container" id = "title-con"><strong id = "title"></strong></div>
+            
+            <h3>Story Sketchpad</h3>
+            <div class="container">
+                <input type="text" id="sketchpad-name" class="sketchpad-input" placeholder="Your Name"><br>
+                <input type="text" id="sketchpad-title" class="sketchpad-input" placeholder="Idea Title"><br>
+                <textarea id="sketchpad-body" class="sketchpad-input" placeholder="Write your awesome story idea here..."></textarea><br>
+                <button id="sketchpad-publish">Publish to Notes</button>
+            </div>
+
+            <h3>Notes</h3>
+            <div id="notes-con" class="contain"></div>
         </div>
         <div id = "member-data">
             <div class = "contain">
@@ -350,28 +381,24 @@
         var homeData = document.getElementById("home-data");
         
         var buttons = document.querySelectorAll("#bar .nav-btn");
-        
-        var openMembers = function() {
-            memberData.style.display = "block";
+        var closeAll = function() {
+            memberData.style.display = "none";
             homeData.style.display = "none";
             bookData.style.display = "none";
-            chatData.style.display = "none";
-            signData.style.display = "none";
+        }
+        
+        var openMembers = function() {
+            closeAll();
+            memberData.style.display = "block";
         }
         var openBooks = function() {
+            closeAll();
             bookData.style.display = "block";
-            homeData.style.display = "none";
-            memberData.style.display = "none";
-            chatData.style.display = "none";
-            signData.style.display = "none";
         }
         var openHome = function() {
             showSpotlight();
+            closeAll();
             homeData.style.display = "block";
-            memberData.style.display = "none";
-            bookData.style.display = "none";
-            chatData.style.display = "none";
-            signData.style.display = "none";
         }
         
         for (var i = 0; i < buttons.length; i++) {
@@ -472,26 +499,10 @@
         var nameCon = document.getElementById("name");
         var nameGen = document.getElementById("name-gen");
         var firstNames = [
-            "Alex",
-            "Rapheil",
-            "Max",
-            "Jack",
-            "Oliver",
-            "Rose",
-            "Angel",
-            "Sarah",
-            "Rafe"
+            "Alex", "Rapheil", "Max", "Jack", "Oliver", "Rose", "Angel", "Sarah", "Rafe"
         ];
         var lastNames = [
-            "Krosaka",
-            "Masor",
-            "Shawn",
-            "Thomas",
-            "Montomery",
-            "Realtit",
-            "Jobernag",
-            "Halfnet",
-            "Smyth"
+            "Krosaka", "Masor", "Shawn", "Thomas", "Montomery", "Realtit", "Jobernag", "Halfnet", "Smyth"
         ];
         var showNames = function() {
             var nameNums = [Math.floor(Math.random() * firstNames.length), Math.floor(Math.random() * lastNames.length)];
@@ -502,38 +513,13 @@
         
         var title = {
             "nouns" : [
-                "Camel",
-                "Squirrel",
-                "Dog",
-                "Cat",
-                "Table",
-                "Asteroid",
-                "School",
-                "Planet",
-                "Star",
-                "Headphones",
-                "Earth",
-                "Guitar",
-                "Piano",
-                "Buffalo"
+                "Camel", "Squirrel", "Dog", "Cat", "Table", "Asteroid", "School", "Planet", "Star", "Headphones", "Earth", "Guitar", "Piano", "Buffalo"
             ],
             "articles" : [
-                "A",
-                "The",
+                "A", "The",
             ],
             "adjectives" : [
-                "Stinky",
-                "Furry",
-                "Secret",
-                "Rabid",
-                "Dangerous",
-                "Scared",
-                "Brave",
-                "Adventurous",
-                "Solitary",
-                "Happy",
-                "Sad",
-                "Angry"
+                "Stinky", "Furry", "Secret", "Rabid", "Dangerous", "Scared", "Brave", "Adventurous", "Solitary", "Happy", "Sad", "Angry"
             ]
         };
         
@@ -544,6 +530,52 @@
         }
         titleGen.addEventListener("click", showTitle);
         showTitle();
+
+        var sketchpadName = document.getElementById("sketchpad-name");
+        var sketchpadTitle = document.getElementById("sketchpad-title");
+        var sketchpadBody = document.getElementById("sketchpad-body");
+        var publishBtn = document.getElementById("sketchpad-publish");
+        var notesCon = document.getElementById("notes-con");
+
+        var buildNoteCard = function(authorName, ideaTitle, ideaBody) {
+            var cardDiv = document.createElement("div");
+            cardDiv.className = "card";
+            
+            cardDiv.innerHTML = "<h3>" + ideaTitle + "</h3>" +
+                                "<p><strong>By:</strong> " + authorName + "</p>" +
+                                "<p>" + ideaBody + "</p>";
+                                
+            notesCon.appendChild(cardDiv);
+        };
+
+        var loadSavedNotes = function() {
+            var storedList = JSON.parse(localStorage.getItem("coalitionNotes")) || [];
+            for (var i = 0; i < storedList.length; i++) {
+                buildNoteCard(storedList[i].author, storedList[i].title, storedList[i].body);
+            }
+        };
+        
+        publishBtn.addEventListener("click", function() {
+            var nameValue = sketchpadName.value.trim();
+            var titleValue = sketchpadTitle.value.trim();
+            var bodyValue = sketchpadBody.value.trim();
+
+            if (nameValue === "" || titleValue === "" || bodyValue === "") {
+                alert("Please don't leave any boxes blank! We need your name, title, and idea.");
+                return;
+            }
+
+            buildNoteCard(nameValue, titleValue, bodyValue);
+
+            var storedList = JSON.parse(localStorage.getItem("coalitionNotes")) || [];
+            storedList.push({ author: nameValue, title: titleValue, body: bodyValue });
+            localStorage.setItem("coalitionNotes", JSON.stringify(storedList));
+
+            sketchpadTitle.value = "";
+            sketchpadBody.value = "";
+        });
+        
+        loadSavedNotes();
     </script>
     </body>
 </html>
