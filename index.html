@@ -245,7 +245,7 @@
             <h1>The Writers Coalition</h1>
             <p>The writers coaltion is a group of writers that are dedicated to sharing their ideas and creativity with the comunity. There are 4 members so far.</p>
             <h2>Rules of the Coalition</h2>
-            <p>There aren't that many rules, but the ones there are are followed without complaint. Let's look at all the listed ones.</p>
+            <p>There aren't that many rules, but the ones there are are followed without complaint. let's look at all the listed ones.</p>
             <p>We also have a special writers coalition chat. The first seven rules are specifically for the chat.</p>
             <ol>
                 <li>No long words</li>
@@ -280,8 +280,10 @@
                 </div>
                 <div class = "card">
                     <h3>Teemo</h3>
-                    <p>Teemo is the author of the well-loved book, Diary of a Needoh. He is currently two books into the series.</p>
+                    <p>Teemo is the author of the well-loved book, Diary of a Needoh. He is currently four books into the series.</p>
                 </div>
+            </div>
+            <div class = "contain">
                 <div class = "card">
                     <h3>Oz</h3>
                     <p>Oz is the author of the PAWS series, Clash of the Gods, A crazy day in the House of Commons, and Diary of a Minecraft Wolf. He is the current record holder for the most mini-novels.</p>
@@ -294,40 +296,40 @@
         </div>
     </div>
     <script>
-        var members = [
+        let members = [
             {name: "Oz", book: "Clash of the Gods"},
             {name: "Teemo", book: "Diary of a Needoh"},
             {name: "Aokai", book: "World of Cubes"},
             {name: "Immanuel", book: "Alpha Squad: RECON"},
         ];
-        var showSpotlight = function() {
-            var info = document.getElementById("info");
-            var num = Math.floor(Math.random() * members.length);
-            var person = members[num];
+        let showSpotlight = function() {
+            let info = document.getElementById("info");
+            let num = Math.floor(Math.random() * members.length);
+            let person = members[num];
             info.textContent = person.name + " for " + person.book;
         }
         showSpotlight();
         
-        var memberData = document.getElementById("member-data");
-        var homeData = document.getElementById("home-data");
+        let memberData = document.getElementById("member-data");
+        let homeData = document.getElementById("home-data");
         
-        var buttons = document.querySelectorAll("#bar .nav-btn");
-        var closeAll = function() {
+        let buttons = document.querySelectorAll("#bar .nav-btn");
+        let closeAll = function() {
             memberData.style.display = "none";
             homeData.style.display = "none";
         }
         
-        var openMembers = function() {
+        let openMembers = function() {
             closeAll();
             memberData.style.display = "block";
         }
-        var openHome = function() {
+        let openHome = function() {
             showSpotlight();
             closeAll();
             homeData.style.display = "block";
         }
         
-        for (var i = 0; i < buttons.length; i++) {
+        for (let i = 0; i < buttons.length; i++) {
             if (i === 0) {
                 buttons[i].addEventListener("click", openMembers);
             } else if (i === 1) {
@@ -335,10 +337,10 @@
             }
         }
         
-        var res = document.getElementById("res");
-        var gen = document.getElementById("generate");
-        var prevNum = -1;
-        var prompts = [
+        let res = document.getElementById("res");
+        let gen = document.getElementById("generate");
+        let prevNum = -1;
+        let prompts = [
             "A detective who can talk to plants",
             "A spaceship that lands on a planet made of candy",
             "A cheetah that was born slow",
@@ -346,8 +348,8 @@
             "A fidget who gets into a fight",
             "An asteroid that's going to hit Earth"
         ];
-        var generate = function() {
-            var num = Math.floor(Math.random() * prompts.length);
+        let generate = function() {
+            let num = Math.floor(Math.random() * prompts.length);
             while (num === prevNum) {
                 num = Math.floor(Math.random() * prompts.length);
             }
@@ -357,8 +359,8 @@
         gen.addEventListener("click", generate);
         generate()
         
-        var togBtn = document.getElementById("toggle");
-        var toggle = function() {
+        let togBtn = document.getElementById("toggle");
+        let toggle = function() {
             if (togBtn.textContent === "Dark Mode") {
                 document.body.classList.add("dark");
                 togBtn.textContent = "Light Mode";
@@ -369,11 +371,11 @@
         }
         togBtn.addEventListener("click", toggle);
         
-        var count = document.getElementById("count");
-        var num = document.getElementById("num");
-        var wordCount = 0;
-        var findCount = function() {
-            var cleanedText = count.value.trim();
+        let count = document.getElementById("count");
+        let num = document.getElementById("num");
+        let wordCount = 0;
+        let findCount = function() {
+            let cleanedText = count.value.trim();
             if (cleanedText === "") {
                 wordCount = 0;
                 num.textContent = 0;
@@ -381,8 +383,8 @@
             } else {
                 wordCount = cleanedText.split(/\s+/).length;
                 num.textContent = wordCount;
-                var annTimes = [50, 100, 150, 200, 250, 300];
-                var ann = document.getElementById("announce");
+                let annTimes = [50, 100, 150, 200, 250, 300];
+                let ann = document.getElementById("announce");
                 if (annTimes.includes(wordCount)) {
                     ann.textContent = wordCount + " words! You're on a roll!";
                 } 
@@ -393,8 +395,8 @@
         }
         count.addEventListener("input", findCount);
         
-        var readTime;
-        var findReadTime = function() {
+        let readTime;
+        let findReadTime = function() {
             readTime = Math.floor(wordCount / 200);
             if (readTime < 1) {
                 readTime = "less than 1";
@@ -402,14 +404,14 @@
             if (count.value === "") {
                 readTime = 0;
             }
-            var len = document.getElementById("len");
+            let len = document.getElementById("len");
             len.textContent = readTime;
         }
         count.addEventListener("input", findReadTime);
         
-        var checkTimeOfDay = function() {
-            var currentHour = new Date().getHours();
-            var togBtn = document.getElementById("toggle");
+        let checkTimeOfDay = function() {
+            let currentHour = new Date().getHours();
+            let togBtn = document.getElementById("toggle");
             if (currentHour < 6 || currentHour >= 18) {
                 document.body.classList.add("dark");
                 togBtn.textContent = "Light Mode";
@@ -420,22 +422,22 @@
         }
         checkTimeOfDay();
         
-        var nameCon = document.getElementById("name");
-        var nameGen = document.getElementById("name-gen");
-        var firstNames = [
+        let nameCon = document.getElementById("name");
+        let nameGen = document.getElementById("name-gen");
+        let firstNames = [
             "Alex", "Rapheil", "Max", "Jack", "Oliver", "Rose", "Angel", "Sarah", "Rafe"
         ];
-        var lastNames = [
+        let lastNames = [
             "Krosaka", "Masor", "Shawn", "Thomas", "Montomery", "Realtit", "Jobernag", "Halfnet", "Smyth"
         ];
-        var showNames = function() {
-            var nameNums = [Math.floor(Math.random() * firstNames.length), Math.floor(Math.random() * lastNames.length)];
+        let showNames = function() {
+            let nameNums = [Math.floor(Math.random() * firstNames.length), Math.floor(Math.random() * lastNames.length)];
             nameCon.textContent = firstNames[nameNums[0]] + " " + lastNames[nameNums[1]];
         }
         nameGen.addEventListener("click", showNames);
         showNames()
         
-        var title = {
+        let title = {
             "nouns" : [
                 "Camel", "Squirrel", "Dog", "Cat", "Table", "Asteroid", "School", "Planet", "Star", "Headphones", "Earth", "Guitar", "Piano", "Buffalo"
             ],
@@ -447,9 +449,9 @@
             ]
         };
         
-        var titleGen = document.getElementById("gen-title");
-        var titleEl = document.getElementById("title")
-        var showTitle = function() {
+        let titleGen = document.getElementById("gen-title");
+        let titleEl = document.getElementById("title")
+        let showTitle = function() {
             titleEl.textContent = title["articles"][Math.floor(Math.random() * title["articles"].length)] + " " + title["adjectives"][Math.floor(Math.random() * title["adjectives"].length)] + " " + title["nouns"][Math.floor(Math.random() * title["nouns"].length)];
         }
         titleGen.addEventListener("click", showTitle);
