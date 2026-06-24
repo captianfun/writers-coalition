@@ -167,32 +167,6 @@
                 border-color:skyblue;
             }
             
-            #name {
-                height:30px;
-                max-width:400px;
-                font-weight:bold;
-            }
-            
-            #title-con {
-                max-width:400px;
-                height:20px;
-            }
-
-            .sketchpad-input {
-                width: 100%;
-                max-width: 400px;
-                box-sizing: border-box;
-                padding: 6px;
-                margin-bottom: 8px;
-                border: 2px solid deepskyblue;
-                border-radius: 6px;
-                font-family: inherit;
-            }
-            
-            #sketchpad-body {
-                height: 80px;
-            }
-            
             textarea {
                 resize:none;
             }
@@ -253,12 +227,6 @@
                 background-color:orange;
                 border-color:gold;
             }
-
-            body.dark .sketchpad-input {
-                background-color: #333;
-                color: white;
-                border-color: orange;
-            }
         </style>
     </head>
     <body>
@@ -304,17 +272,6 @@
             <h3>Book Title Generator</h3>
             <button id = "gen-title">Generate Title</button>
             <div class = "container" id = "title-con"><strong id = "title"></strong></div>
-            
-            <h3>Story Sketchpad</h3>
-            <div class="container">
-                <input type="text" id="sketchpad-name" class="sketchpad-input" placeholder="Your Name"><br>
-                <input type="text" id="sketchpad-title" class="sketchpad-input" placeholder="Idea Title"><br>
-                <textarea id="sketchpad-body" class="sketchpad-input" placeholder="Write your awesome story idea here..."></textarea><br>
-                <button id="sketchpad-publish">Publish to Notes</button>
-            </div>
-
-            <h3>Notes</h3>
-            <div id="notes-con" class="contain"></div>
         </div>
         <div id = "member-data">
             <div class = "contain">
@@ -530,52 +487,6 @@
         }
         titleGen.addEventListener("click", showTitle);
         showTitle();
-
-        var sketchpadName = document.getElementById("sketchpad-name");
-        var sketchpadTitle = document.getElementById("sketchpad-title");
-        var sketchpadBody = document.getElementById("sketchpad-body");
-        var publishBtn = document.getElementById("sketchpad-publish");
-        var notesCon = document.getElementById("notes-con");
-
-        var buildNoteCard = function(authorName, ideaTitle, ideaBody) {
-            var cardDiv = document.createElement("div");
-            cardDiv.className = "card";
-            
-            cardDiv.innerHTML = "<h3>" + ideaTitle + "</h3>" +
-                                "<p><strong>By:</strong> " + authorName + "</p>" +
-                                "<p>" + ideaBody + "</p>";
-                                
-            notesCon.appendChild(cardDiv);
-        };
-
-        var loadSavedNotes = function() {
-            var storedList = JSON.parse(localStorage.getItem("coalitionNotes")) || [];
-            for (var i = 0; i < storedList.length; i++) {
-                buildNoteCard(storedList[i].author, storedList[i].title, storedList[i].body);
-            }
-        };
-        
-        publishBtn.addEventListener("click", function() {
-            var nameValue = sketchpadName.value.trim();
-            var titleValue = sketchpadTitle.value.trim();
-            var bodyValue = sketchpadBody.value.trim();
-
-            if (nameValue === "" || titleValue === "" || bodyValue === "") {
-                alert("Please don't leave any boxes blank! We need your name, title, and idea.");
-                return;
-            }
-
-            buildNoteCard(nameValue, titleValue, bodyValue);
-
-            var storedList = JSON.parse(localStorage.getItem("coalitionNotes")) || [];
-            storedList.push({ author: nameValue, title: titleValue, body: bodyValue });
-            localStorage.setItem("coalitionNotes", JSON.stringify(storedList));
-
-            sketchpadTitle.value = "";
-            sketchpadBody.value = "";
-        });
-        
-        loadSavedNotes();
     </script>
     </body>
 </html>
