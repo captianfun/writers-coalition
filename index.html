@@ -299,7 +299,7 @@
         }
 
         let loadMembers = function() {
-            for (let i = 0; i < Math.floor(members.length / 2); i++) {
+            for (let i = 0; i < Math.ceil(members.length / 2); i++) {
                 let conDiv = document.createElement("div"); // Fixed: changed memberData to document
                 conDiv.classList.add("contain");
                 memberData.appendChild(conDiv);
