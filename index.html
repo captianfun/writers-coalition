@@ -297,10 +297,10 @@
     </div>
     <script>
         let members = [
-            {name: "Oz", book: "Clash of the Gods"},
-            {name: "Teemo", book: "Diary of a Needoh"},
-            {name: "Aokai", book: "World of Cubes"},
-            {name: "Immanuel", book: "Alpha Squad: RECON"},
+            {name: "Oz", book: "Clash of the Gods", des: "Oz is the author of the PAWS series, Clash of the Gods, A crazy day in the House of Commons, and Diary of a Minecraft Wolf. He is the current record holder for the most mini-novels."},
+            {name: "Teemo", book: "Diary of a Needoh", des: "Teemo is the author of the well-loved book, Diary of a Needoh. He is currently four books into the series."},
+            {name: "Aokai", book: "World of Cubes", des: "Aokai is the founder of the Writers Coalition. He is the author of the World Of Cubes series and Panorama Perspective."},
+            {name: "Immanuel", book: "Alpha Squad: RECON", des: "Immanuel is the author of the Space Rabbit series and the Alpha Squad series. He is the record holder for the most books, but he is the only member to write comic books."},
         ];
         let showSpotlight = function() {
             let info = document.getElementById("info");
@@ -317,6 +317,25 @@
         let closeAll = function() {
             memberData.style.display = "none";
             homeData.style.display = "none";
+        }
+
+        let loadMembers = function() {
+            let conts = document.querySelectorAll("#member-data .contain");
+            for (let i = 0; i < members.length; i++) {
+                let memDiv = document.createElement("div");
+                memDiv.classList.add("card");
+                let par = document.createElement("p");
+                par.textContent = members[i].des;
+                let head = document.createElement("h3");
+                head.textContent = members[i].name;
+                memDiv.appendChild(head);
+                memDiv.appendChild(par);
+                if (i === 1 || i === 2) {
+                    conts[0].appendChild(memDiv);
+                } else {
+                    conts[1].appendChild(memDiv);
+                }
+            }
         }
         
         let openMembers = function() {
