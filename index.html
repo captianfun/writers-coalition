@@ -233,7 +233,6 @@
     <div id = "content">
         <div id = "bar">
             <button class="nav-btn">members</button>
-            <button class="nav-btn">books</button>
             <button class="nav-btn">home</button>
             <button id = "toggle">Dark Mode</button>
         </div>
@@ -293,30 +292,6 @@
                 </div>
             </div>
         </div>
-        <div id = "book-data">
-            <div class = "contain">
-                <div class = "book">
-                    <div class = "book-title">
-                        the PAWS series: Mole, Comeback, and Finale
-                    </div>
-                </div>
-                <div class = "book">
-                    <div class = "book-title">
-                        the World of Cubes series: World of Cubes, The Corruption, The Timeline
-                    </div>
-                </div>
-                <div class = "book">
-                    <div class = "book-title">
-                        the Diary of a Needoh series: Diary of a Needoh, Lights out
-                    </div>
-                </div>
-                <div class = "book">
-                    <div class = "book-title">
-                        Alpha Squad series: RECON, *unknown*
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
     <script>
         var members = [
@@ -333,7 +308,6 @@
         }
         showSpotlight();
         
-        var bookData = document.getElementById("book-data");
         var memberData = document.getElementById("member-data");
         var homeData = document.getElementById("home-data");
         
@@ -341,16 +315,11 @@
         var closeAll = function() {
             memberData.style.display = "none";
             homeData.style.display = "none";
-            bookData.style.display = "none";
         }
         
         var openMembers = function() {
             closeAll();
             memberData.style.display = "block";
-        }
-        var openBooks = function() {
-            closeAll();
-            bookData.style.display = "block";
         }
         var openHome = function() {
             showSpotlight();
@@ -362,8 +331,6 @@
             if (i === 0) {
                 buttons[i].addEventListener("click", openMembers);
             } else if (i === 1) {
-                buttons[i].addEventListener("click", openBooks);
-            } else if (i === 2) {
                 buttons[i].addEventListener("click", openHome);
             }
         }
