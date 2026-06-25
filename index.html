@@ -139,6 +139,10 @@
                 box-sizing:border-box;
             }
             
+            .rank {
+                color:gray;
+            }
+            
             select {
                 background-color:aliceblue;
                 border:2px solid deepskyblue;
@@ -201,6 +205,10 @@
                 border-color:white;
             }
             
+            body.dark .rank {
+                color:lightgray;
+            }
+            
             body.dark select {
                 background-color:gold;
                 border-color:orange;
@@ -251,7 +259,7 @@
             {name: "Aadhya", book: "The Guy series", des: "Aadhya is a member who likes to write comic books, but he's also writen some mini-novels. He's currently printed 1 mini-novel and is still working on more books.", rank: "pro writer"},
             {name: "Gal", book: "*getting info*", des: "Gal is the newest recruit to the Writers Coalition. She loves cats, magic, and dragons.", rank: "pro writer"}
         ];
-        let showSpotlight = function() {
+        function showSpotlight() {
             let info = document.getElementById("info");
             let num = Math.floor(Math.random() * members.length);
             let person = members[num];
@@ -263,12 +271,12 @@
         let homeData = document.getElementById("home-data");
         
         let buttons = document.querySelectorAll("#bar .nav-btn");
-        let closeAll = function() {
+        function closeAll() {
             memberData.style.display = "none";
             homeData.style.display = "none";
         }
 
-        let loadMembers = function() {
+        function loadMembers() {
             for (let i = 0; i < Math.ceil(members.length / 2); i++) {
                 let conDiv = document.createElement("div"); // Fixed: changed memberData to document
                 conDiv.classList.add("contain");
@@ -282,6 +290,7 @@
                 par.textContent = members[i].des;
                 let rank = document.createElement("p");
                 rank.textContent = members[i].rank;
+                rank.classList.add("rank");
                 let head = document.createElement("h3");
                 head.textContent = members[i].name;
                 memDiv.appendChild(head);
@@ -294,11 +303,11 @@
             }
         }
         
-        let openMembers = function() {
+        function openMembers() {
             closeAll();
             memberData.style.display = "block";
         }
-        let openHome = function() {
+        function openHome() {
             showSpotlight();
             closeAll();
             homeData.style.display = "block";
@@ -323,7 +332,7 @@
             "A fidget who gets into a fight",
             "An asteroid that's going to hit Earth"
         ];
-        let generate = function() {
+        function generate() {
             let num = Math.floor(Math.random() * prompts.length);
             while (num === prevNum) {
                 num = Math.floor(Math.random() * prompts.length);
@@ -335,7 +344,7 @@
         generate()
         
         let togBtn = document.getElementById("toggle");
-        let toggle = function() {
+        function toggle() {
             if (togBtn.textContent === "Dark Mode") {
                 document.body.classList.add("dark");
                 togBtn.textContent = "Light Mode";
@@ -349,7 +358,7 @@
         let count = document.getElementById("count");
         let num = document.getElementById("num");
         let wordCount = 0;
-        let findCount = function() {
+        function findCount() {
             let cleanedText = count.value.trim();
             if (cleanedText === "") {
                 wordCount = 0;
@@ -371,7 +380,7 @@
         count.addEventListener("input", findCount);
         
         let readTime;
-        let findReadTime = function() {
+        function findReadTime() {
             readTime = Math.floor(wordCount / 200);
             if (readTime < 1) {
                 readTime = "less than 1";
@@ -384,7 +393,7 @@
         }
         count.addEventListener("input", findReadTime);
         
-        let checkTimeOfDay = function() {
+        function checkTimeOfDay() {
             let currentHour = new Date().getHours();
             let togBtn = document.getElementById("toggle");
             if (currentHour < 6 || currentHour >= 18) {
@@ -405,7 +414,7 @@
         let lastNames = [
             "Krosaka", "Masor", "Shawn", "Thomas", "Montomery", "Realtit", "Jobernag", "Halfnet", "Smyth"
         ];
-        let showNames = function() {
+        function showNames() {
             let nameNums = [Math.floor(Math.random() * firstNames.length), Math.floor(Math.random() * lastNames.length)];
             nameCon.textContent = firstNames[nameNums[0]] + " " + lastNames[nameNums[1]];
         }
@@ -413,20 +422,20 @@
         showNames()
         
         let title = {
-            "nouns" : [
+            nouns : [
                 "Camel", "Squirrel", "Dog", "Cat", "Table", "Asteroid", "School", "Planet", "Star", "Headphones", "Earth", "Guitar", "Piano", "Buffalo"
             ],
-            "articles" : [
+            articles : [
                 "A", "The",
             ],
-            "adjectives" : [
+            adjectives : [
                 "Stinky", "Furry", "Secret", "Rabid", "Dangerous", "Scared", "Brave", "Adventurous", "Solitary", "Happy", "Sad", "Angry"
             ]
         };
         
         let titleGen = document.getElementById("gen-title");
         let titleEl = document.getElementById("title")
-        let showTitle = function() {
+        function showTitle() {
             titleEl.textContent = title["articles"][Math.floor(Math.random() * title["articles"].length)] + " " + title["adjectives"][Math.floor(Math.random() * title["adjectives"].length)] + " " + title["nouns"][Math.floor(Math.random() * title["nouns"].length)];
         }
         titleGen.addEventListener("click", showTitle);
