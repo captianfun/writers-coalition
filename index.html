@@ -257,7 +257,7 @@
         let members = [
             {name: "Oz", book: "Clash of the Gods", des: "Oz is the author of the PAWS series, Clash of the Gods, A crazy day in the House of Commons, and Diary of a Minecraft Wolf. He is the current record holder for the most mini-novels.", title: "founder"},
             {name: "Aadhya", book: "The Guy series", des: "Aadhya is a member who likes to write comic books, but he's also writen some mini-novels. He's currently printed 1 mini-novel and is still working on more books.", title : "first join request"},
-            {name: "Gal", book: "*getting info*", des: "Gal is the newest recruit to the Writers Coalition. She loves cats, magic, and dragons.", title: "second join request"}
+            {name: "Gal", book: "Asassin Series", des: "Gal is the newest recruit to the Writers Coalition. She loves cats, magic, and dragons.", title: "second join request"}
         ];
         function showSpotlight() {
             let info = document.getElementById("info");
@@ -288,15 +288,13 @@
                 memDiv.classList.add("card");
                 let par = document.createElement("p");
                 par.textContent = members[i].des;
-                if (members[i].title !== "") {
-                    let title = document.createElement("p");
-                    title.textContent = members[i].title;
-                    title.classList.add("title");
-                }
                 let head = document.createElement("h3");
                 head.textContent = members[i].name;
                 memDiv.appendChild(head);
                 if (members[i].title !== "") {
+                    let title = document.createElement("p");
+                    title.textContent = members[i].title;
+                    title.classList.add("title");
                     memDiv.appendChild(title);
                 }
                 memDiv.appendChild(par);
