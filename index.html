@@ -254,79 +254,17 @@
         </div>
     </div>
     <script>
-        let members = [
+        import readline from 'node:readline';
+        import { EventEmitter } from 'node:events';
+        
+        const members = [
             {name: "Oz", book: "Clash of the Gods", des: "Oz is the author of the PAWS series, Clash of the Gods, A crazy day in the House of Commons, and Diary of a Minecraft Wolf. He is the current record holder for the most mini-novels.", title: "founder"},
             {name: "Aadhya", book: "The Guy series", des: "Aadhya is a member who likes to write comic books, but he's also writen some mini-novels. He's currently printed 1 mini-novel and is still working on more books.", title : "first join request"},
-            {name: "Gal", book: "Asassin Series", des: "Gal is the newest recruit to the Writers Coalition. She loves cats, magic, and dragons.", title: "second join request"}
+            {name: "Gal", book: "Asassin Series", des: "Gal is the newest recruit to the Writers Coalition. She loves cats, magic, and dragons.", title: ""},
+            {name: "Liam", book: "Soccer Story", des: "Liam is the first writer to write a choose-your-own-adventure story. He is also one of the only writers who writes books by hand.", title: ""}
         ];
-        function showSpotlight() {
-            let info = document.getElementById("info");
-            let num = Math.floor(Math.random() * members.length);
-            let person = members[num];
-            info.textContent = person.name + " for " + person.book;
-        }
-        showSpotlight();
         
-        let memberData = document.getElementById("member-data");
-        let homeData = document.getElementById("home-data");
-        
-        let buttons = document.querySelectorAll("#bar .nav-btn");
-        function closeAll() {
-            memberData.style.display = "none";
-            homeData.style.display = "none";
-        }
-
-        function loadMembers() {
-            for (let i = 0; i < Math.ceil(members.length / 2); i++) {
-                let conDiv = document.createElement("div"); // Fixed: changed memberData to document
-                conDiv.classList.add("contain");
-                memberData.appendChild(conDiv);
-            }
-            let conts = document.querySelectorAll("#member-data .contain");
-            for (let i = 0; i < members.length; i++) {
-                let memDiv = document.createElement("div");
-                memDiv.classList.add("card");
-                let par = document.createElement("p");
-                par.textContent = members[i].des;
-                let head = document.createElement("h3");
-                head.textContent = members[i].name;
-                memDiv.appendChild(head);
-                if (members[i].title !== "") {
-                    let title = document.createElement("p");
-                    title.textContent = members[i].title;
-                    title.classList.add("title");
-                    memDiv.appendChild(title);
-                }
-                memDiv.appendChild(par);
-                let which = Math.floor(i / 2); 
-                if (conts[which]) {
-                    conts[which].appendChild(memDiv);
-                }
-            }
-        }
-        
-        function openMembers() {
-            closeAll();
-            memberData.style.display = "block";
-        }
-        function openHome() {
-            showSpotlight();
-            closeAll();
-            homeData.style.display = "block";
-        }
-        
-        for (let i = 0; i < buttons.length; i++) {
-            if (i === 0) {
-                buttons[i].addEventListener("click", openMembers);
-            } else if (i === 1) {
-                buttons[i].addEventListener("click", openHome);
-            }
-        }
-        
-        let res = document.getElementById("res");
-        let gen = document.getElementById("generate");
-        let prevNum = -1;
-        let prompts = [
+        const prompts = [
             "A detective who can talk to plants",
             "A spaceship that lands on a planet made of candy",
             "A cheetah that was born slow",
@@ -334,116 +272,149 @@
             "A fidget who gets into a fight",
             "An asteroid that's going to hit Earth"
         ];
-        function generate() {
+        
+        const firstNames = ["Alex", "Rapheil", "Max", "Jack", "Oliver", "Rose", "Angel", "Sarah", "Rafe"];
+        const lastNames = ["Krosaka", "Masor", "Shawn", "Thomas", "Montomery", "Realtit", "Jobernag", "Halfnet", "Smyth"];
+        
+        const titleComponents = {
+            nouns: ["Camel", "Squirrel", "Dog", "Cat", "Table", "Asteroid", "School", "Planet", "Star", "Headphones", "Earth", "Guitar", "Piano", "Buffalo"],
+            articles: ["A", "The"],
+            adjectives: ["Stinky", "Furry", "Secret", "Rabid", "Dangerous", "Scared", "Brave", "Adventurous", "Solitary", "Happy", "Sad", "Angry"]
+        };
+        
+        let prevNum = -1;
+        
+        const appEvents = new EventEmitter();
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+        
+        function showSpotlight() {
+            const num = Math.floor(Math.random() * members.length);
+            const person = members[num];
+            console.log(`\n=== FEATURED WRITER ===\n${person.name} for "${person.book}"\n`);
+        }
+        
+        function loadMembers() {
+            console.log(`\n=== MEMBERS LIST ===`);
+            members.forEach(m => {
+                const role = m.title ? `(${m.title})` : '';
+                console.log(`- ${m.name} ${role}\n  Book: ${m.book}\n  Bio: ${m.des}\n`);
+            });
+        }
+        
+        function generatePrompt() {
             let num = Math.floor(Math.random() * prompts.length);
             while (num === prevNum) {
                 num = Math.floor(Math.random() * prompts.length);
             }
-            res.textContent = prompts[num];
             prevNum = num;
+            console.log(`\nGenerated Prompt: "${prompts[num]}"\n`);
         }
-        gen.addEventListener("click", generate);
-        generate()
         
-        let togBtn = document.getElementById("toggle");
-        function toggle() {
-            if (togBtn.textContent === "Dark Mode") {
-                document.body.classList.add("dark");
-                togBtn.textContent = "Light Mode";
-            } else {
-                document.body.classList.remove("dark");
-                togBtn.textContent = "Dark Mode";
-            }
+        function generateCharacterName() {
+            const first = firstNames[Math.floor(Math.random() * firstNames.length)];
+            const last = lastNames[Math.floor(Math.random() * lastNames.length)];
+            console.log(`\nGenerated Character Name: ${first} ${last}\n`);
         }
-        togBtn.addEventListener("click", toggle);
         
-        let count = document.getElementById("count");
-        let num = document.getElementById("num");
-        let wordCount = 0;
-        function findCount() {
-            let cleanedText = count.value.trim();
+        function generateBookTitle() {
+            const art = titleComponents.articles[Math.floor(Math.random() * titleComponents.articles.length)];
+            const adj = titleComponents.adjectives[Math.floor(Math.random() * titleComponents.adjectives.length)];
+            const noun = titleComponents.nouns[Math.floor(Math.random() * titleComponents.nouns.length)];
+            console.log(`\nGenerated Book Title: "${art} ${adj} ${noun}"\n`);
+        }
+        
+        function handleWordCounter(text) {
+            const cleanedText = text.trim();
             if (cleanedText === "") {
-                wordCount = 0;
-                num.textContent = 0;
-                document.getElementById("announce").textContent = "";
-            } else {
-                wordCount = cleanedText.split(/\s+/).length;
-                num.textContent = wordCount;
-                let annTimes = [50, 100, 150, 200, 250, 300];
-                let ann = document.getElementById("announce");
-                if (annTimes.includes(wordCount)) {
-                    ann.textContent = wordCount + " words! You're on a roll!";
-                } 
-                if (wordCount < 30) {
-                    ann.textContent = "";
-                }
+                console.log(`\nWords: 0 | Read Time: 0 minutes\n`);
+                return;
             }
-        }
-        count.addEventListener("input", findCount);
+            const wordCount = cleanedText.split(/\s+/).length;
+            let readTime = Math.floor(wordCount / 200);
+            if (readTime < 1) readTime = "less than 1";
         
-        let readTime;
-        function findReadTime() {
-            readTime = Math.floor(wordCount / 200);
-            if (readTime < 1) {
-                readTime = "less than 1";
+            console.log(`\nCurrent word count is: ${wordCount}`);
+            console.log(`Time to read: ${readTime} minutes`);
+            
+            if ([50, 100, 150, 200, 250, 300].includes(wordCount)) {
+                console.log(`[ANNOUNCEMENT] ${wordCount} words! You're on a roll!`);
             }
-            if (count.value === "") {
-                readTime = 0;
-            }
-            let len = document.getElementById("len");
-            len.textContent = readTime;
+            console.log('');
         }
-        count.addEventListener("input", findReadTime);
         
         function checkTimeOfDay() {
-            let currentHour = new Date().getHours();
-            let togBtn = document.getElementById("toggle");
+            const currentHour = new Date().getHours();
             if (currentHour < 6 || currentHour >= 18) {
-                document.body.classList.add("dark");
-                togBtn.textContent = "Light Mode";
+                console.log(`[System Notice] Time is ${currentHour}:00. Dark Mode layout recommended.`);
             } else {
-                document.body.classList.remove("dark");
-                togBtn.textContent = "Dark Mode";
+                console.log(`[System Notice] Time is ${currentHour}:00. Light Mode layout recommended.`);
             }
         }
+        
+        appEvents.on('viewSpotlight', showSpotlight);
+        appEvents.on('viewMembers', loadMembers);
+        appEvents.on('genPrompt', generatePrompt);
+        appEvents.on('genName', generateCharacterName);
+        appEvents.on('genTitle', generateBookTitle);
+        appEvents.on('countWords', handleWordCounter);
+        
         checkTimeOfDay();
+        showSpotlight();
         
-        let nameCon = document.getElementById("name");
-        let nameGen = document.getElementById("name-gen");
-        let firstNames = [
-            "Alex", "Rapheil", "Max", "Jack", "Oliver", "Rose", "Angel", "Sarah", "Rafe"
-        ];
-        let lastNames = [
-            "Krosaka", "Masor", "Shawn", "Thomas", "Montomery", "Realtit", "Jobernag", "Halfnet", "Smyth"
-        ];
-        function showNames() {
-            let nameNums = [Math.floor(Math.random() * firstNames.length), Math.floor(Math.random() * lastNames.length)];
-            nameCon.textContent = firstNames[nameNums[0]] + " " + lastNames[nameNums[1]];
+        function startInteractiveMenu() {
+            console.log(`--- WRITERS COALITION MENU ---`);
+            console.log(`1. View Members Page`);
+            console.log(`2. View Home Spotlight`);
+            console.log(`3. Generate Book Prompt`);
+            console.log(`4. Generate Character Name`);
+            console.log(`5. Generate Book Title`);
+            console.log(`6. Test Word Counter`);
+            console.log(`7. Exit`);
+        
+            rl.question('\nChoose an action (1-7): ', (choice) => {
+                switch (choice.trim()) {
+                    case '1':
+                        appEvents.emit('viewMembers');
+                        startInteractiveMenu();
+                        break;
+                    case '2':
+                        appEvents.emit('viewSpotlight');
+                        startInteractiveMenu();
+                        break;
+                    case '3':
+                        appEvents.emit('genPrompt');
+                        startInteractiveMenu();
+                        break;
+                    case '4':
+                        appEvents.emit('genName');
+                        startInteractiveMenu();
+                        break;
+                    case '5':
+                        appEvents.emit('genTitle');
+                        startInteractiveMenu();
+                        break;
+                    case '6':
+                        rl.question('Type or paste text to count: ', (text) => {
+                            appEvents.emit('countWords', text);
+                            startInteractiveMenu();
+                        });
+                        break;
+                    case '7':
+                        console.log('Closing Writers Coalition app.');
+                        rl.close();
+                        break;
+                    default:
+                        console.log('\nInvalid selection. Choose 1 through 7.\n');
+                        startInteractiveMenu();
+                        break;
+                }
+            });
         }
-        nameGen.addEventListener("click", showNames);
-        showNames()
         
-        let title = {
-            nouns : [
-                "Camel", "Squirrel", "Dog", "Cat", "Table", "Asteroid", "School", "Planet", "Star", "Headphones", "Earth", "Guitar", "Piano", "Buffalo"
-            ],
-            articles : [
-                "A", "The",
-            ],
-            adjectives : [
-                "Stinky", "Furry", "Secret", "Rabid", "Dangerous", "Scared", "Brave", "Adventurous", "Solitary", "Happy", "Sad", "Angry"
-            ]
-        };
-        
-        let titleGen = document.getElementById("gen-title");
-        let titleEl = document.getElementById("title")
-        function showTitle() {
-            titleEl.textContent = title["articles"][Math.floor(Math.random() * title["articles"].length)] + " " + title["adjectives"][Math.floor(Math.random() * title["adjectives"].length)] + " " + title["nouns"][Math.floor(Math.random() * title["nouns"].length)];
-        }
-        titleGen.addEventListener("click", showTitle);
-        showTitle();
-
-        loadMembers()
+        startInteractiveMenu();
     </script>
     </body>
 </html>
