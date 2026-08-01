@@ -1,860 +1,144 @@
 <!DOCTYPE html>
-
 <html>
-
     <head>
-
         <meta charset="utf-8">
-
         <title>Writers Coalition</title>
-
         <style>
-
             body {
-
-                background:linear-gradient(lightskyblue, skyblue, deepskyblue);
-
-                background-attachment:fixed;
-
+                background-color:#FFF8DC;
+                margin:0px;
+                overflow-x:hidden;
             }
-
             
-
             * {
-
                 font-family:"comic sans ms", "comic sans", sans-serif;
-
             }
-
             
-
-            #content {
-
-                background-color:white;
-
-                border-radius:8px;
-
-                border:2px solid black;
-
-                padding:10px;
-
-                min-height:100vh;
-
-            }
-
-            
-
             #bar {
-
+                background-color:#FFF8DC;
                 border-bottom:2px solid black;
-
-                margin:-10px;
-
-                padding:10px;
-
+                padding:5px;
+                z-index:5;
+                top:0px;
                 display:flex;
-
+                position:fixed;
+                height:45px;
+                width:100%;
                 justify-content:space-between;
-
-            }
-
-            
-
-            #announce {
-
-                max-width:400px;
-
-                height:20px;
-
-            }
-
-            
-
-            button {
-
-                background-color:aliceblue;
-
-                border-radius:8px;
-
-                border:2px solid deepskyblue;
-
-                padding: 5px 10px;
-
-            }
-
-            
-
-            button:hover {
-
-                background-color:deepskyblue;
-
-                cursor:pointer;
-
-                border-color:skyblue;
-
-            }
-
-            
-
-            .card {
-
-                border:2px solid black;
-
-                background-color:white;
-
-                border-radius:8px;
-
-                width:200px;
-
-                padding:10px;
-
-                margin-top:20px;
-
-                min-height:150px;
-
-                height: auto;
-
-            }
-
-            
-
-            .contain {
-
-                display:flex;
-
-                justify-content:space-between;
-
-                flex-wrap:wrap;
-
-            }
-
-            
-
-            #member-data {
-
-                display:none;
-
-            }
-
-            
-
-            #book-data {
-
-                display:none;
-
-            }
-
-            
-
-            #chat-data {
-
-                display:none;
-
-            }
-
-            
-
-            #res {
-
-                font-weight:bold;
-
-                min-height:20px;
-
-                max-width:400px;
-
-            }
-
-            
-
-            .container {
-
-                margin-top:15px;
-
-                padding:10px;
-
-                background-color:aliceblue;
-
-                border:2px dashed deepskyblue;
-
-                border-radius:8px;
-
-            }
-
-            
-
-            #featured {
-
-                border-radius:8px;
-
-                display:flex;
-
-                align-items:center;
-
-            }
-
-            
-
-            #icon {
-
-                position:relative;
-
-                width:100px;
-
-                height:100px;
-
-                overflow:hidden;
-
-            }
-
-            
-
-            #icon::before {
-
-                content:"";
-
-                position:absolute;
-
-                top:20px;
-
-                left:50%;
-
-                transform:translateX(-50%);
-
-                width:35px;
-
-                height:35px;
-
-                background-color:deepskyblue;
-
-                border-radius:50%;
-
-            }
-
-            
-
-            #icon::after {
-
-                content:"";
-
-                position:absolute;
-
-                bottom:0;
-
-                left:50%;
-
-                transform:translateX(-50%);
-
-                width:65px;
-
-                height:35px;
-
-                background-color:deepskyblue;
-
-                border-radius:35px 35px 0 0; 
-
-            }
-
-            
-
-            #info {
-
-                font-size:1.1em;
-
-                margin:0;
-
-                margin-left:20px;
-
-            }
-
-            
-
-            #count {
-
-                width:300px;
-
-                height:150px;
-
                 box-sizing:border-box;
-
             }
-
             
-
-            .title {
-
-                color:gray;
-
+            #bar button {
+                border:transparent;
+                background-color:#FFF8DC;
+                font-size:20px;
+                font-family:monospace;
             }
-
             
-
-            select {
-
-                background-color:aliceblue;
-
-                border:2px solid deepskyblue;
-
-                border-radius:8px;
-
-            }
-
-            
-
-            select:hover {
-
-                background-color:deepskyblue;
-
-                border-color:skyblue;
-
-            }
-
-            
-
-            textarea {
-
-                resize:none;
-
-            }
-
-
-            body.dark {
-
-                color:white;
-
-                background:linear-gradient(darkgray, black);
-
-                background-attachment:fixed;
-
-            }
-
-            
-
-            body.dark #content {
-
-                background-color:#222;
-
-                border-color:white;
-
-            }
-
-            
-
-            body.dark .card {
-
-                background-color:#333;
-
-                border-color: white;
-
-                color: white;
-
-            }
-
-            
-
-            body.dark #icon::before, body.dark #icon::after {
-
-                background-color:orange;
-
-            }
-
-            
-
-            body.dark button {
-
-                background-color:gold;
-
-                border-color:orange;
-
-                color: black;
-
-            }
-
-            
-
-            body.dark button:hover {
-
-                cursor:pointer;
-
-                border-color:gold;
-
-                background-color:orange;
-
-            }
-
-            
-
-            body.dark .container {
-
-                border-color:orange;
-
-                background-color:gold;
-
-                color: black;
-
-            }
-
-            
-
-            body.dark #info {
-
+            #bar a {
                 color:black;
-
+                text-decoration:none;
+                font-family:monospace;
             }
-
             
-
-            body.dark #bar {
-
-                border-color:white;
-
+            #bar button:hover {
+                background-color:#FFFAF0;
+                border-radius:8px;
             }
-
             
-
-            body.dark .title {
-
-                color:lightgray;
-
+            .heading {
+                margin-top:60px;
+                text-align:center;
+                transform:rotate(-5deg);
             }
-
             
-
-            body.dark select {
-
-                background-color:gold;
-
-                border-color:orange;
-
+            .para {
+                text-align:center;
             }
-
             
-
-            body.dark select:hover {
-
-                background-color:orange;
-
-                border-color:gold;
-
+            .ref {
+                margin-left:34%;
+                margin-right:36%;
             }
-
+            
+            .ref div {
+                border-radius:8px;
+                border:1px solid gray;
+                padding:10px;
+                background-color:lightgray;
+                text-align:center;
+                margin-bottom:10px;
+            }
+            
+            #mem-con {
+                display:grid;
+                grid-template-columns:repeat(2, 1fr);
+                text-align:center;
+                border-radius:8px;
+                border:2px solid black;
+                margin:5px;
+            }
+            
+            #mem-con div {
+                border:1px solid black;
+            }
         </style>
-
     </head>
-
     <body>
-
-    <div id = "content">
-
         <div id = "bar">
-
-            <button class="nav-btn">members</button>
-
-            <button class="nav-btn">home</button>
-
-            <button id = "toggle">Dark Mode</button>
-
+            <button><a href = "#members">Members</a></button>
+            <button><a href = "#home">Home</a></button>
+            <button><a href = "#competition">Competition</a></button>
+            <button><a href = "#our-story">Our Story</a></button>
         </div>
-
-        <div id = "home-data">
-
-            <h2>Featured Writer</h2>
-
-            <div class = "container" id = "featured">
-
-                <div id = "icon"></div>
-
-                <p id = "info"></p>
-
+        <div id = "home">
+            <h1 class = "heading">Writers Coalition</h1>
+            <p class = "para">The writers Coalition is a group of kids working together to make stories that they share with others.</p>
+            <div class = "ref">
+                <div>We make  Books</div>
+                <div>We make Comics</div>
+                <div>We make Stories</div>
             </div>
-
-            <h1>The Writers Coalition</h1>
-
-            <p>The writers coaltion is a group of writers that are dedicated to sharing their ideas and creativity with the comunity. There are 3 members so far.</p>
-
-            <h3>Book Prompt Generator</h3>
-
-            <button id = "generate">Generate prompt</button>
-
-            <div class = "container" id = "res"></div>
-
-            <h3>Word Counter</h3>
-
-            <textarea class = "container" id = "count" placeholder = "enter your text here to see the word count!"></textarea>
-
-            <p>Current word count is: <span id = "num">0</span></p>
-
-            <p>Time to read: <span id = "len">0</span> minutes</p>
-
-            <div class = "container" id = "announce"></div>
-
-            <h3>Character Name Generator</h3>
-
-            <button id = "name-gen">Generate Name</button>
-
-            <div class = "container" id = "name"></div>
-
-            <h3>Book Title Generator</h3>
-
-            <button id = "gen-title">Generate Title</button>
-
-            <div class = "container" id = "title-con"><strong id = "title"></strong></div>
-
         </div>
-
-        <div id = "member-data">
-
+        <div id = "members">
+            <div id = "members"></div>
+            <h1 class = "heading">Members</h1>
+            <div id = "mem-con">
+                
+            </div>
         </div>
-
-    </div>
-
-    <script>
-
-        let members = [
-
-            {name: "Oz", book: "Clash of the Gods", des: "Oz is the author of the PAWS series, Clash of the Gods, A crazy day in the House of Commons, and Diary of a Minecraft Wolf. He is the current record holder for the most mini-novels.", title: "founder"},
-
-            {name: "Aadhya", book: "The Guy series", des: "Aadhya is a member who likes to write comic books, but he's also writen some mini-novels. He's currently printed 1 mini-novel and is still working on more books.", title : "first join request"},
-
-            {name: "Gal", book: "Asassin Series", des: "Gal is the newest recruit to the Writers Coalition. She loves cats, magic, and dragons.", title: ""},
-            {name: "Liam", bookL "Soccer Story", des: "Liam is the first writer to write a choose-your-own-adventure story. He's also one of the only mambers to draw books by hand.", title: ""}
-
-        ];
-
-        function showSpotlight() {
-
-            let info = document.getElementById("info");
-
-            let num = Math.floor(Math.random() * members.length);
-
-            let person = members[num];
-
-            info.textContent = person.name + " for " + person.book;
-
-        }
-
-        showSpotlight();
-
-        
-
-        let memberData = document.getElementById("member-data");
-
-        let homeData = document.getElementById("home-data");
-
-        
-
-        let buttons = document.querySelectorAll("#bar .nav-btn");
-
-        function closeAll() {
-
-            memberData.style.display = "none";
-
-            homeData.style.display = "none";
-
-        }
-
-
-        function loadMembers() {
-
-            for (let i = 0; i < Math.ceil(members.length / 2); i++) {
-
-                let conDiv = document.createElement("div"); // Fixed: changed memberData to document
-
-                conDiv.classList.add("contain");
-
-                memberData.appendChild(conDiv);
-
+        <div id = "our-story">
+            <h1 class = "heading">Our Story</h1>
+            <p class = "para">This Writers Coalition began as another one. the founder in the other Writers Coalition (Writers Coalition #2), Aokia, decided to kick Oz out of the Coalition #2 for no good reason. Oz decided to make his own Writers Coalition (Writers Coalition #1) and invite new members.</p>
+            <p class = "para">Though, quickly,  Writers Coalition #2 came back and started stealing members from Oz. That is why, to this day, Writers Coalition #1 tries to make better stories.</p>
+        </div>
+        <div id = "competition">
+            <h1 class = "heading">Competition</h1>
+            <p class = "para">The Writers Coalition #2's members are Teemo, Aokai, and Imannuel. Teemo and Aokai are originals, but Imannuel is a stolen member from Writers Coalition #1.</p>
+            <p class = "para">Writers Coalition #1 and Writers Coalition #2 are rivals. They each try to make better books than the other.</p>
+        </div>
+        <script>
+            var members = [
+                {name: "Oz", des: "Oz founded the Writers Coalition."},
+                {name: "Aahdya", des: "Aahdya gave the first join request."},
+                {name: "Liam", des: "Liam was the first member to write a choose-your-own-adventure book."},
+                {name: "Gal", des: "Gal gave the second join request."},
+            ];
+            
+            if (members.length / 2 !== Math.floor(members.length / 2)) {
+                members.push({name: "empty", des: "empty"});
             }
-
-            let conts = document.querySelectorAll("#member-data .contain");
-
-            for (let i = 0; i < members.length; i++) {
-
-                let memDiv = document.createElement("div");
-
-                memDiv.classList.add("card");
-
-                let par = document.createElement("p");
-
-                par.textContent = members[i].des;
-
-                let head = document.createElement("h3");
-
-                head.textContent = members[i].name;
-
-                memDiv.appendChild(head);
-
-                if (members[i].title !== "") {
-
-                    let title = document.createElement("p");
-
-                    title.textContent = members[i].title;
-
-                    title.classList.add("title");
-
-                    memDiv.appendChild(title);
-
-                }
-
-                memDiv.appendChild(par);
-
-                let which = Math.floor(i / 2); 
-
-                if (conts[which]) {
-
-                    conts[which].appendChild(memDiv);
-
-                }
-
+            
+            for (var i = 0; i < members.length; i++) {
+                newDiv = document.createElement("div");
+                newP = document.createElement("p");
+                newP.textContent = members[i].des;
+                newH3 = document.createElement("h3");
+                newH3.textContent = members[i].name;
+                newDiv.appendChild(newH3);
+                newDiv.appendChild(newP);
+                document.getElementById("mem-con").appendChild(newDiv);
             }
-
-        }
-
-        
-
-        function openMembers() {
-
-            closeAll();
-
-            memberData.style.display = "block";
-
-        }
-
-        function openHome() {
-
-            showSpotlight();
-
-            closeAll();
-
-            homeData.style.display = "block";
-
-        }
-
-        
-
-        for (let i = 0; i < buttons.length; i++) {
-
-            if (i === 0) {
-
-                buttons[i].addEventListener("click", openMembers);
-
-            } else if (i === 1) {
-
-                buttons[i].addEventListener("click", openHome);
-
-            }
-
-        }
-
-        
-
-        let res = document.getElementById("res");
-
-        let gen = document.getElementById("generate");
-
-        let prevNum = -1;
-
-        let prompts = [
-
-            "A detective who can talk to plants",
-
-            "A spaceship that lands on a planet made of candy",
-
-            "A cheetah that was born slow",
-
-            "A dog who gets denied his toys",
-
-            "A fidget who gets into a fight",
-
-            "An asteroid that's going to hit Earth"
-
-        ];
-
-        function generate() {
-
-            let num = Math.floor(Math.random() * prompts.length);
-
-            while (num === prevNum) {
-
-                num = Math.floor(Math.random() * prompts.length);
-
-            }
-
-            res.textContent = prompts[num];
-
-            prevNum = num;
-
-        }
-
-        gen.addEventListener("click", generate);
-
-        generate()
-
-        
-
-        let togBtn = document.getElementById("toggle");
-
-        function toggle() {
-
-            if (togBtn.textContent === "Dark Mode") {
-
-                document.body.classList.add("dark");
-
-                togBtn.textContent = "Light Mode";
-
-            } else {
-
-                document.body.classList.remove("dark");
-
-                togBtn.textContent = "Dark Mode";
-
-            }
-
-        }
-
-        togBtn.addEventListener("click", toggle);
-
-        
-
-        let count = document.getElementById("count");
-
-        let num = document.getElementById("num");
-
-        let wordCount = 0;
-
-        function findCount() {
-
-            let cleanedText = count.value.trim();
-
-            if (cleanedText === "") {
-
-                wordCount = 0;
-
-                num.textContent = 0;
-
-                document.getElementById("announce").textContent = "";
-
-            } else {
-
-                wordCount = cleanedText.split(/\s+/).length;
-
-                num.textContent = wordCount;
-
-                let annTimes = [50, 100, 150, 200, 250, 300];
-
-                let ann = document.getElementById("announce");
-
-                if (annTimes.includes(wordCount)) {
-
-                    ann.textContent = wordCount + " words! You're on a roll!";
-
-                } 
-
-                if (wordCount < 30) {
-
-                    ann.textContent = "";
-
-                }
-
-            }
-
-        }
-
-        count.addEventListener("input", findCount);
-
-        
-
-        let readTime;
-
-        function findReadTime() {
-
-            readTime = Math.floor(wordCount / 200);
-
-            if (readTime < 1) {
-
-                readTime = "less than 1";
-
-            }
-
-            if (count.value === "") {
-
-                readTime = 0;
-
-            }
-
-            let len = document.getElementById("len");
-
-            len.textContent = readTime;
-
-        }
-
-        count.addEventListener("input", findReadTime);
-
-        
-
-        function checkTimeOfDay() {
-
-            let currentHour = new Date().getHours();
-
-            let togBtn = document.getElementById("toggle");
-
-            if (currentHour < 6 || currentHour >= 18) {
-
-                document.body.classList.add("dark");
-
-                togBtn.textContent = "Light Mode";
-
-            } else {
-
-                document.body.classList.remove("dark");
-
-                togBtn.textContent = "Dark Mode";
-
-            }
-
-        }
-        checkTimeOfDay();
-        
-        let nameCon = document.getElementById("name");
-
-        let nameGen = document.getElementById("name-gen");
-
-        let firstNames = [
-            "Alex", "Rapheil", "Max", "Jack", "Oliver", "Rose", "Angel", "Sarah", "Rafe"
-        ];
-
-        let lastNames = [
-            "Krosaka", "Masor", "Shawn", "Thomas", "Montomery", "Realtit", "Jobernag", "Halfnet", "Smyth"
-        ];
-
-        function showNames() {
-            let nameNums = [Math.floor(Math.random() * firstNames.length), Math.floor(Math.random() * lastNames.length)];
-            nameCon.textContent = firstNames[nameNums[0]] + " " + lastNames[nameNums[1]];
-        }
-        nameGen.addEventListener("click", showNames);
-        showNames()
-
-        let title = {
-            nouns : [
-                "Camel", "Squirrel", "Dog", "Cat", "Table", "Asteroid", "School", "Planet", "Star", "Headphones", "Earth", "Guitar", "Piano", "Buffalo"
-            ],
-
-            articles : [
-                "A", "The",
-            ],
-            adjectives : [
-                "Stinky", "Furry", "Secret", "Rabid", "Dangerous", "Scared", "Brave", "Adventurous", "Solitary", "Happy", "Sad", "Angry"
-            ]
-        };
-        let titleGen = document.getElementById("gen-title");
-
-        let titleEl = document.getElementById("title")
-
-        function showTitle() {
-            titleEl.textContent = title["articles"][Math.floor(Math.random() * title["articles"].length)] + " " + title["adjectives"][Math.floor(Math.random() * title["adjectives"].length)] + " " + title["nouns"][Math.floor(Math.random() * title["nouns"].length)];
-        }
-        titleGen.addEventListener("click", showTitle);
-        showTitle();
-        loadMembers()
-    </script>
+        </script>
     </body>
-</html> 
+</html>
