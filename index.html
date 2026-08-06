@@ -1,1145 +1,751 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Writers Coalition | High-Tech Writing Terminal</title>
-    <!-- Google Fonts for Modern High-Tech Aesthetics -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Space+Grotesk:wght@400;600&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --tech-bg: #0b0f19;
-            --tech-card: #111827;
-            --tech-border: #1f293d;
-            --neon-blue: #00f0ff;
-            --neon-purple: #a855f7;
-            --neon-green: #10b981;
-            --neon-pink: #ec4899;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --glow-blue: rgba(0, 240, 255, 0.25);
-            --glow-purple: rgba(168, 85, 247, 0.25);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--tech-bg);
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.12), transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1), transparent 50%),
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
-            color: var(--text-main);
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            min-height: 100vh;
-            padding: 20px 10px;
-            overflow-x: hidden;
-        }
-
-        /* Tech Container Scroll Wrapper */
-        .scroll-wrapper {
-            max-width: 1100px;
-            margin: 0 auto;
-            position: relative;
-            background: rgba(17, 24, 39, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            box-shadow: 
-                0 0 40px rgba(0, 0, 0, 0.8),
-                0 0 20px var(--glow-blue),
-                inset 0 0 2px var(--neon-blue);
-            border: 1px solid var(--tech-border);
-            padding: 40px 30px;
-            position: relative;
-        }
-
-        /* High-Tech Decorative Top and Bottom Bars */
-        .scroll-wrapper::before, .scroll-wrapper::after {
-            content: "[ SYS // ONLINE ] • • • NETWORK STATUS: SECURE • • • [ PROTOCOL v4.02 ]";
-            display: block;
-            text-align: center;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            letter-spacing: 4px;
-            color: var(--neon-blue);
-            opacity: 0.8;
-            padding: 8px;
-            border-top: 1px solid rgba(0, 240, 255, 0.3);
-            border-bottom: 1px solid rgba(0, 240, 255, 0.3);
-            margin-bottom: 25px;
-            text-shadow: 0 0 8px var(--neon-blue);
-            background: rgba(0, 240, 255, 0.03);
-            border-radius: 4px;
-        }
-
-        .scroll-wrapper::after {
-            margin-top: 40px;
-            margin-bottom: 0;
-            content: "⚡ WRITERS COALITION TERMINAL // ALL SYSTEMS OPERATIONAL ⚡";
-        }
-
-        /* Header Styling */
-        header {
-            text-align: center;
-            border-bottom: 1px solid var(--tech-border);
-            padding-bottom: 25px;
-            margin-bottom: 30px;
-            position: relative;
-        }
-
-        .eyepiece-icon {
-            font-size: 3.5rem;
-            color: var(--neon-blue);
-            text-shadow: 0 0 15px var(--neon-blue);
-            margin-bottom: 5px;
-            display: inline-block;
-            animation: pulse-glow 3s infinite alternate;
-        }
-
-        @keyframes pulse-glow {
-            0% { transform: scale(1); filter: drop-shadow(0 0 4px var(--neon-blue)); }
-            100% { transform: scale(1.08); filter: drop-shadow(0 0 15px var(--neon-purple)); color: var(--neon-purple); }
-        }
-
-        h1.site-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 900;
-            color: #ffffff;
-            text-shadow: 0 0 10px var(--neon-blue), 0 0 20px var(--neon-purple);
-            letter-spacing: 3px;
-            line-height: 1.2;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .sub-title {
-            font-family: 'Fira Code', monospace;
-            font-size: 1.05rem;
-            color: var(--neon-blue);
-            letter-spacing: 1px;
-        }
-
-        /* Seal Badge */
-        .seal-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0, 240, 255, 0.08);
-            border: 1px solid var(--neon-blue);
-            padding: 6px 20px;
-            border-radius: 20px;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: #fff;
-            font-family: 'Fira Code', monospace;
-            box-shadow: 0 0 10px var(--glow-blue);
-        }
-
-        /* Navigation Bar */
-        nav.papyrus-nav {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 35px;
-            border-bottom: 1px solid var(--tech-border);
-            padding-bottom: 20px;
-        }
-
-        .nav-btn {
-            background: rgba(31, 41, 61, 0.6);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            color: var(--text-main);
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            padding: 10px 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            border-radius: 6px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.4);
-            transition: all 0.25s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: 1px;
-        }
-
-        .nav-btn:hover {
-            background: rgba(0, 240, 255, 0.15);
-            border-color: var(--neon-blue);
-            color: #fff;
-            box-shadow: 0 0 12px var(--glow-blue);
-            transform: translateY(-2px);
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(135deg, var(--neon-blue) 0%, var(--neon-purple) 100%);
-            color: #000;
-            border-color: #fff;
-            box-shadow: 0 0 15px var(--glow-purple);
-            font-weight: 900;
-        }
-
-        /* Content Sections */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.4s ease-in-out;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Section Titles */
-        .section-header {
-            text-align: center;
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .section-header h2 {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--neon-blue);
-            font-size: 2.1rem;
-            display: inline-block;
-            border-bottom: 2px solid var(--neon-purple);
-            padding-bottom: 5px;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--glow-blue);
-        }
-
-        .section-header p {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.15rem;
-            color: var(--text-muted);
-            margin-top: 5px;
-        }
-
-        /* Generic Glass Tech Box */
-        .parchment-box {
-            background: rgba(17, 24, 39, 0.7);
-            border: 1px solid var(--tech-border);
-            border-radius: 10px;
-            padding: 24px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            position: relative;
-        }
-
-        .parchment-box::before {
-            content: '⚡';
-            position: absolute;
-            top: 12px;
-            right: 15px;
-            font-size: 1.2rem;
-            opacity: 0.5;
-            color: var(--neon-blue);
-        }
-
-        /* Story Page Styling */
-        .story-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 25px;
-        }
-
-        @media (max-width: 768px) {
-            .story-grid { grid-template-columns: 1fr; }
-        }
-
-        .story-text p {
-            margin-bottom: 16px;
-            font-size: 1.1rem;
-            text-align: left;
-            color: var(--text-main);
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .story-text p::first-letter {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.6rem;
-            float: left;
-            line-height: 0.8;
-            margin-right: 10px;
-            color: var(--neon-blue);
-            font-weight: bold;
-            text-shadow: 0 0 8px var(--neon-blue);
-        }
-
-        /* The Holy Word Document Highlight */
-        .word-doc-scroll {
-            background: #0f172a;
-            border: 1px solid #2563eb;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .word-doc-header {
-            background: #1e40af;
-            color: white;
-            padding: 8px 12px;
-            margin: -20px -20px 15px -20px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .word-doc-content {
-            font-family: 'Fira Code', monospace;
-            color: #e2e8f0;
-            font-size: 0.9rem;
-            background: #090d16;
-            padding: 15px;
-            border: 1px solid #1e293b;
-            border-radius: 4px;
-            max-height: 320px;
-            overflow-y: auto;
-        }
-
-        .chat-bubble {
-            margin-bottom: 12px;
-            padding: 8px 12px;
-            border-radius: 6px;
-            background: #131c2e;
-            border-left: 3px solid var(--neon-blue);
-        }
-
-        .chat-author {
-            font-weight: bold;
-            color: var(--neon-blue);
-            font-size: 0.85rem;
-        }
-
-        .chat-timestamp {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-left: 6px;
-        }
-
-        /* Members Section Styling */
-        .members-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 22px;
-        }
-
-        .member-card {
-            background: rgba(17, 24, 39, 0.9);
-            border: 1px solid var(--tech-border);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .member-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0 20px var(--glow-purple);
-            border-color: var(--neon-purple);
-        }
-
-        .member-avatar {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 12px;
-            background: #1e293b;
-            border: 2px solid var(--neon-blue);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            box-shadow: 0 0 10px var(--glow-blue);
-            color: var(--neon-blue);
-        }
-
-        .member-name {
-            font-family: 'Orbitron', sans-serif;
-            color: #ffffff;
-            font-size: 1.3rem;
-            margin-bottom: 2px;
-            letter-spacing: 1px;
-        }
-
-        .member-title {
-            font-family: 'Fira Code', monospace;
-            color: var(--neon-purple);
-            font-weight: bold;
-            font-size: 0.85rem;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .member-stats {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid var(--tech-border);
-            padding: 10px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            text-align: left;
-            margin-bottom: 12px;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .member-stats div {
-            margin-bottom: 4px;
-        }
-
-        .member-quote {
-            font-style: italic;
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            border-top: 1px solid var(--tech-border);
-            padding-top: 10px;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        /* Speed Writing Timer */
-        .timer-wrapper {
-            text-align: center;
-            max-width: 750px;
-            margin: 0 auto;
-        }
-
-        .sundial-display {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 4.5rem;
-            font-weight: 900;
-            color: var(--neon-blue);
-            text-shadow: 0 0 20px var(--neon-blue);
-            margin: 15px 0;
-            letter-spacing: 4px;
-        }
-
-        .timer-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            background: rgba(17, 24, 39, 0.9);
-            color: var(--neon-blue);
-            border: 1px solid var(--neon-blue);
-            padding: 10px 20px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            font-size: 0.9rem;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 0 8px rgba(0, 240, 255, 0.1);
-        }
-
-        .action-btn:hover {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
-
-        .prompt-box {
-            background: rgba(0, 240, 255, 0.05);
-            border-left: 4px solid var(--neon-blue);
-            padding: 15px;
-            margin-bottom: 20px;
-            text-align: left;
-            border-radius: 0 6px 6px 0;
-        }
-
-        .prompt-title {
-            font-weight: bold;
-            color: var(--neon-blue);
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-            letter-spacing: 1px;
-        }
-
-        .prompt-text {
-            font-size: 1.15rem;
-            font-family: 'Space Grotesk', sans-serif;
-            color: #fff;
-        }
-
-        textarea.papyrus-textarea {
-            width: 100%;
-            height: 220px;
-            background-color: #090d16;
-            line-height: 28px;
-            padding: 12px 15px;
-            border: 1px solid var(--tech-border);
-            border-radius: 6px;
-            font-family: 'Fira Code', monospace;
-            font-size: 1.05rem;
-            color: var(--neon-blue);
-            resize: vertical;
-            outline: none;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
-        }
-
-        textarea.papyrus-textarea:focus {
-            border-color: var(--neon-blue);
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.8), 0 0 10px var(--glow-blue);
-        }
-
-        .timer-stats {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 15px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--tech-border);
-            padding: 12px;
-            border-radius: 6px;
-            font-family: 'Fira Code', monospace;
-        }
-
-        /* Choose-Your-Own-Adventure */
-        .adventure-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .adventure-story {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            margin-bottom: 25px;
-            background: rgba(17, 24, 39, 0.9);
-            padding: 25px;
-            border-radius: 8px;
-            border: 1px solid var(--tech-border);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-            min-height: 160px;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .adventure-choices {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .choice-btn {
-            background: rgba(31, 41, 61, 0.7);
-            border: 1px solid var(--tech-border);
-            padding: 14px 20px;
-            border-radius: 6px;
-            text-align: left;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .choice-btn:hover {
-            background: rgba(168, 85, 247, 0.15);
-            border-color: var(--neon-purple);
-            color: #fff;
-            transform: translateX(5px);
-            box-shadow: 0 0 12px var(--glow-purple);
-        }
-
-        .choice-btn::before {
-            content: "⚡";
-            font-size: 1.2rem;
-            color: var(--neon-purple);
-        }
-
-        /* Word Counter Section */
-        .counter-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .counter-grid { grid-template-columns: 1fr; }
-        }
-
-        .stat-card-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .stat-card {
-            background: rgba(17, 24, 39, 0.8);
-            border: 1px solid var(--tech-border);
-            padding: 15px;
-            border-radius: 6px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 2.2rem;
-            font-weight: bold;
-            color: var(--neon-blue);
-            text-shadow: 0 0 8px var(--glow-blue);
-        }
-
-        .stat-label {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            font-weight: bold;
-            font-family: 'Fira Code', monospace;
-        }
-
-        .goal-bar-container {
-            margin-top: 15px;
-            background: rgba(0,0,0,0.5);
-            height: 18px;
-            border-radius: 9px;
-            overflow: hidden;
-            border: 1px solid var(--tech-border);
-        }
-
-        .goal-bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-blue) 0%, var(--neon-purple) 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-            box-shadow: 0 0 10px var(--neon-purple);
-        }
-
-        /* Footer Trim */
-        .hieroglyph-bar {
-            margin-top: 35px;
-            text-align: center;
-            font-family: 'Fira Code', monospace;
-            font-size: 1.1rem;
-            letter-spacing: 10px;
-            color: var(--neon-blue);
-            opacity: 0.6;
-            user-select: none;
-        }
-
-        /* Decorative Elements */
-        .cartouche {
-            border: 1px solid var(--neon-blue);
-            border-radius: 4px;
-            padding: 2px 10px;
-            display: inline-block;
-            background: rgba(0, 240, 255, 0.1);
-            font-weight: bold;
-            color: var(--neon-blue);
-            font-family: 'Fira Code', monospace;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Writers Coalition</title>
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0b0d17;
+      color: #e0e6ed;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(157, 78, 221, 0.08) 0%, transparent 40%);
+    }
+
+    /* Header & Navigation */
+    header {
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 2px solid #00f0ff;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #00f0ff, #7928ca);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0b0d17;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    h1.site-title {
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+    }
+
+    nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-btn {
+      background: rgba(30, 41, 59, 0.8);
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      color: #00f0ff;
+      border-color: #00f0ff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .nav-btn.active {
+      background: rgba(0, 240, 255, 0.15);
+      color: #00f0ff;
+      border-color: #00f0ff;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+    }
+
+    /* Main Container & Page Layout */
+    main {
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card UI Style */
+    .card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, #00f0ff, #7928ca);
+    }
+
+    h2 {
+      color: #00f0ff;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h3 {
+      color: #e2e8f0;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    p {
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+    }
+
+    /* Form & Interactive Elements */
+    button.action-btn {
+      background: linear-gradient(135deg, #00f0ff, #0088ff);
+      color: #0b0d17;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+
+    button.action-btn:hover {
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+      transform: translateY(-1px);
+    }
+
+    button.secondary-btn {
+      background: rgba(30, 41, 59, 0.8);
+      color: #00f0ff;
+      border: 1px solid #00f0ff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+
+    button.secondary-btn:hover {
+      background: rgba(0, 240, 255, 0.1);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    textarea {
+      width: 100%;
+      height: 140px;
+      background: rgba(2, 6, 23, 0.8);
+      border: 1px solid #334155;
+      color: #00f0ff;
+      padding: 0.8rem;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      margin-bottom: 1rem;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #00f0ff;
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+    }
+
+    /* Activity Specific Styles */
+    .timer-display {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #00f0ff;
+      font-family: monospace;
+      background: rgba(2, 6, 23, 0.9);
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 6px;
+      border: 1px solid #00f0ff;
+      box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.2);
+      margin-bottom: 1rem;
+    }
+
+    .prompt-box {
+      background: rgba(2, 6, 23, 0.8);
+      border-left: 3px solid #7928ca;
+      padding: 1rem;
+      border-radius: 0 4px 4px 0;
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+      color: #f1f5f9;
+    }
+
+    .cyoa-choice-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid #334155;
+      color: #e2e8f0;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cyoa-choice-btn:hover {
+      border-color: #00f0ff;
+      background: rgba(0, 240, 255, 0.1);
+      color: #00f0ff;
+    }
+
+    /* Member List Styles */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .member-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid #1e293b;
+      border-radius: 6px;
+      padding: 1.2rem;
+      transition: all 0.2s ease;
+    }
+
+    .member-card:hover {
+      border-color: #00f0ff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 240, 255, 0.15);
+    }
+
+    .member-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .member-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 2px solid #00f0ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #00f0ff;
+    }
+
+    .member-title {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .member-genre {
+      display: inline-block;
+      background: rgba(121, 40, 202, 0.3);
+      color: #d8b4fe;
+      border: 1px solid rgba(121, 40, 202, 0.5);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 12px;
+      margin-top: 0.5rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid #1e293b;
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-top: auto;
+    }
+
+    .control-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="scroll-wrapper">
-        <!-- Header -->
-        <header>
-            <div class="eyepiece-icon">⚡</div>
-            <h1 class="site-title">The Writers Coalition</h1>
-            <div class="sub-title">"Digital Command Center & Shared Cloud Terminal"</div>
-            <div class="seal-badge">
-                <span>⚡ Tyee Elementary Club</span>
-                <span>•</span>
-                <span>Cyber Division</span>
-            </div>
-        </header>
+  <!-- Header Section -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">WC</div>
+      <h1 class="site-title">The Writers Coalition</h1>
+    </div>
+    <nav>
+      <button class="nav-btn active" onclick="switchTab('home')">Home</button>
+      <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
+      <button class="nav-btn" onclick="switchTab('members')">Members</button>
+    </nav>
+  </header>
 
-        <!-- Navigation -->
-        <nav class="papyrus-nav">
-            <button class="nav-btn active" onclick="switchTab('home')">💻 Module I: Home</button>
-            <button class="nav-btn" onclick="switchTab('members')">👥 Module II: Members</button>
-            <button class="nav-btn" onclick="switchTab('timer')">⏱️ Module III: Speed Timer</button>
-            <button class="nav-btn" onclick="switchTab('adventure')">🎮 Module IV: Cyber Quest</button>
-            <button class="nav-btn" onclick="switchTab('counter')">📊 Module V: Word Counter</button>
-        </nav>
+  <!-- Main Content Body -->
+  <main>
 
-        <!-- TAB 1: HOMEPAGE (STORY OF THE CLUB) -->
-        <div id="tab-home" class="tab-content active">
-            <div class="section-header">
-                <h2>The Coalition Logs</h2>
-            </div>
-
-            <div class="story-grid">
-                <div class="parchment-box story-text">
-                    <h3 style="font-family:'Orbitron', sans-serif; color: var(--neon-blue); margin-bottom: 12px; font-size: 1.3rem;">
-                        ⚡ Origin of the Coalition
-                    </h3>
-                    <p>
-                        The Writers Coalition started as just three kids who liked to write books. They eventually decided to join to make books and collaborate.
-                    </p>
-                    <p>
-                        Thus, the <span class="cartouche">The Writers Coalition</span> was born!
-                    </p>
-                    <p>
-                        Eventually, though, two of the members quit, Leaving only Oz. So he decided to make his <em>own</em> Writers Coalition.
-                    </p>
-                    <p>
-                        He got four members to join him, and they all collaborate to this day!
-                    </p>
-                </div>
-            </div>
-
-        <!-- TAB 2: MEMBERS PAGE -->
-        <div id="tab-members" class="tab-content">
-            <div class="section-header">
-                <h2>The Five Core Members</h2>
-                <p>The Founders & Writers of the Network</p>
-            </div>
-
-            <div class="members-container">
-                <!-- Member 1 -->
-                <div class="member-card">
-                    <div class="member-avatar">⚡</div>
-                    <div class="member-name">Oz Lavenski</div>
-                    <div class="member-title">Club President and Founder</div>
-                    <div class="member-stats">
-                        <div><strong>Favorite Genre:</strong> Realistic Fiction</div>
-                    </div>
-                </div>
-
-                <!-- Member 2 -->
-                <div class="member-card">
-                    <div class="member-avatar">🔍</div>
-                    <div class="member-name">Aahdyah Srenivas</div>
-                    <div class="member-title">Master Minecraft Writer</div>
-                    <div class="member-stats">
-                        <div><strong>Favorite Genre:</strong> Minecraft Adventures</div>
-                    </div>
-                </div>
-
-                <!-- Member 3 -->
-                <div class="member-card">
-                    <div class="member-avatar">🤖</div>
-                    <div class="member-name">Gal Lavie</div>
-                    <div class="member-title">Lead Fantasy Writer</div>
-                    <div class="member-stats">
-                        <div><strong>Favorite Genre:</strong> Fantasy</div>
-                    </div>
-                </div>
-
-                <!-- Member 4 -->
-                <div class="member-card">
-                    <div class="member-avatar">✨</div>
-                    <div class="member-name">Liam Small</div>
-                    <div class="member-title">Hand-drawn book writer</div>
-                    <div class="member-stats">
-                        <div><strong>Favorite Genre:</strong> Multiple</div>
-                    </div>
-                </div>
-
-                <!-- Member 5 -->
-                <div class="member-card">
-                    <div class="member-avatar">🌐</div>
-                    <div class="member-name">Immanuel Chibota</div>
-                    <div class="member-title">Lead Comic Writer</div>
-                    <div class="member-stats">
-                        <div><strong>Favorite Genre:</strong> Multiple</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 3: SPEED WRITING TIMER -->
-        <div id="tab-timer" class="tab-content">
-            <div class="section-header">
-                <h2>The High-Tech Speed Writer</h2>
-                <p>Beat the Digital Clock & Write Without Hesitation!</p>
-            </div>
-
-            <div class="parchment-box timer-wrapper">
-                <div class="prompt-box">
-                    <div class="prompt-title">⚡ Daily Prompt Generator:</div>
-                    <div class="prompt-text" id="prompt-display">
-                        "You discover a hidden door behind the library bookshelf that leads straight to an underground lab with a glowing computer terminal..."
-                    </div>
-                    <button class="nav-btn" style="margin-top: 10px; font-size: 0.8rem; padding: 4px 10px;" onclick="generateNewPrompt()">
-                        🎲 New Random Prompt
-                    </button>
-                </div>
-
-                <div class="sundial-display" id="timer-display">03:00</div>
-
-                <div class="timer-controls">
-                    <button class="action-btn" onclick="setTimerDuration(1)">1 Min Sprint</button>
-                    <button class="action-btn" onclick="setTimerDuration(3)">3 Min Trial</button>
-                    <button class="action-btn" onclick="setTimerDuration(5)">5 Min Challenge</button>
-                    <button class="action-btn" style="background:var(--neon-purple); color:#fff; border-color:var(--neon-purple);" id="start-btn" onclick="toggleTimer()">▶ Start Timer</button>
-                    <button class="action-btn" onclick="resetTimer()">↺ Reset</button>
-                </div>
-
-                <textarea class="papyrus-textarea" id="speed-writing-input" placeholder="Type your story here before the timer runs out... Keep writing!" oninput="updateTimerWordCount()"></textarea>
-
-                <div class="timer-stats">
-                    <span>Words Written: <strong id="speed-word-count" style="color:var(--neon-blue)">0</strong></span>
-                    <span>Writing Speed: <strong id="speed-wpm">0 WPM</strong></span>
-                    <span>Status: <strong id="speed-status" style="color:var(--neon-purple)">Ready to Write</strong></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 4: CHOOSE YOUR OWN ADVENTURE -->
-        <div id="tab-adventure" class="tab-content">
-            <div class="section-header">
-                <h2>The Vault of Interactive Choices</h2>
-                <p>An Interactive Cyber Story Quest</p>
-            </div>
-
-            <div class="adventure-container">
-                <div class="adventure-story parchment-box" id="adventure-text">
-                    Loading story chapter...
-                </div>
-
-                <div class="adventure-choices" id="adventure-choices">
-                    <!-- Dynamic choice buttons inserted via JS -->
-                </div>
-
-                <div style="margin-top: 25px; text-align: center;">
-                    <button class="nav-btn" onclick="restartAdventure()" style="font-size: 0.85rem;">
-                        ↺ Restart Quest from the Beginning
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 5: WORD COUNTER -->
-        <div id="tab-counter" class="tab-content">
-            <div class="section-header">
-                <h2>The Digital Word Analyzer</h2>
-                <p>Analyze Your Words & Track Your Progress</p>
-            </div>
-
-            <div class="counter-grid">
-                <div>
-                    <textarea class="papyrus-textarea" id="main-counter-input" style="height: 320px;" placeholder="Paste or type your story here to analyze your metrics..." oninput="calculateStats()"></textarea>
-                    
-                    <div style="margin-top: 15px;" class="parchment-box">
-                        <h4 style="font-family:'Orbitron', sans-serif; color:var(--neon-blue); margin-bottom: 5px;">
-                            ⚡ Daily Writing Goal Tracker (Target: 300 Words)
-                        </h4>
-                        <div class="goal-bar-container">
-                            <div class="goal-bar-fill" id="goal-bar"></div>
-                        </div>
-                        <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-top:5px; font-family:'Fira Code', monospace;">
-                            <span id="goal-text">0 / 300 words</span>
-                            <span id="goal-percentage">0% Complete</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card-group">
-                    <div class="stat-card">
-                        <div class="stat-value" id="stat-words">0</div>
-                        <div class="stat-label">Words</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="stat-chars">0</div>
-                        <div class="stat-label">Characters</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="stat-sentences">0</div>
-                        <div class="stat-label">Sentences</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="stat-paragraphs">0</div>
-                        <div class="stat-label">Paragraphs</div>
-                    </div>
-                    <div class="stat-card" style="grid-column: span 2;">
-                        <div class="stat-value" id="stat-readtime">0 min</div>
-                        <div class="stat-label">Estimated Read Time</div>
-                    </div>
-                    <div class="stat-card" style="grid-column: span 2;">
-                        <div class="stat-value" id="stat-papyrus-length">0.0</div>
-                        <div class="stat-label">Estimated Pages</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- TAB 1: HOME PAGE -->
+    <div id="home" class="tab-content active">
+      <div class="card">
+        <h2>Welcome to Our Writing Club</h2>
+        <p>The Writers Coalition is an elementary school club where young authors come together to share stories, explore new ideas, and build creative writing skills in a supportive, fun environment.</p>
+        <p>Whether you love writing realistic fiction, poetry, fantasy, or mystery stories, you will find a friendly place to share your work here!</p>
+      </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-        /* ================= TAB SWITCHING SYSTEM ================= */
-        function switchTab(tabId) {
-            // Hide all tabs
-            const tabs = document.querySelectorAll('.tab-content');
-            tabs.forEach(tab => tab.classList.remove('active'));
+    <!-- TAB 2: ACTIVITIES (Timer, Story Starter, CYOA) -->
+    <div id="activities" class="tab-content">
+      
+      <!-- Speed Writing Timer -->
+      <div class="card">
+        <h2>Speed Writing Timer</h2>
+        <p>Challenge yourself to write without stopping until the timer runs out!</p>
+        
+        <div class="control-group">
+          <button class="secondary-btn" onclick="setTimerDuration(1)">1 Min</button>
+          <button class="secondary-btn" onclick="setTimerDuration(3)">3 Mins</button>
+          <button class="secondary-btn" onclick="setTimerDuration(5)">5 Mins</button>
+        </div>
 
-            // Deactivate all buttons
-            const buttons = document.querySelectorAll('.nav-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
+        <div class="timer-display" id="timerDisplay">03:00</div>
+        
+        <div>
+          <button class="action-btn" id="startBtn" onclick="startTimer()">Start Writing</button>
+          <button class="secondary-btn" onclick="resetTimer()">Reset</button>
+        </div>
 
-            // Show selected tab & activate button
-            document.getElementById('tab-' + tabId).classList.add('active');
-            
-            // Find active nav button by onclick text
-            buttons.forEach(btn => {
-                if (btn.getAttribute('onclick').includes(tabId)) {
-                    btn.classList.add('active');
-                }
-            });
+        <div style="margin-top: 1rem;">
+          <textarea id="speedWritingArea" placeholder="Start typing your story here when the timer starts..."></textarea>
+          <p id="wordCountDisplay" style="font-size: 0.9rem; color: #94a3b8;">Word count: 0</p>
+        </div>
+      </div>
+
+      <!-- Story Starter Generator -->
+      <div class="card">
+        <h2>Story Starter Generator</h2>
+        <p>Need an idea for a story? Click the button below to generate a unique combination!</p>
+        
+        <div class="prompt-box" id="generatedStoryStarter">
+          Click "Generate Story Idea" to get your prompt!
+        </div>
+
+        <button class="action-btn" onclick="generateStoryStarter()">Generate Story Idea</button>
+      </div>
+
+      <!-- Choose Your Own Adventure Story -->
+      <div class="card">
+        <h2>Interactive Sci-Fi Adventure: The Lost Signal</h2>
+        <p>Read through this mini-adventure story and make choices to decide what happens next!</p>
+        
+        <div class="prompt-box" id="cyoaText">
+          Loading adventure...
+        </div>
+
+        <div id="cyoaChoices"></div>
+        <button class="secondary-btn" id="restartCyoaBtn" onclick="startCyoa()" style="margin-top: 1rem; display: none;">Restart Adventure</button>
+      </div>
+
+    </div>
+
+    <!-- TAB 3: MEMBERS PAGE -->
+    <div id="members" class="tab-content">
+      <div class="card">
+        <h2>Club Member Directory</h2>
+        <p>Meet the creative elementary students who make up the Writers Coalition!</p>
+      </div>
+
+      <div class="members-grid" id="membersContainer">
+        <!-- Generated dynamically via JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    The Writers Coalition &bull; Elementary School Creative Writing Club
+  </footer>
+
+  <!-- JavaScript Section (Pure JS using only 'var') -->
+  <script>
+    // Global State Variables
+    var currentTimer = null;
+    var timerSeconds = 180;
+    var initialSeconds = 180;
+    var timerRunning = false;
+
+    // Story Starter Arrays
+    var characterList = [
+      "a quiet 5th grader",
+      "an energetic detective",
+      "a talented young artist",
+      "a curious librarian",
+      "a friendly neighborhood baker",
+      "a shy piano player"
+    ];
+
+    var settingList = [
+      "in an old neighborhood treehouse",
+      "inside a bustling city park",
+      "during a stormy afternoon at school",
+      "at a vibrant summer camp",
+      "inside a cozy hometown bookstore",
+      "on a quiet train ride"
+    ];
+
+    var plotList = [
+      "finds an ancient key with no lock.",
+      "discovers a map drawn on the back of a poster.",
+      "tries to solve the mystery of a missing pet.",
+      "receives an unaddressed letter in the mail.",
+      "hides a big secret from their best friend.",
+      "wins a contest with unexpected rules."
+    ];
+
+    // CYOA Data Object
+    var cyoaStory = {
+      start: {
+        text: "You are standing inside the science lab during after-school detention when you notice a strange blinking blue light coming from an old radio monitor on the back shelf. What do you do?",
+        choices: [
+          { text: "Walk over and inspect the radio screen.", next: "inspectRadio" },
+          { text: "Ignore it and keep working on your homework.", next: "ignoreRadio" }
+        ]
+      },
+      inspectRadio: {
+        text: "You walk closer. The screen displays a message: 'Signal Received from Sector 4.' A small green button begins to flash beneath the dial. Do you push it?",
+        choices: [
+          { text: "Push the flashing green button.", next: "pushButton" },
+          { text: "Call the teacher over to take a look.", next: "callTeacher" }
+        ]
+      },
+      ignoreRadio: {
+        text: "You focus on your math worksheet, but the radio makes a loud chime and prints out a tiny strip of paper with numbers on it! Curiosity gets the best of you.",
+        choices: [
+          { text: "Pick up the paper strip.", next: "inspectRadio" },
+          { text: "Quickly pack your bag and leave.", next: "leaveRoom" }
+        ]
+      },
+      pushButton: {
+        text: "A calm audio recording plays through the speaker: 'Congratulations writer, you have unlocked the secret vault room in the library!' A secret panel opens in the wall, revealing a hidden room filled with vintage notebooks.",
+        choices: [
+          { text: "Step inside the vault to explore.", next: "endingSuccess" },
+          { text: "Grab one notebook and step back.", next: "endingSafe" }
+        ]
+      },
+      callTeacher: {
+        text: "Your teacher looks up, smiles, and says, 'Ah, you found Mr. Henderson's old puzzle box! It's a creative writing game from 10 years ago.' She hands you a special pen to start writing.",
+        choices: [
+          { text: "Sit down and start writing a new story.", next: "endingTeacher" }
+        ]
+      },
+      leaveRoom: {
+        text: "You decide to head home for the day. As you walk out, you wonder what that mysterious signal was all about. Maybe you will check it out tomorrow!",
+        choices: [
+          { text: "Try again tomorrow.", next: "start" }
+        ]
+      },
+      endingSuccess: {
+        text: "VICTORY: You discovered the historic library archive! You spend the rest of the semester reading forgotten stories written by former students. The End.",
+        choices: []
+      },
+      endingSafe: {
+        text: "SUCCESS: You take the notebook and write an amazing novel that wins first place in the school writing competition. The End.",
+        choices: []
+      },
+      endingTeacher: {
+        text: "SUCCESS: You and your teacher start the school's very first creative writing club together! The End.",
+        choices: []
+      }
+    };
+
+    // Member Roster Data
+    var memberData = [
+      { name: "Oz Lavenski", title: "Club President", genre: "Realistic Fiction", bio: "Oz loves writing fast-paced stories, from spies to talking wolves." },
+      { name: "Liam Small", title: "Hand-written book writer", genre: "Multiple", bio: "Liam was the first writer to write a choose your own adventure book." },
+      { name: "Aadhya Srenivas", title: "Minecraft writer", genre: "Minecraft", bio: "Aadhya loves Minecraft, but he also write the handwritten 'The Guy' series." },
+      { name: "Immanuel Chibota", title: "Comic Creator", genre: "Sci-Fi & Graphic Novels", bio: "Immanuel wrote the Space Rabbit series and is one of hte only writers to make comics." },
+      { name: "Gal Lavie", title: "Fantasy Writer", genre: "Fantasy", bio: "Gal loves writing fantasy stories. She also loves cats and dragons." }
+    ];
+
+    // Navigation Function
+    function switchTab(tabId) {
+      var contents = document.getElementsByClassName("tab-content");
+      var navBtns = document.getElementsByClassName("nav-btn");
+      var i = 0;
+
+      for (i = 0; i < contents.length; i++) {
+        contents[i].classList.remove("active");
+      }
+      for (i = 0; i < navBtns.length; i++) {
+        navBtns[i].classList.remove("active");
+      }
+
+      document.getElementById(tabId).classList.add("active");
+      
+      // Update active state on button
+      for (i = 0; i < navBtns.length; i++) {
+        if (navBtns[i].getAttribute("onclick").indexOf(tabId) !== -1) {
+          navBtns[i].classList.add("active");
         }
+      }
+    }
 
-        /* ================= SPEED WRITING TIMER SYSTEM ================= */
-        const prompts = [
-            "You discover a hidden door behind the library bookshelf that leads straight to an underground lab with a glowing computer terminal...",
-            "Your mechanical pencil begins writing predictions about recess on its own...",
-            "The fifth-grade teacher is replaced by an AI hologram that only communicates in riddles...",
-            "During a thunderstorm, the single Microsoft Word doc 'The Writers Coalition Chat' starts replying to your messages by itself...",
-            "You find a mysterious glowing USB drive in the lost-and-found that unlocks secret digital vaults...",
-            "A glowing digital blueprint found inside a gym locker leads to the school's secret stash of extra-fudgy brownies..."
-        ];
+    // Speed Writing Timer Functions
+    function setTimerDuration(minutes) {
+      if (timerRunning) {
+        resetTimer();
+      }
+      initialSeconds = minutes * 60;
+      timerSeconds = initialSeconds;
+      updateTimerDisplay();
+    }
 
-        let timerInterval = null;
-        let totalSeconds = 180; // default 3 minutes
-        let remainingSeconds = 180;
-        let isRunning = false;
+    function updateTimerDisplay() {
+      var mins = Math.floor(timerSeconds / 60);
+      var secs = timerSeconds % 60;
+      var minsStr = mins < 10 ? "0" + mins : "" + mins;
+      var secsStr = secs < 10 ? "0" + secs : "" + secs;
+      document.getElementById("timerDisplay").innerText = minsStr + ":" + secsStr;
+    }
 
-        function generateNewPrompt() {
-            const randomIndex = Math.floor(Math.random() * prompts.length);
-            document.getElementById('prompt-display').innerText = '"' + prompts[randomIndex] + '"';
-        }
-
-        function setTimerDuration(minutes) {
-            resetTimer();
-            totalSeconds = minutes * 60;
-            remainingSeconds = totalSeconds;
+    function startTimer() {
+      var btn = document.getElementById("startBtn");
+      
+      if (!timerRunning) {
+        timerRunning = true;
+        btn.innerText = "Pause";
+        btn.style.background = "linear-gradient(135deg, #ff0055, #ff5500)";
+        
+        currentTimer = setInterval(function() {
+          if (timerSeconds > 0) {
+            timerSeconds--;
             updateTimerDisplay();
+          } else {
+            clearInterval(currentTimer);
+            timerRunning = false;
+            btn.innerText = "Start Writing";
+            btn.style.background = "linear-gradient(135deg, #00f0ff, #0088ff)";
+            alert("Time's up! Great job writing. Take a moment to read over your work.");
+          }
+        }, 1000);
+      } else {
+        clearInterval(currentTimer);
+        timerRunning = false;
+        btn.innerText = "Resume";
+        btn.style.background = "linear-gradient(135deg, #00f0ff, #0088ff)";
+      }
+    }
+
+    function resetTimer() {
+      if (currentTimer) {
+        clearInterval(currentTimer);
+      }
+      timerRunning = false;
+      timerSeconds = initialSeconds;
+      updateTimerDisplay();
+      
+      var btn = document.getElementById("startBtn");
+      btn.innerText = "Start Writing";
+      btn.style.background = "linear-gradient(135deg, #00f0ff, #0088ff)";
+    }
+
+    // Word Count Tracker
+    function initWordCounter() {
+      var textarea = document.getElementById("speedWritingArea");
+      textarea.addEventListener("input", function() {
+        var text = textarea.value.trim();
+        var words = text === "" ? 0 : text.split(/\s+/).length;
+        document.getElementById("wordCountDisplay").innerText = "Word count: " + words;
+      });
+    }
+
+    // Story Starter Generator Function
+    function generateStoryStarter() {
+      var randomChar = characterList[Math.floor(Math.random() * characterList.length)];
+      var randomSetting = settingList[Math.floor(Math.random() * settingList.length)];
+      var randomPlot = plotList[Math.floor(Math.random() * plotList.length)];
+
+      var fullPrompt = "Story Idea: " + randomChar + " " + randomSetting + " " + randomPlot;
+      document.getElementById("generatedStoryStarter").innerText = fullPrompt;
+    }
+
+    // Choose Your Own Adventure Engine
+    function renderCyoaNode(nodeKey) {
+      var node = cyoaStory[nodeKey];
+      var textElement = document.getElementById("cyoaText");
+      var choicesElement = document.getElementById("cyoaChoices");
+      var restartBtn = document.getElementById("restartCyoaBtn");
+
+      textElement.innerText = node.text;
+      choicesElement.innerHTML = "";
+
+      if (node.choices.length === 0) {
+        restartBtn.style.display = "inline-block";
+      } else {
+        restartBtn.style.display = "none";
+        var i = 0;
+        for (i = 0; i < node.choices.length; i++) {
+          var choice = node.choices[i];
+          var btn = document.createElement("button");
+          btn.className = "cyoa-choice-btn";
+          btn.innerText = (i + 1) + ". " + choice.text;
+          
+          // Create closure scope for loop index
+          (function(nextKey) {
+            btn.onclick = function() {
+              renderCyoaNode(nextKey);
+            };
+          })(choice.next);
+
+          choicesElement.appendChild(btn);
         }
+      }
+    }
 
-        function updateTimerDisplay() {
-            const mins = Math.floor(remainingSeconds / 60);
-            const secs = remainingSeconds % 60;
-            document.getElementById('timer-display').innerText = 
-                (mins < 10 ? '0' : '') + mins + ':' + (secs < 10 ? '0' : '') + secs;
-        }
+    function startCyoa() {
+      renderCyoaNode("start");
+    }
 
-        function toggleTimer() {
-            const startBtn = document.getElementById('start-btn');
-            if (!isRunning) {
-                if (remainingSeconds <= 0) return;
-                isRunning = true;
-                startBtn.innerText = "⏸ Pause Timer";
-                startBtn.style.background = "var(--neon-blue)";
-                startBtn.style.color = "#000";
-                document.getElementById('speed-status').innerText = "Writing in Progress!";
-                document.getElementById('speed-status').style.color = "var(--neon-blue)";
+    // Member List Renderer
+    function renderMembers() {
+      var container = document.getElementById("membersContainer");
+      container.innerHTML = "";
 
-                timerInterval = setInterval(() => {
-                    remainingSeconds--;
-                    updateTimerDisplay();
-                    updateTimerWordCount();
+      var i = 0;
+      for (i = 0; i < memberData.length; i++) {
+        var member = memberData[i];
+        var initial = member.name.charAt(0);
 
-                    if (remainingSeconds <= 0) {
-                        clearInterval(timerInterval);
-                        isRunning = false;
-                        startBtn.innerText = "▶ Start Timer";
-                        startBtn.style.background = "var(--neon-purple)";
-                        startBtn.style.color = "#fff";
-                        document.getElementById('speed-status').innerText = "Time Expired! Great Writing Session!";
-                        document.getElementById('speed-status').style.color = "var(--neon-green)";
-                        playAncientBell();
-                    }
-                }, 1000);
-            } else {
-                clearInterval(timerInterval);
-                isRunning = false;
-                startBtn.innerText = "▶ Resume Timer";
-                startBtn.style.background = "var(--neon-purple)";
-                startBtn.style.color = "#fff";
-                document.getElementById('speed-status').innerText = "Paused";
-                document.getElementById('speed-status').style.color = "var(--text-muted)";
-            }
-        }
+        var card = document.createElement("div");
+        card.className = "member-card";
 
-        function resetTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            remainingSeconds = totalSeconds;
-            updateTimerDisplay();
-            document.getElementById('start-btn').innerText = "▶ Start Timer";
-            document.getElementById('start-btn').style.background = "var(--neon-purple)";
-            document.getElementById('start-btn').style.color = "#fff";
-            document.getElementById('speed-status').innerText = "Ready to Write";
-            document.getElementById('speed-status').style.color = "var(--neon-purple)";
-        }
+        var headerDiv = document.createElement("div");
+        headerDiv.className = "member-header";
 
-        function updateTimerWordCount() {
-            const text = document.getElementById('speed-writing-input').value.trim();
-            const words = text ? text.split(/\s+/).length : 0;
-            document.getElementById('speed-word-count').innerText = words;
+        var avatar = document.createElement("div");
+        avatar.className = "member-avatar";
+        avatar.innerText = initial;
 
-            const elapsedTime = totalSeconds - remainingSeconds;
-            if (elapsedTime > 0) {
-                const wpm = Math.round((words / elapsedTime) * 60);
-                document.getElementById('speed-wpm').innerText = wpm + " WPM";
-            } else {
-                document.getElementById('speed-wpm').innerText = "0 WPM";
-            }
-        }
+        var nameGroup = document.createElement("div");
+        
+        var nameH3 = document.createElement("h3");
+        nameH3.innerText = member.name;
+        nameH3.style.marginBottom = "2px";
 
-        function playAncientBell() {
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-                gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.5);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 1.5);
-            } catch(e) {
-                console.log('Audio not supported or permitted');
-            }
-        }
+        var titleSpan = document.createElement("div");
+        titleSpan.className = "member-title";
+        titleSpan.innerText = member.title;
 
-        /* ================= CHOOSE YOUR OWN ADVENTURE SYSTEM ================= */
-        const storyTree = {
-            start: {
-                text: "You live in the year 3010. You're riding your flying car when a traffic jam starts. You look carefully at the jam and see a person holding a glowing ring in their hand.",
-                choices: [
-                    { text: "Ask him what he's doing", target: "ask" },
-                    { text: "Leave the passage", target: "leave" }
-                ]
-            },
-            ask: {
-                text: "The man says that he's trying to blow up the road, because he works for a rival nation. You try to stop him, but he presses a button on the glowing ring, and fire explodes from the ground.",
-                choices: [
-                    { text: "Run away", target: "leave" },
-                    { text: "Decide to meet your fate", target: "fall" }
-                ]
-            },
-            leave: {
-                text: "You race away from the jam, when fire completely fills the passage. You keep running, until you find yourself at a locked door.",
-                choices: [
-                    { text: "Try to unlock it with the master combination", target: "unlock" },
-                    { text: "Give up and meet your fate", target: "fall" }
-                ]
-            },
-            fall: {
-                text: "You fall to your doom. Nobody manages to save you, and you land painfully on the ground. You're alive, but you're terribly injured.",
-                choices: [
-                    { text: "Try again from the beginning of your quest.", target: "start" }
-                ]
-            },
-            unlock: {
-                text: "You desprately punch in the numbers on the keypad, 7-7-3-4-1. The door hisses and opens, allowing you to escape from the fire.",
-                choices: [
-                    { text: "⚡ VICTORY! You have completed the quest with supreme wisdom!", target: "start" }
-                ]
-            },
-        };
+        nameGroup.appendChild(nameH3);
+        nameGroup.appendChild(titleSpan);
+        headerDiv.appendChild(avatar);
+        headerDiv.appendChild(nameGroup);
 
-        function renderAdventureNode(nodeKey) {
-            const node = storyTree[nodeKey];
-            const textEl = document.getElementById('adventure-text');
-            const choicesEl = document.getElementById('adventure-choices');
+        var bioP = document.createElement("p");
+        bioP.innerText = member.bio;
+        bioP.style.fontSize = "0.9rem";
 
-            textEl.innerHTML = "<p>" + node.text + "</p>";
-            choicesEl.innerHTML = "";
+        var genreTag = document.createElement("span");
+        genreTag.className = "member-genre";
+        genreTag.innerText = "Favorite Genre: " + member.genre;
 
-            node.choices.forEach(choice => {
-                const btn = document.createElement('button');
-                btn.className = "choice-btn";
-                btn.innerText = choice.text;
-                btn.onclick = () => renderAdventureNode(choice.target);
-                choicesEl.appendChild(btn);
-            });
-        }
+        card.appendChild(headerDiv);
+        card.appendChild(bioP);
+        card.appendChild(genreTag);
 
-        function restartAdventure() {
-            renderAdventureNode('start');
-        }
+        container.appendChild(card);
+      }
+    }
 
-        /* ================= WORD COUNTER SYSTEM ================= */
-        function calculateStats() {
-            const text = document.getElementById('main-counter-input').value;
-
-            // Word Count
-            const wordsMatch = text.trim().match(/\b\S+\b/g);
-            const wordCount = wordsMatch ? wordsMatch.length : 0;
-
-            // Character Count
-            const charCount = text.length;
-
-            // Sentence Count
-            const sentenceMatch = text.match(/[^.!?]+[.!?]+/g);
-            const sentenceCount = sentenceMatch ? sentenceMatch.length : (text.trim() ? 1 : 0);
-
-            // Paragraph Count
-            const paragraphsMatch = text.replace(/\n$/gm, '').split(/\n+/);
-            const paragraphCount = text.trim() ? paragraphsMatch.length : 0;
-
-            // Estimated Reading Time
-            const readTimeMin = Math.ceil(wordCount / 180);
-
-            // Page Count Estimation (approx 250 words per standard printed page)
-            const standardPages = (wordCount / 250).toFixed(1);
-
-            // Update UI
-            document.getElementById('stat-words').innerText = wordCount;
-            document.getElementById('stat-chars').innerText = charCount;
-            document.getElementById('stat-sentences').innerText = sentenceCount;
-            document.getElementById('stat-paragraphs').innerText = paragraphCount;
-            document.getElementById('stat-readtime').innerText = (wordCount > 0 ? readTimeMin : 0) + " min";
-            document.getElementById('stat-papyrus-length').innerText = standardPages;
-
-            // Update Goal Meter
-            const targetGoal = 300;
-            const percentage = Math.min(Math.round((wordCount / targetGoal) * 100), 100);
-            document.getElementById('goal-bar').style.width = percentage + "%";
-            document.getElementById('goal-text').innerText = wordCount + " / " + targetGoal + " words";
-            document.getElementById('goal-percentage').innerText = percentage + "% Complete";
-        }
-
-        function autoScrollChat() {
-            const chatEl = document.getElementById('live-chat-scroll');
-            if (chatEl) {
-                chatEl.scrollTop = chatEl.scrollHeight;
-            }
-        }
-
-        window.onload = function() {
-            renderAdventureNode('start');
-            calculateStats();
-            autoScrollChat();
-        };
-    </script>
+    // Page Initialization on Window Load
+    window.onload = function() {
+      updateTimerDisplay();
+      initWordCounter();
+      startCyoa();
+      renderMembers();
+    };
+  </script>
 </body>
 </html>
