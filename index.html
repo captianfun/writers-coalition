@@ -346,6 +346,22 @@
       margin-bottom: 1rem;
       flex-wrap: wrap;
     }
+    
+    input, button {
+        color:white;
+        background-color:black;
+        border:2px solid white;
+        border-radius:8px;
+        padding:5px;
+        font-family:monospace;
+    }
+    
+    #input-slots {
+        display:grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap:5px;
+        margin-bottom:5px;
+    }
   </style>
 </head>
 <body>
@@ -374,7 +390,23 @@
         <p>Whether you love writing realistic fiction, poetry, fantasy, or mystery stories, you will find a friendly place to share your work here!</p>
       </div>
     </div>
-
+    
+    <div class = "card">
+        <h2>CrAZy MaD LIbS</h2>
+        <div id = "input-slots">
+            <input placeholder = "noun here">
+            <input placeholder = "adjective here">
+            <input placeholder = "name here">
+            <input placeholder = "animal here">
+            <input placeholder = "adjective here">
+            <input placeholder = "noun here">
+            <input placeholder = "noun here">
+            <input placeholder = "name here">
+        </div>
+        <button id = "return">Read story</button>
+        <p id = "story-con"></p>
+    </div>
+    
     <!-- TAB 2: ACTIVITIES (Timer, Story Starter, CYOA) -->
     <div id="activities" class="tab-content">
       
@@ -738,6 +770,19 @@
         container.appendChild(card);
       }
     }
+    
+    var storyCon = document.getElementById("story-con");
+    var inputSlots = document.querySelectorAll("#input-slots input");
+    var storyBtn = document.getElementById("return")
+    function writeStory() {
+        var words = [];
+        for (var i = 0; i < inputSlots.length; i++) {
+            words.push(inputSlots[i].value);
+        }
+        var storyText = "Once, a long time ago, there was a " + words[1] + " " + words[0] + " who longed to be king. He lived a modest life, and was very noble. His name was " + words[2] + ". After a while, the king " + words[7] + " IV hired " + words[2] + " to tend for the royal " + words[3] + ". After a while, " + words[2] + " was promoted to Duke of Yarbodle by " + words[7] + " III's " + words[4] + " " + words[5] + ". And, after a long time, " + words[2] + " was promoted to Earl of the royal " + words[6] + "."
+        storyCon.textContent = storyText;
+    };
+    storyBtn.addEventListener("click", writeStory);
 
     // Page Initialization on Window Load
     window.onload = function() {
