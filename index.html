@@ -777,9 +777,13 @@
     function writeStory() {
         var words = [];
         for (var i = 0; i < inputSlots.length; i++) {
+            if (inputSlots[i].value === "") {
+              alert("Fill in all feilds first.")
+              return
+            }
             words.push(inputSlots[i].value);
         }
-        var storyText = "Once, a long time ago, there was a " + words[1] + " " + words[0] + " who longed to be king. He lived a modest life, and was very noble. His name was " + words[2] + ". After a while, the king " + words[7] + " IV hired " + words[2] + " to tend for the royal " + words[3] + ". After a while, " + words[2] + " was promoted to Duke of Yarbodle by " + words[7] + " III's " + words[4] + " " + words[5] + ". And, after a long time, " + words[2] + " was promoted to Earl of the royal " + words[6] + "."
+        var storyText = "Once, a long time ago, there was a " + words[1] + " " + words[0] + " who longed to be king. He lived a modest life, and was very noble. His name was " + words[2] + ". After a while, the king " + words[7] + " IV hired " + words[2] + " to tend for the royal " + words[3] + ". After a while, " + words[2] + " was promoted to Duke of Yarbodle by " + words[7] + " IV's " + words[4] + " " + words[5] + ". And, after a long time, " + words[2] + " was promoted to Earl of the royal " + words[6] + "."
         storyCon.textContent = storyText;
     };
     storyBtn.addEventListener("click", writeStory);
