@@ -362,6 +362,13 @@
         gap:5px;
         margin-bottom:5px;
     }
+    
+    @keyframes bounce { 0% { transform:scale(1); } 25% { transform:scale(1.01); } 50% { transform:scale(1.02); } 75% { transform:scale(1.01); } 100% { transform:scale(1); } }
+    
+    #title-con {
+        animation:0.5s bounce ease-in-out;
+        animation-iteration-count: infinite;
+    }
   </style>
 </head>
 <body>
@@ -376,6 +383,7 @@
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
       <button class="nav-btn" onclick="switchTab('members')">Members</button>
+      <button class="nav-btn" onclick="switchTab('game')">Game</button>
     </nav>
   </header>
 
@@ -470,6 +478,18 @@
       <div class="members-grid" id="membersContainer">
         <!-- Generated dynamically via JS -->
       </div>
+    </div>
+    
+    <!-- TAB 4: GAME -->
+    <div id="game" class="tab-content">
+        <div class = "card">
+            <div class="card" id="title-con">
+                <h1 style="text-align:center;" id="title">
+                    <!-- Text inserted remotely with JS -->
+                </h1>
+            </div>
+            <span style="color:gray;">Click to go to the next slide.</span>
+        </div>
     </div>
 
   </main>
@@ -786,6 +806,38 @@
         storyCon.textContent = storyText;
     };
     storyBtn.addEventListener("click", writeStory);
+    
+    var title = document.getElementById("title");
+    var titles = [
+        "GUESS THE MEMBER!!!",
+        "We'll give you the title of a book and you'll try to figure out which member wrote it!",
+        "Starting... now!",
+        "Soccer Story",
+        "IT WAS LIAM!!!",
+        "Did you guess it right?",
+        "Clash of the Gods",
+        "IT WAS OZ!!!",
+        "Did you guess it right?",
+        "The Guy",
+        "IT WAS AADHYA!!!",
+        "Did you guess it right?",
+        "Final question!",
+        "Space Rabbit",
+        "IT WAS IMMANUEL!!!",
+        "Did you guess it right?",
+        "Thanks for playing Guess the Member!!!"
+    ];
+    var itter = 0;
+    title.textContent = titles[itter];
+    function nextSlide() {
+        if (itter !== 16) {
+            itter++
+        } else {
+            itter = 0
+        }
+        title.textContent = titles[itter];
+    }
+    title.addEventListener("click", nextSlide);
 
     // Page Initialization on Window Load
     window.onload = function() {
