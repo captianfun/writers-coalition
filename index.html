@@ -268,66 +268,6 @@
       color: #00f0ff;
     }
 
-    /* Member List Styles */
-    .members-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.2rem;
-    }
-
-    .member-card {
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid #1e293b;
-      border-radius: 6px;
-      padding: 1.2rem;
-      transition: all 0.2s ease;
-    }
-
-    .member-card:hover {
-      border-color: #00f0ff;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 240, 255, 0.15);
-    }
-
-    .member-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 0.8rem;
-    }
-
-    .member-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: #1e293b;
-      border: 2px solid #00f0ff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #00f0ff;
-    }
-
-    .member-title {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .member-genre {
-      display: inline-block;
-      background: rgba(121, 40, 202, 0.3);
-      color: #d8b4fe;
-      border: 1px solid rgba(121, 40, 202, 0.5);
-      font-size: 0.75rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 12px;
-      margin-top: 0.5rem;
-    }
-
     /* Footer */
     footer {
       text-align: center;
@@ -369,6 +309,12 @@
         animation:0.5s bounce ease-in-out;
         animation-iteration-count: infinite;
     }
+    
+    @keyframes spin { 0% { transform:rotate(0deg); } 50% { transform:rotate(180deg); } 75% { transform:rotate(-90deg); } 100% { transform:rotate(0deg); } }
+    
+    #owl:hover {
+        animation:0.6s spin ease-in-out;
+    }
   </style>
 </head>
 <body>
@@ -376,14 +322,38 @@
   <!-- Header Section -->
   <header>
     <div class="logo-container">
-      <div class="logo-icon">WC</div>
+      <svg width="48" height="48" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" id="owl">
+          <ellipse cx="50" cy="55" rx="35" ry="40" fill="#1b67e3" stroke="#00f0ff" stroke-width="3"/>
+          
+          <ellipse cx="50" cy="65" rx="22" ry="25" fill="#1b67e3" stroke="#7928ca" stroke-width="2"/>
+          
+          <path d="M42 55 Q50 60 58 55 M40 63 Q50 68 60 63 M44 71 Q50 75 56 71" fill="blue" stroke="#00f0ff" stroke-width="2" stroke-linecap="round"/>
+          
+          <path d="M15 50 Q10 75 28 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
+          <path d="M85 50 Q90 75 72 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
+          
+          <polygon points="25,25 35,5 45,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
+          <polygon points="75,25 65,5 55,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
+          
+          <circle cx="36" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
+          <circle cx="64" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
+          
+          <circle cx="36" cy="38" r="7" fill="#0b0d17"/>
+          <circle cx="64" cy="38" r="7" fill="#0b0d17"/>
+          
+          <circle cx="34" cy="36" r="2.5" fill="#00f0ff"/>
+          <circle cx="62" cy="36" r="2.5" fill="#00f0ff"/>
+          
+          <polygon points="50,42 44,52 56,52" fill="#1b67e3"/>
+          
+          <ellipse cx="40" cy="93" rx="6" ry="3" fill="#ff9900"/>
+          <ellipse cx="60" cy="93" rx="6" ry="3" fill="#ff9900"/>
+        </svg>
       <h1 class="site-title">The Writers Coalition</h1>
     </div>
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
-      <button class="nav-btn" onclick="switchTab('members')">Members</button>
-      <button class="nav-btn" onclick="switchTab('game')">Game</button>
     </nav>
   </header>
 
@@ -465,31 +435,6 @@
         <div id="cyoaChoices"></div>
         <button class="secondary-btn" id="restartCyoaBtn" onclick="startCyoa()" style="margin-top: 1rem; display: none;">Restart Adventure</button>
       </div>
-
-    </div>
-
-    <!-- TAB 3: MEMBERS PAGE -->
-    <div id="members" class="tab-content">
-      <div class="card">
-        <h2>Club Member Directory</h2>
-        <p>Meet the creative elementary students who make up the Writers Coalition!</p>
-      </div>
-
-      <div class="members-grid" id="membersContainer">
-        <!-- Generated dynamically via JS -->
-      </div>
-    </div>
-    
-    <!-- TAB 4: GAME -->
-    <div id="game" class="tab-content">
-        <div class = "card">
-            <div class="card" id="title-con">
-                <h1 style="text-align:center;" id="title">
-                    <!-- Text inserted remotely with JS -->
-                </h1>
-            </div>
-            <span style="color:gray;">Click to go to the next slide.</span>
-        </div>
     </div>
 
   </main>
@@ -590,15 +535,6 @@
         choices: []
       }
     };
-
-    // Member Roster Data
-    var memberData = [
-      { name: "Oz Lavenski", title: "Club President", genre: "Realistic Fiction", bio: "Oz loves writing fast-paced stories, from spies to talking wolves." },
-      { name: "Liam Small", title: "Hand-written book writer", genre: "Multiple", bio: "Liam was the first writer to write a choose your own adventure book." },
-      { name: "Aadhya Srenivas", title: "Minecraft writer", genre: "Minecraft", bio: "Aadhya loves Minecraft, but he also write the handwritten 'The Guy' series." },
-      { name: "Immanuel Chibota", title: "Comic Creator", genre: "Sci-Fi & Graphic Novels", bio: "Immanuel wrote the Space Rabbit series and is one of hte only writers to make comics." },
-      { name: "Gal Lavie", title: "Fantasy Writer", genre: "Fantasy", bio: "Gal loves writing fantasy stories. She also loves cats and dragons." }
-    ];
 
     // Navigation Function
     function switchTab(tabId) {
@@ -738,57 +674,6 @@
     function startCyoa() {
       renderCyoaNode("start");
     }
-
-    // Member List Renderer
-    function renderMembers() {
-      var container = document.getElementById("membersContainer");
-      container.innerHTML = "";
-
-      var i = 0;
-      for (i = 0; i < memberData.length; i++) {
-        var member = memberData[i];
-        var initial = member.name.charAt(0);
-
-        var card = document.createElement("div");
-        card.className = "member-card";
-
-        var headerDiv = document.createElement("div");
-        headerDiv.className = "member-header";
-
-        var avatar = document.createElement("div");
-        avatar.className = "member-avatar";
-        avatar.innerText = initial;
-
-        var nameGroup = document.createElement("div");
-        
-        var nameH3 = document.createElement("h3");
-        nameH3.innerText = member.name;
-        nameH3.style.marginBottom = "2px";
-
-        var titleSpan = document.createElement("div");
-        titleSpan.className = "member-title";
-        titleSpan.innerText = member.title;
-
-        nameGroup.appendChild(nameH3);
-        nameGroup.appendChild(titleSpan);
-        headerDiv.appendChild(avatar);
-        headerDiv.appendChild(nameGroup);
-
-        var bioP = document.createElement("p");
-        bioP.innerText = member.bio;
-        bioP.style.fontSize = "0.9rem";
-
-        var genreTag = document.createElement("span");
-        genreTag.className = "member-genre";
-        genreTag.innerText = "Favorite Genre: " + member.genre;
-
-        card.appendChild(headerDiv);
-        card.appendChild(bioP);
-        card.appendChild(genreTag);
-
-        container.appendChild(card);
-      }
-    }
     
     var storyCon = document.getElementById("story-con");
     var inputSlots = document.querySelectorAll("#input-slots input");
@@ -806,45 +691,12 @@
         storyCon.textContent = storyText;
     };
     storyBtn.addEventListener("click", writeStory);
-    
-    var title = document.getElementById("title");
-    var titles = [
-        "GUESS THE MEMBER!!!",
-        "We'll give you the title of a book and you'll try to figure out which member wrote it!",
-        "Starting... now!",
-        "Soccer Story",
-        "IT WAS LIAM!!!",
-        "Did you guess it right?",
-        "Clash of the Gods",
-        "IT WAS OZ!!!",
-        "Did you guess it right?",
-        "The Guy",
-        "IT WAS AADHYA!!!",
-        "Did you guess it right?",
-        "Final question!",
-        "Space Rabbit",
-        "IT WAS IMMANUEL!!!",
-        "Did you guess it right?",
-        "Thanks for playing Guess the Member!!!"
-    ];
-    var itter = 0;
-    title.textContent = titles[itter];
-    function nextSlide() {
-        if (itter !== 16) {
-            itter++
-        } else {
-            itter = 0
-        }
-        title.textContent = titles[itter];
-    }
-    title.addEventListener("click", nextSlide);
 
     // Page Initialization on Window Load
     window.onload = function() {
       updateTimerDisplay();
       initWordCounter();
       startCyoa();
-      renderMembers();
     };
   </script>
 </body>
