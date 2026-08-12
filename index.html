@@ -323,9 +323,11 @@
     
     @keyframes flap-left { 0% { transform: rotate(0deg); } 50% { transform: rotate(-20deg); } 100% { transform: rotate(0deg); } }
     @keyframes flap-right { 0% { transform: rotate(0deg); } 50% { transform: rotate(20deg); } 100% { transform: rotate(0deg); } }
+    
     #owl:hover .left-wing {
         animation: 0.3s flap-left infinite ease-in-out;
         transform-origin: 28px 70px; 
+    
     }
     #owl:hover .right-wing {
         animation: 0.3s flap-right infinite ease-in-out; 
@@ -344,31 +346,6 @@
 
     #sign-in {
       justify-content:center;
-    }
-
-    /* Chat box styles - not in your file yet, added here just so the preview has something to look at */
-    #chat-box {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      padding: 1.5rem;
-      margin-top: 1.5rem;
-    }
-
-    #chat-messages {
-      background: rgba(2, 6, 23, 0.8);
-      border: 1px solid #334155;
-      border-radius: 4px;
-      padding: 0.8rem;
-      height: 150px;
-      overflow-y: auto;
-      margin-bottom: 1rem;
-    }
-
-    #chat-messages p {
-      margin-bottom: 0.4rem;
-      color: #e2e8f0;
-      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -419,7 +396,6 @@
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
-      <button class="nav-btn" onclick="switchTab('chat')">Chat</button>
       <button id="logout" onclick="logout()">Log Out</button>
     </nav>
   </header>
@@ -509,16 +485,6 @@
       </div>
     </div>
 
-    <!-- TAB 3: CHAT (new, not styled/placed in your real file yet - just previewing it here) -->
-    <div id="chat" class="tab-content">
-      <div id="chat-box">
-        <h2>Chat</h2>
-        <div id="chat-messages"></div>
-        <input type="text" id="chat-input" placeholder="Type a message..." style="width: 70%;">
-        <button class="action-btn" onclick="sendMessage()">Send</button>
-      </div>
-    </div>
-
   </main>
 
   <!-- Footer -->
@@ -526,13 +492,11 @@
     The Writers Coalition &bull; Elementary School Creative Writing Club
   </footer>
   </div>
-
-  <script type="module">
+   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+    import { getDatabase } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
   
-    // Firebase Config
     var firebaseConfig = {
       apiKey: "AIzaSyD_3RVuR8gKoGlUFT5i1bViGFvHjeJyLxc",
       authDomain: "writers-coalition-database.firebaseapp.com",
@@ -543,16 +507,13 @@
       appId: "1:868427458842:web:c23b0d652e284c76eb64a3"
     };
   
-    // Initialize Firebase
     var app = initializeApp(firebaseConfig);
     var auth = getAuth(app);
     var db = getDatabase(app);
   
-    // Make auth and db available to your regular JS file later
     window.firebaseAuth = auth;
     window.firebaseDB = db;
   
-    // Login Function
     function login() {
       var email = document.getElementById("email").value;
       var password = document.getElementById("password").value;
@@ -564,7 +525,6 @@
     }
     window.login = login;
   
-    // Logout Function
     function logout() {
       signOut(auth)
         .then(function() {
@@ -576,10 +536,9 @@
     }
     window.logout = logout;
   
-    // Show/Hide Login Box Based on Sign-In State
     function handleAuthChange(user) {
       var loginBox = document.getElementById("login-box");
-      var siteContent = document.getElementById("site-content");
+      var siteContent = document.getElementById("app-box");
   
       if (user) {
         loginBox.style.display = "none";
@@ -591,48 +550,10 @@
     }
     onAuthStateChanged(auth, handleAuthChange);
   
-    // Send Chat Message
-    function sendMessage() {
-      var input = document.getElementById("chat-input");
-      var text = input.value.trim();
-  
-      if (text === "") {
-        return;
-      }
-  
-      var user = auth.currentUser;
-      var senderName = user ? user.email : "Unknown";
-  
-      push(ref(db, "chat"), {
-        sender: senderName,
-        text: text,
-        time: Date.now()
-      });
-  
-      input.value = "";
-    }
-    window.sendMessage = sendMessage;
-  
-    // Display Chat Messages
-    function displayMessages(snapshot) {
-      var messagesDiv = document.getElementById("chat-messages");
-      messagesDiv.innerHTML = "";
-  
-      snapshot.forEach(function(child) {
-        var msg = child.val();
-        var msgElement = document.createElement("p");
-        msgElement.innerText = msg.sender + ": " + msg.text;
-        messagesDiv.appendChild(msgElement);
-      });
-    }
-    onValue(ref(db, "chat"), displayMessages);
-  
-    // Runs once the page finishes loading (separate from your existing window.onload)
     window.addEventListener("load", function() {
       console.log("Firebase ready.");
     });
   </script>
-
   <script>
     // Global State Variables
     var currentTimer = null;
