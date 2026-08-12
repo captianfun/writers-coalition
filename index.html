@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Writers Coalition</title>
+  <title>The Writers Coalition (Preview)</title>
   <style>
     /* Reset & Base Styles */
     * {
@@ -345,9 +345,46 @@
     #sign-in {
       justify-content:center;
     }
+
+    /* Chat box styles - not in your file yet, added here just so the preview has something to look at */
+    #chat-box {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    #chat-messages {
+      background: rgba(2, 6, 23, 0.8);
+      border: 1px solid #334155;
+      border-radius: 4px;
+      padding: 0.8rem;
+      height: 150px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    #chat-messages p {
+      margin-bottom: 0.4rem;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+    }
+
+    /* Preview-only banner, remove this block when copying back to your real file */
+    #preview-banner {
+      background: #7928ca;
+      color: white;
+      text-align: center;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+      font-family: monospace;
+    }
   </style>
 </head>
   <body>
+  <div id="preview-banner">PREVIEW MODE — Firebase is mocked here so you can test the look. Type anything and hit "Log In" to simulate signing in.</div>
+
   <!-- Login Section -->
   <div id="login-box">
     <h2 id="sign-in">Sign In</h2>
@@ -393,6 +430,7 @@
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
+      <button class="nav-btn" onclick="switchTab('chat')">Chat</button>
       <button id="logout" onclick="logout()">Log Out</button>
     </nav>
   </header>
@@ -482,6 +520,16 @@
       </div>
     </div>
 
+    <!-- TAB 3: CHAT (new, not styled/placed in your real file yet - just previewing it here) -->
+    <div id="chat" class="tab-content">
+      <div id="chat-box">
+        <h2>Chat</h2>
+        <div id="chat-messages"></div>
+        <input type="text" id="chat-input" placeholder="Type a message..." style="width: 70%;">
+        <button class="action-btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
   </main>
 
   <!-- Footer -->
@@ -490,11 +538,10 @@
   </footer>
   </div>
 
-  <!-- JavaScript Section (Pure JS using only 'var') -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-    import { getDatabase } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
   
     // Firebase Config
     var firebaseConfig = {
@@ -527,7 +574,7 @@
         });
     }
     window.login = login;
-
+  
     // Logout Function
     function logout() {
       signOut(auth)
@@ -544,7 +591,7 @@
     function handleAuthChange(user) {
       var loginBox = document.getElementById("login-box");
       var siteContent = document.getElementById("site-content");
-    
+  
       if (user) {
         loginBox.style.display = "none";
         siteContent.style.display = "block";
@@ -555,11 +602,48 @@
     }
     onAuthStateChanged(auth, handleAuthChange);
   
+    // Send Chat Message
+    function sendMessage() {
+      var input = document.getElementById("chat-input");
+      var text = input.value.trim();
+  
+      if (text === "") {
+        return;
+      }
+  
+      var user = auth.currentUser;
+      var senderName = user ? user.email : "Unknown";
+  
+      push(ref(db, "chat"), {
+        sender: senderName,
+        text: text,
+        time: Date.now()
+      });
+  
+      input.value = "";
+    }
+    window.sendMessage = sendMessage;
+  
+    // Display Chat Messages
+    function displayMessages(snapshot) {
+      var messagesDiv = document.getElementById("chat-messages");
+      messagesDiv.innerHTML = "";
+  
+      snapshot.forEach(function(child) {
+        var msg = child.val();
+        var msgElement = document.createElement("p");
+        msgElement.innerText = msg.sender + ": " + msg.text;
+        messagesDiv.appendChild(msgElement);
+      });
+    }
+    onValue(ref(db, "chat"), displayMessages);
+  
     // Runs once the page finishes loading (separate from your existing window.onload)
     window.addEventListener("load", function() {
       console.log("Firebase ready.");
     });
   </script>
+
   <script>
     // Global State Variables
     var currentTimer = null;
