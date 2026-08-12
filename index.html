@@ -87,6 +87,20 @@
       transition: all 0.2s ease;
     }
 
+    #logout {
+      background: rgba(30, 41, 59, 0.8);
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+
     .nav-btn:hover {
       color: #00f0ff;
       border-color: #00f0ff;
@@ -317,10 +331,31 @@
         animation: 0.3s flap-right infinite ease-in-out; 
         transform-origin: 72px 70px; 
     }
+
+    #login-box {
+      border:2px solid white;
+      border-radius:8px;
+      background-color:rgb(15, 23, 42);
+      color:white;
+      margin:10%;
+    }
+
+    #sign-in {
+      justify-content:center;
+    }
   </style>
 </head>
-<body>
-
+  <body>
+  <!-- Login Section -->
+  <div id="login-box">
+    <h2 id="sign-in">Sign In</h2>
+    <input type="email" id="email" placeholder="Email"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button onclick="login()">Log In</button>
+    <p id="login-status"></p>
+  </div>
+  
+  <div id="app-box" style="display:none;">
   <!-- Header Section -->
   <header>
     <div class="logo-container">
@@ -356,6 +391,7 @@
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
+      <button id="logout" onclick="logout()">Log Out</button>
     </nav>
   </header>
 
@@ -450,8 +486,78 @@
   <footer>
     The Writers Coalition &bull; Elementary School Creative Writing Club
   </footer>
+  </div>
 
   <!-- JavaScript Section (Pure JS using only 'var') -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+    import { getDatabase } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+  
+    // Firebase Config
+    var firebaseConfig = {
+      apiKey: "AIzaSyD_3RVuR8gKoGlUFT5i1bViGFvHjeJyLxc",
+      authDomain: "writers-coalition-database.firebaseapp.com",
+      databaseURL: "https://writers-coalition-database-default-rtdb.firebaseio.com",
+      projectId: "writers-coalition-database",
+      storageBucket: "writers-coalition-database.firebasestorage.app",
+      messagingSenderId: "868427458842",
+      appId: "1:868427458842:web:c23b0d652e284c76eb64a3"
+    };
+  
+    // Initialize Firebase
+    var app = initializeApp(firebaseConfig);
+    var auth = getAuth(app);
+    var db = getDatabase(app);
+  
+    // Make auth and db available to your regular JS file later
+    window.firebaseAuth = auth;
+    window.firebaseDB = db;
+  
+    // Login Function
+    function login() {
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+  
+      signInWithEmailAndPassword(auth, email, password)
+        .catch(function(error) {
+          document.getElementById("login-status").innerText = "Login failed: " + error.message;
+        });
+    }
+    window.login = login;
+
+    // Logout Function
+    function logout() {
+      signOut(auth)
+        .then(function() {
+          document.getElementById("login-status").innerText = "Signed out.";
+        })
+        .catch(function(error) {
+          document.getElementById("login-status").innerText = "Logout failed: " + error.message;
+        });
+    }
+    window.logout = logout;
+  
+    // Show/Hide Login Box Based on Sign-In State
+    function handleAuthChange(user) {
+      var loginBox = document.getElementById("login-box");
+      var siteContent = document.getElementById("site-content");
+    
+      if (user) {
+        loginBox.style.display = "none";
+        siteContent.style.display = "block";
+      } else {
+        loginBox.style.display = "block";
+        siteContent.style.display = "none";
+      }
+    }
+    onAuthStateChanged(auth, handleAuthChange);
+  
+    // Runs once the page finishes loading (separate from your existing window.onload)
+    window.addEventListener("load", function() {
+      console.log("Firebase ready.");
+    });
+  </script>
   <script>
     // Global State Variables
     var currentTimer = null;
