@@ -287,7 +287,7 @@
       flex-wrap: wrap;
     }
     
-    input, button {
+    input, button, select {
         color:white;
         background-color:black;
         border:2px solid white;
@@ -303,17 +303,19 @@
         margin-bottom:5px;
     }
     
-    @keyframes bounce { 0% { transform:scale(1); } 25% { transform:scale(1.01); } 50% { transform:scale(1.02); } 75% { transform:scale(1.01); } 100% { transform:scale(1); } }
-    
-    #title-con {
-        animation:0.5s bounce ease-in-out;
-        animation-iteration-count: infinite;
+    #story-select {
+        margin-bottom:5px;
     }
     
-    @keyframes spin { 0% { transform:rotate(0deg); } 50% { transform:rotate(180deg); } 75% { transform:rotate(-90deg); } 100% { transform:rotate(0deg); } }
-    
-    #owl:hover {
-        animation:0.6s spin ease-in-out;
+    @keyframes flap-left { 0% { transform: rotate(0deg); } 50% { transform: rotate(-20deg); } 100% { transform: rotate(0deg); } }
+    @keyframes flap-right { 0% { transform: rotate(0deg); } 50% { transform: rotate(20deg); } 100% { transform: rotate(0deg); } }
+    #owl:hover .left-wing {
+        animation: 0.3s flap-left infinite ease-in-out;
+        transform-origin: 28px 70px; 
+    }
+    #owl:hover .right-wing {
+        animation: 0.3s flap-right infinite ease-in-out; 
+        transform-origin: 72px 70px; 
     }
   </style>
 </head>
@@ -329,8 +331,8 @@
           
           <path d="M42 55 Q50 60 58 55 M40 63 Q50 68 60 63 M44 71 Q50 75 56 71" fill="blue" stroke="#00f0ff" stroke-width="2" stroke-linecap="round"/>
           
-          <path d="M15 50 Q10 75 28 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
-          <path d="M85 50 Q90 75 72 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
+          <path class="left-wing" d="M15 50 Q10 75 28 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
+          <path class="right-wing" d="M85 50 Q90 75 72 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
           
           <polygon points="25,25 35,5 45,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
           <polygon points="75,25 65,5 55,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
@@ -369,6 +371,10 @@
       </div>
       <div class = "card">
         <h2>CrAZy MaD LIbS</h2>
+        <select id="story-select">
+            <option>Story One</option>
+            <option>Story Two</option>
+        </select>
         <div id = "input-slots">
             <input placeholder = "noun here">
             <input placeholder = "adjective here">
@@ -378,6 +384,7 @@
             <input placeholder = "noun here">
             <input placeholder = "noun here">
             <input placeholder = "name here">
+            <input placeholder = "verb here">
         </div>
         <button id = "return">Read story</button>
         <p id = "story-con"></p>
@@ -677,7 +684,8 @@
     
     var storyCon = document.getElementById("story-con");
     var inputSlots = document.querySelectorAll("#input-slots input");
-    var storyBtn = document.getElementById("return")
+    var storyBtn = document.getElementById("return");
+    var select = document.getElementById("story-select");
     function writeStory() {
         var words = [];
         for (var i = 0; i < inputSlots.length; i++) {
@@ -687,10 +695,38 @@
             }
             words.push(inputSlots[i].value);
         }
-        var storyText = "Once, a long time ago, there was a " + words[1] + " " + words[0] + " who longed to be king. He lived a modest life, and was very noble. His name was " + words[2] + ". After a while, the king " + words[7] + " IV hired " + words[2] + " to tend for the royal " + words[3] + ". After a while, " + words[2] + " was promoted to Duke of Yarbodle by " + words[7] + " IV's " + words[4] + " " + words[5] + ". And, after a long time, " + words[2] + " was promoted to Earl of the royal " + words[6] + "."
+        var storyText = "";
+        if (select.value === "Story One") {
+            storyText = "Once, a long time ago, there was a " + words[1] + " " + words[0] + " who longed to be king. He lived a modest life, and was very noble. His name was " + words[2] + ". After a while, the king " + words[7] + " IV hired " + words[2] + " to tend for the royal " + words[3] + ". After a while, " + words[2] + " was promoted to Duke of Yarbodle by " + words[7] + " IV's " + words[4] + " " + words[5] + ". And, after a long time, " + words[2] + " was " + words[8] + "ed to Earl of the royal " + words[6] + "."
+        } else {
+            storyText = "I woke up. I suddendly realised that it was April fools day! I had to act quick before anybody could " + words[8] + " me! So I qickly ran to the kitchen and checked all the " + words[0] + " shakers and made sure there were no " + words[1] + " " + words[6] + "s stuck to me and that nobody had stolen my " + words[3] + ". I even checked the ceiling so no " + words[4] + " " + words[5] + "s fell on me. I interrogated my brothers, " + words[2] + " and " + words[7] + ". Finnaly, I made it through the day without being pranked!"
+        }
         storyCon.textContent = storyText;
     };
     storyBtn.addEventListener("click", writeStory);
+    
+    document.addEventListener("mousemove", function(e) {
+      var owlSvg = document.getElementById("owl");
+      var rect = owlSvg.getBoundingClientRect();
+      
+      // Find the middle of the owl on the screen
+      var owlX = rect.left + rect.width / 2;
+      var owlY = rect.top + rect.height / 2;
+      
+      // Calculate the direction to the mouse
+      var angle = Math.atan2(e.clientY - owlY, e.clientX - owlX);
+      
+      // Move the light blue dots up to 3 pixels in that direction
+      var distance = 3;
+      var moveX = Math.cos(angle) * distance;
+      var moveY = Math.sin(angle) * distance;
+      
+      // Select the light blue circles (#00f0ff) instead of the black pupils
+      var highlights = owlSvg.querySelectorAll("circle[fill='#00f0ff']");
+      for (var i = 0; i < highlights.length; i++) {
+        highlights[i].setAttribute("transform", "translate(" + moveX + "," + moveY + ")");
+      }
+    });
 
     // Page Initialization on Window Load
     window.onload = function() {
