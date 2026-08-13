@@ -355,6 +355,19 @@
     #poem-word, #poem-sub, #poem-con input {
       margin-bottom:5px;
     }
+
+    #poem-gallery-list {
+      display:grid;
+      grid-template-columns:repeat(2, 1fr);
+      gap:5px;
+    }
+
+    #poem-gallery-list div {
+      border:2px solid white;
+      color:white;
+      padding:5px;
+      text-align:center;
+    }
   </style>
 </head>
   <body>
@@ -404,6 +417,7 @@
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
+      <button class="nav-btn" onclick="switchTab('gallery')">Gallery</button>
       <button id="logout" onclick="logout()">Log Out</button>
     </nav>
   </header>
@@ -444,6 +458,9 @@
       <input id="poem-word">
       <button id="poem-sub">Generate Template</button>
       <div id="poem-con"></div>
+      <input id="poem-title" placeholder="Give your poem a title" style="display:none;"><br>
+      <button id="poem-save" class="action-btn" style="display:none;">Save to Gallery</button>
+      <p id="poem-save-status" style="font-size:0.85rem; color:#94a3b8;"></p>
     </div>
     </div>
     
@@ -500,6 +517,15 @@
       </div>
     </div>
 
+    <!-- TAB 3: GALLERY -->
+    <div id="gallery" class="tab-content">
+      <div class="card">
+        <h2>Poem Gallery</h2>
+        <p>See acrostic poems written by everyone in the club!</p>
+        <div id="poem-gallery-list"></div>
+      </div>
+    </div>
+
   </main>
 
   <!-- Footer -->
@@ -510,7 +536,7 @@
    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-    import { getDatabase } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
   
     var firebaseConfig = {
       apiKey: "AIzaSyD_3RVuR8gKoGlUFT5i1bViGFvHjeJyLxc",
@@ -564,6 +590,58 @@
       }
     }
     onAuthStateChanged(auth, handleAuthChange);
+
+    function savePoem() {
+      var title = document.getElementById("poem-title").value.trim();
+      var poemInputs = document.querySelectorAll("#poem-con input");
+      var lines = [];
+    
+      for (var i = 0; i < poemInputs.length; i++) {
+        lines.push(poemInputs[i].value);
+      }
+    
+      if (title === "" || lines.length === 0) {
+        document.getElementById("poem-save-status").innerText = "Add a title and fill in your poem first!";
+        return;
+      }
+    
+      var user = auth.currentUser;
+      var authorName = user ? user.email : "Unknown";
+    
+      push(ref(db, "poems"), {
+        title: title,
+        lines: lines,
+        author: authorName,
+        time: Date.now()
+      });
+    
+      document.getElementById("poem-save-status").innerText = "Saved to gallery!";
+    }
+    window.savePoem = savePoem;
+    
+    function displayPoemGallery(snapshot) {
+      var galleryDiv = document.getElementById("poem-gallery-list");
+      galleryDiv.innerHTML = "";
+    
+      snapshot.forEach(function(child) {
+        var poem = child.val();
+        var poemCard = document.createElement("div");
+        poemCard.className = "prompt-box";
+    
+        var titleEl = document.createElement("h3");
+        titleEl.innerText = poem.title + " — by " + poem.author;
+        poemCard.appendChild(titleEl);
+    
+        for (var i = 0; i < poem.lines.length; i++) {
+          var lineEl = document.createElement("p");
+          lineEl.innerText = poem.lines[i];
+          poemCard.appendChild(lineEl);
+        }
+    
+        galleryDiv.appendChild(poemCard);
+      });
+    }
+    onValue(ref(db, "poems"), displayPoemGallery);
   
     window.addEventListener("load", function() {
       console.log("Firebase ready.");
@@ -856,8 +934,13 @@
             input.placeholder = poemLets[i].toUpperCase();
             poemCon.appendChild(input);
         }
+        document.getElementById("poem-title").style.display = "inline-block";
+        document.getElementById("poem-save").style.display = "inline-block";
     }
     poemSub.addEventListener("click", createTemp);
+
+    var poemSave = document.getElementById("poem-save");
+    poemSave.addEventListener("click", savePoem);
 
     // Page Initialization on Window Load
     window.onload = function() {
