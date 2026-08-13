@@ -434,7 +434,7 @@
       <h2>Acrostic poem template</h2>
       <p>Enter your word that you're making your acrostic poem about below.</p>
       <input id="poem-word">
-      <button id="poem-submit">Generate Template</button>
+      <button id="poem-sub">Generate Template</button>
       <div id="poem-con"></div>
     </div>
     </div>
@@ -839,16 +839,17 @@
 
     var poemWord = document.getElementById("poem-word");
     var poemCon = document.getElementById("poem-con");
-    var poemSub = document.getElementById("poem-submit");
-    function createPoem() {
-      var poemLets = Array.from(poemWord);
-      for (var i = 0; i < poemLets.length; i++) {
-        var input = document.createElement("input");
-        input.placeholder = poemLets[i].toUpperCase;
-        poemCon.appendChild(input);
-      }
+    var poemSub = document.getElementById("poem-sub");
+    function createTemp() {
+        var poemLets = Array.from(poemWord.value);
+        poemCon.innerHTML = "";
+        for (var i = 0; i < poemLets.length; i++) {
+            var input = document.createElement("input");
+            input.placeholder = poemLets[i].toUpperCase();
+            poemCon.appendChild(input);
+        }
     }
-    poemSub.addEventListener("click", createPoem);
+    poemSub.addEventListener("click", createTemp);
 
     // Page Initialization on Window Load
     window.onload = function() {
