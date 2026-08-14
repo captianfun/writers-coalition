@@ -352,7 +352,7 @@
       display:grid;
     }
 
-    #poem-word, #poem-sub, #poem-con input {
+    #poem-word, #poem-sub, #poem-con input, #poem-title, #poem-save {
       margin-bottom:5px;
     }
 
@@ -460,7 +460,7 @@
       <div id="poem-con"></div>
       <input id="poem-title" placeholder="Give your poem a title" style="display:none;"><br>
       <button id="poem-save" class="action-btn" style="display:none;">Save to Gallery</button>
-      <p id="poem-save-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+      <p id="poem-save-status" style="font-size:0.85rem; color:#94a3b8;" onclick = "savePoem()"></p>
     </div>
     </div>
     
@@ -938,9 +938,6 @@
         document.getElementById("poem-save").style.display = "inline-block";
     }
     poemSub.addEventListener("click", createTemp);
-
-    var poemSave = document.getElementById("poem-save");
-    poemSave.addEventListener("click", savePoem);
 
     // Page Initialization on Window Load
     window.onload = function() {
