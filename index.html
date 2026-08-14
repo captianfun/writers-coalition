@@ -621,7 +621,6 @@
       if (user) {
         loginBox.style.display = "none";
         siteContent.style.display = "flex";
-        updateStreak(user);
         onValue(ref(db, "bookmarks/" + user.uid), displayBookmarks);
       } else {
         loginBox.style.display = "block";
