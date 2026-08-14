@@ -101,6 +101,12 @@
       transition: all 0.2s ease;
     }
 
+    #logout:hover {
+      color: #00f0ff;
+      border-color: #00f0ff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
     .nav-btn:hover {
       color: #00f0ff;
       border-color: #00f0ff;
@@ -329,6 +335,7 @@
         transform-origin: 28px 70px; 
     
     }
+    
     #owl:hover .right-wing {
         animation: 0.3s flap-right infinite ease-in-out; 
         transform-origin: 72px 70px; 
@@ -426,6 +433,7 @@
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
       <button class="nav-btn" onclick="switchTab('gallery')">Gallery</button>
       <button class="nav-btn" onclick="switchTab('reading-list')">My Reading List</button>
+      <button class="nav-btn" onclick="switchTab('profile')">My Profile</button>
       <button class="nav-btn" onclick="switchTab('chat')">Chat</button>
       <button id="logout" onclick="logout()">Log Out</button>
     </nav>
@@ -546,13 +554,24 @@
       </div>
     </div>
 
-    <!-- TAB 4: CHAT -->
+    <!-- TAB 5: CHAT -->
     <div id="chat" class="tab-content">
     <div class="card">
       <h2>Chat</h2>
       <div id="chat-messages" style="background: rgba(2, 6, 23, 0.8); border: 1px solid #334155; border-radius: 4px; padding: 0.8rem; height: 200px; overflow-y: auto; margin-bottom: 1rem;"></div>
       <input type="text" id="chat-input" placeholder="Type a message..." style="width: 70%;">
       <button class="action-btn" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <!-- TAB 6: PROFILE -->
+  <div id="profile" class="tab-content">
+    <div class="card">
+      <h2 id="profile-name">Loading profile...</h2>
+      <p id="profile-piece-count"></p>
+      <p id="profile-bookmark-count"></p>
+      <h3 style="margin-top: 1.5rem;">Your Saved Work</h3>
+      <div id="profile-pieces"></div>
     </div>
   </div>
 
@@ -613,6 +632,42 @@
         });
     }
     window.logout = logout;
+
+    function loadProfile(user) {
+      var displayName = getDisplayName(user.email);
+      document.getElementById("profile-name").innerText = displayName + "'s Profile";
+    
+      // Saved poems/stories by this person
+      get(ref(db, "poems")).then(function(snapshot) {
+        var piecesDiv = document.getElementById("profile-pieces");
+        piecesDiv.innerHTML = "";
+        var pieceCount = 0;
+    
+        snapshot.forEach(function(child) {
+          var poem = child.val();
+          if (poem.author === displayName) {
+            pieceCount++;
+    
+            var pieceCard = document.createElement("div");
+            pieceCard.className = "prompt-box";
+    
+            var titleEl = document.createElement("h3");
+            titleEl.innerText = poem.title;
+            pieceCard.appendChild(titleEl);
+    
+            piecesDiv.appendChild(pieceCard);
+          }
+        });
+    
+        document.getElementById("profile-piece-count").innerText = "Pieces saved: " + pieceCount;
+      });
+    
+      // Bookmark count
+      get(ref(db, "bookmarks/" + user.uid)).then(function(snapshot) {
+        var bookmarkCount = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+        document.getElementById("profile-bookmark-count").innerText = "Items in reading list: " + bookmarkCount;
+      });
+    }
   
     function handleAuthChange(user) {
       var loginBox = document.getElementById("login-box");
@@ -622,6 +677,7 @@
         loginBox.style.display = "none";
         siteContent.style.display = "flex";
         onValue(ref(db, "bookmarks/" + user.uid), displayBookmarks);
+        loadProfile(user);
       } else {
         loginBox.style.display = "block";
         siteContent.style.display = "none";
