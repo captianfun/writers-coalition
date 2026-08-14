@@ -439,10 +439,6 @@
         <p>The Writers Coalition is an elementary school club where young authors come together to share stories, explore new ideas, and build creative writing skills in a supportive, fun environment.</p>
         <p>Whether you love writing realistic fiction, poetry, fantasy, or mystery stories, you will find a friendly place to share your work here!</p>
       </div>
-      <div class="card">
-        <h2>Your Writing Streak</h2>
-        <p id="streak-display">Loading your streak...</p>
-      </div>
       <div class = "card">
         <h2>CrAZy MaD LIbS</h2>
         <select id="story-select">
@@ -599,40 +595,6 @@
         });
     }
     window.logout = logout;
-
-    function updateStreak(user) {
-      var todayStr = new Date().toDateString();
-      var streakRef = ref(db, "streaks/" + user.uid);
-    
-      get(streakRef).then(function(snapshot) {
-        var streakData = snapshot.exists() ? snapshot.val() : null;
-        var newCount = 1;
-    
-        if (streakData) {
-          var lastVisit = new Date(streakData.lastVisit);
-          var today = new Date(todayStr);
-          var diffDays = Math.round((today - lastVisit) / (1000 * 60 * 60 * 24));
-    
-          if (diffDays === 0) {
-            // Already visited today, keep the same count
-            newCount = streakData.count;
-          } else if (diffDays === 1) {
-            // Visited yesterday, streak continues
-            newCount = streakData.count + 1;
-          } else {
-            // Missed a day or more, streak resets
-            newCount = 1;
-          }
-        }
-    
-        set(streakRef, {
-          lastVisit: todayStr,
-          count: newCount
-        });
-    
-        document.getElementById("streak-display").innerText = "You've visited " + newCount + " day" + (newCount === 1 ? "" : "s") + " in a row!";
-      });
-    }
   
     function handleAuthChange(user) {
       var loginBox = document.getElementById("login-box");
@@ -641,7 +603,6 @@
       if (user) {
         loginBox.style.display = "none";
         siteContent.style.display = "block";
-        updateStreak(user);
       } else {
         loginBox.style.display = "block";
         siteContent.style.display = "none";
