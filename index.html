@@ -471,7 +471,15 @@
       <button id="poem-save" class="action-btn" style="display:none;" onclick="savePoem()">Save to Gallery</button>
       <p id="poem-save-status" style="font-size:0.85rem; color:#94a3b8;"></p>
     </div>
+    <div class="card">
+      <h2>Genre Spinner</h2>
+      <p>Spin the wheel to discover what genre to write in next!</p>
+      <div id="spinner-wheel" style="width: 220px; height: 220px; border-radius: 50%; border: 4px solid #00f0ff; display: flex; align-items: center; justify-content: center; margin: 1.5rem auto; background: radial-gradient(circle, #1e293b, #0b0d17); transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99); font-size: 1.1rem; font-weight: bold; color: #00f0ff; text-align: center; padding: 1rem;">
+        Click to Spin!
+      </div>
+      <button class="action-btn" onclick="spinGenre()" style="display:block; margin: 0 auto;">Spin the Wheel</button>
     </div>
+  </div>
     
     <!-- TAB 2: ACTIVITIES (Timer, Story Starter, CYOA) -->
     <div id="activities" class="tab-content">
@@ -1015,12 +1023,47 @@
     }
     poemSub.addEventListener("click", createTemp);
 
-    // Page Initialization on Window Load
-    window.onload = function() {
-      updateTimerDisplay();
-      initWordCounter();
-      startCyoa();
-    };
+    // Genre Spinner
+    var genreList = [
+      "Mystery",
+      "Sci-Fi",
+      "Realistic Fiction",
+      "Adventure",
+      "Comedy",
+      "Spooky",
+      "Fantasy",
+      "Superhero"
+    ];
+    
+    var spinnerSpinning = false;
+    
+    function spinGenre() {
+      if (spinnerSpinning) {
+        return;
+      }
+      spinnerSpinning = true;
+    
+      var wheel = document.getElementById("spinner-wheel");
+      var randomGenre = genreList[Math.floor(Math.random() * genreList.length)];
+    
+      // Spin a random number of full rotations plus a bit extra for effect
+      var spins = 4 + Math.floor(Math.random() * 3);
+      var currentRotation = (spins * 360) + Math.floor(Math.random() * 360);
+    
+      wheel.style.transform = "rotate(" + currentRotation + "deg)";
+    
+      setTimeout(function() {
+        wheel.innerText = randomGenre;
+        spinnerSpinning = false;
+      }, 3000);
+    }
+    
+        // Page Initialization on Window Load
+        window.onload = function() {
+          updateTimerDisplay();
+          initWordCounter();
+          startCyoa();
+        };
   </script>
 </body>
 </html>
