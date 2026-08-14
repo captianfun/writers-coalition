@@ -573,6 +573,13 @@
   
     window.firebaseAuth = auth;
     window.firebaseDB = db;
+
+    function getDisplayName(email) {
+      if (!email) {
+        return "Unknown";
+      }
+      return email.split("@")[0];
+    }
   
     function login() {
       var email = document.getElementById("email").value;
@@ -625,7 +632,7 @@
       }
     
       var user = auth.currentUser;
-      var authorName = user ? user.email : "Unknown";
+      var authorName = user ? getDisplayName(user.email) : "Unknown";
     
       push(ref(db, "poems"), {
         title: title,
@@ -647,7 +654,7 @@
       }
     
       var user = auth.currentUser;
-      var authorName = user ? user.email : "Unknown";
+      var authorName = user ? getDisplayName(user.email) : "Unknown";
     
       push(ref(db, "poems"), {
         title: "Mad Libs Story",
@@ -693,7 +700,7 @@
       }
     
       var user = auth.currentUser;
-      var senderName = user ? user.email : "Unknown";
+      var senderName = user ? getDisplayName(user.email) : "Unknown";
     
       push(ref(db, "chat"), {
         sender: senderName,
