@@ -454,8 +454,10 @@
             <input placeholder = "name here">
             <input placeholder = "verb here">
         </div>
-        <button id = "return">Read story</button>
-        <p id = "story-con"></p>
+        <button id="return">Read story</button>
+        <p id="story-con"></p>
+        <button id="story-save" class="action-btn" style="display:none;" onclick="saveStory()">Save to Gallery</button>
+        <p id="story-save-status" style="font-size:0.85rem; color:#94a3b8;"></p>
     </div>
     <div class="card">
       <h2>Acrostic poem template</h2>
@@ -525,7 +527,7 @@
     <!-- TAB 3: GALLERY -->
     <div id="gallery" class="tab-content">
       <div class="card">
-        <h2>Poem Gallery</h2>
+        <h2>Poem and Story Gallery</h2>
         <p>See acrostic poems written by everyone in the club!</p>
         <div id="poem-gallery-list"></div>
       </div>
@@ -623,6 +625,28 @@
       document.getElementById("poem-save-status").innerText = "Saved to gallery!";
     }
     window.savePoem = savePoem;
+
+    function saveStory() {
+      var storyText = document.getElementById("story-con").textContent;
+    
+      if (storyText === "") {
+        document.getElementById("story-save-status").innerText = "Generate a story first!";
+        return;
+      }
+    
+      var user = auth.currentUser;
+      var authorName = user ? user.email : "Unknown";
+    
+      push(ref(db, "poems"), {
+        title: "Mad Libs Story",
+        lines: [storyText],
+        author: authorName,
+        time: Date.now()
+      });
+    
+      document.getElementById("story-save-status").innerText = "Saved to gallery!";
+    }
+    window.saveStory = saveStory;
     
     function displayPoemGallery(snapshot) {
       var galleryDiv = document.getElementById("poem-gallery-list");
@@ -902,6 +926,7 @@
             storyText = "I woke up. I suddendly realised that it was April fools day! I had to act quick before anybody could " + words[8] + " me! So I qickly ran to the kitchen and checked all the " + words[0] + " shakers and made sure there were no " + words[1] + " " + words[6] + "s stuck to me and that nobody had stolen my " + words[3] + ". I even checked the ceiling so no " + words[4] + " " + words[5] + "s fell on me. I interrogated my brothers, " + words[2] + " and " + words[7] + ". Finnaly, I made it through the day without being pranked!"
         }
         storyCon.textContent = storyText;
+        document.getElementById("story-save").style.display = "inline-block";
     };
     storyBtn.addEventListener("click", writeStory);
     
