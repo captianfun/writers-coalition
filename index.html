@@ -566,7 +566,7 @@
    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-    import { getDatabase, ref, push, onValue, get, set } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue, get, set, remove } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
     
     var firebaseConfig = {
       apiKey: "AIzaSyD_3RVuR8gKoGlUFT5i1bViGFvHjeJyLxc",
@@ -734,6 +734,7 @@
     
       snapshot.forEach(function(child) {
         var bookmark = child.val();
+        var bookmarkId = child.key;
         var card = document.createElement("div");
         card.className = "prompt-box";
     
@@ -747,8 +748,24 @@
           card.appendChild(lineEl);
         }
     
+        var removeBtn = document.createElement("button");
+        removeBtn.className = "secondary-btn";
+        removeBtn.innerText = "Remove from List";
+        removeBtn.onclick = function() {
+          removeBookmark(bookmarkId);
+        };
+        card.appendChild(removeBtn);
+    
         listDiv.appendChild(card);
       });
+    }
+    
+    function removeBookmark(bookmarkId) {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+      remove(ref(db, "bookmarks/" + user.uid + "/" + bookmarkId));
     }
 
     function sendMessage() {
