@@ -439,6 +439,10 @@
         <p>The Writers Coalition is an elementary school club where young authors come together to share stories, explore new ideas, and build creative writing skills in a supportive, fun environment.</p>
         <p>Whether you love writing realistic fiction, poetry, fantasy, or mystery stories, you will find a friendly place to share your work here!</p>
       </div>
+      <div class="card">
+        <h2>Your Writing Streak</h2>
+        <p id="streak-display">Loading your streak...</p>
+      </div>
       <div class = "card">
         <h2>CrAZy MaD LIbS</h2>
         <select id="story-select">
@@ -470,14 +474,6 @@
       <input id="poem-title" placeholder="Give your poem a title" style="display:none;"><br>
       <button id="poem-save" class="action-btn" style="display:none;" onclick="savePoem()">Save to Gallery</button>
       <p id="poem-save-status" style="font-size:0.85rem; color:#94a3b8;"></p>
-    </div>
-    <div class="card">
-      <h2>Genre Spinner</h2>
-      <p>Spin the wheel to discover what genre to write in next!</p>
-      <div id="spinner-wheel" style="width: 220px; height: 220px; border-radius: 50%; border: 4px solid #00f0ff; display: flex; align-items: center; justify-content: center; margin: 1.5rem auto; background: radial-gradient(circle, #1e293b, #0b0d17); transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99); font-size: 1.1rem; font-weight: bold; color: #00f0ff; text-align: center; padding: 1rem;">
-        Click to Spin!
-      </div>
-      <button class="action-btn" onclick="spinGenre()" style="display:block; margin: 0 auto;">Spin the Wheel</button>
     </div>
   </div>
     
@@ -563,7 +559,7 @@
    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-    import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue, get, set } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
   
     var firebaseConfig = {
       apiKey: "AIzaSyD_3RVuR8gKoGlUFT5i1bViGFvHjeJyLxc",
@@ -603,14 +599,49 @@
         });
     }
     window.logout = logout;
+
+    function updateStreak(user) {
+      var todayStr = new Date().toDateString();
+      var streakRef = ref(db, "streaks/" + user.uid);
+    
+      get(streakRef).then(function(snapshot) {
+        var streakData = snapshot.exists() ? snapshot.val() : null;
+        var newCount = 1;
+    
+        if (streakData) {
+          var lastVisit = new Date(streakData.lastVisit);
+          var today = new Date(todayStr);
+          var diffDays = Math.round((today - lastVisit) / (1000 * 60 * 60 * 24));
+    
+          if (diffDays === 0) {
+            // Already visited today, keep the same count
+            newCount = streakData.count;
+          } else if (diffDays === 1) {
+            // Visited yesterday, streak continues
+            newCount = streakData.count + 1;
+          } else {
+            // Missed a day or more, streak resets
+            newCount = 1;
+          }
+        }
+    
+        set(streakRef, {
+          lastVisit: todayStr,
+          count: newCount
+        });
+    
+        document.getElementById("streak-display").innerText = "You've visited " + newCount + " day" + (newCount === 1 ? "" : "s") + " in a row!";
+      });
+    }
   
     function handleAuthChange(user) {
       var loginBox = document.getElementById("login-box");
       var siteContent = document.getElementById("site-content");
-  
+    
       if (user) {
         loginBox.style.display = "none";
         siteContent.style.display = "block";
+        updateStreak(user);
       } else {
         loginBox.style.display = "block";
         siteContent.style.display = "none";
@@ -1023,47 +1054,12 @@
     }
     poemSub.addEventListener("click", createTemp);
 
-    // Genre Spinner
-    var genreList = [
-      "Mystery",
-      "Sci-Fi",
-      "Realistic Fiction",
-      "Adventure",
-      "Comedy",
-      "Spooky",
-      "Fantasy",
-      "Superhero"
-    ];
-    
-    var spinnerSpinning = false;
-    
-    function spinGenre() {
-      if (spinnerSpinning) {
-        return;
-      }
-      spinnerSpinning = true;
-    
-      var wheel = document.getElementById("spinner-wheel");
-      var randomGenre = genreList[Math.floor(Math.random() * genreList.length)];
-    
-      // Spin a random number of full rotations plus a bit extra for effect
-      var spins = 4 + Math.floor(Math.random() * 3);
-      var currentRotation = (spins * 360) + Math.floor(Math.random() * 360);
-    
-      wheel.style.transform = "rotate(" + currentRotation + "deg)";
-    
-      setTimeout(function() {
-        wheel.innerText = randomGenre;
-        spinnerSpinning = false;
-      }, 3000);
-    }
-    
-        // Page Initialization on Window Load
-        window.onload = function() {
-          updateTimerDisplay();
-          initWordCounter();
-          startCyoa();
-        };
+    // Page Initialization on Window Load
+    window.onload = function() {
+      updateTimerDisplay();
+      initWordCounter();
+      startCyoa();
+    };
   </script>
 </body>
 </html>
