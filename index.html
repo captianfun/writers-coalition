@@ -367,6 +367,7 @@
       color:white;
       padding:5px;
       text-align:center;
+      border-radius:8px;
     }
 
     #site-content {
@@ -423,6 +424,7 @@
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
       <button class="nav-btn" onclick="switchTab('gallery')">Gallery</button>
+      <button class="nav-btn" onclick="switchTab('chat')">Chat</button>
       <button id="logout" onclick="logout()">Log Out</button>
     </nav>
   </header>
@@ -532,6 +534,16 @@
         <div id="poem-gallery-list"></div>
       </div>
     </div>
+
+    <!-- TAB 4: CHAT -->
+    <div id="chat" class="tab-content">
+    <div class="card">
+      <h2>Chat</h2>
+      <div id="chat-messages" style="background: rgba(2, 6, 23, 0.8); border: 1px solid #334155; border-radius: 4px; padding: 0.8rem; height: 200px; overflow-y: auto; margin-bottom: 1rem;"></div>
+      <input type="text" id="chat-input" placeholder="Type a message..." style="width: 70%;">
+      <button class="action-btn" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
 
   </main>
 
@@ -671,7 +683,41 @@
       });
     }
     onValue(ref(db, "poems"), displayPoemGallery);
-  
+
+    function sendMessage() {
+      var input = document.getElementById("chat-input");
+      var text = input.value.trim();
+    
+      if (text === "") {
+        return;
+      }
+    
+      var user = auth.currentUser;
+      var senderName = user ? user.email : "Unknown";
+    
+      push(ref(db, "chat"), {
+        sender: senderName,
+        text: text,
+        time: Date.now()
+      });
+    
+      input.value = "";
+    }
+    window.sendMessage = sendMessage;
+    
+    function displayMessages(snapshot) {
+      var messagesDiv = document.getElementById("chat-messages");
+      messagesDiv.innerHTML = "";
+    
+      snapshot.forEach(function(child) {
+        var msg = child.val();
+        var msgElement = document.createElement("p");
+        msgElement.innerText = msg.sender + ": " + msg.text;
+        messagesDiv.appendChild(msgElement);
+      });
+    }
+    onValue(ref(db, "chat"), displayMessages);
+      
     window.addEventListener("load", function() {
       console.log("Firebase ready.");
     });
