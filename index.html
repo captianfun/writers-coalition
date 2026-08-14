@@ -425,6 +425,7 @@
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
       <button class="nav-btn" onclick="switchTab('gallery')">Gallery</button>
+      <button class="nav-btn" onclick="switchTab('reading-list')">My Reading List</button>
       <button class="nav-btn" onclick="switchTab('chat')">Chat</button>
       <button id="logout" onclick="logout()">Log Out</button>
     </nav>
@@ -536,6 +537,15 @@
       </div>
     </div>
 
+    <!-- TAB 4: READING LIST -->
+    <div id="reading-list" class="tab-content">
+      <div class="card">
+        <h2>My Reading List</h2>
+        <p>Poems and stories you've saved to read later!</p>
+        <div id="bookmark-list"></div>
+      </div>
+    </div>
+
     <!-- TAB 4: CHAT -->
     <div id="chat" class="tab-content">
     <div class="card">
@@ -557,7 +567,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
     import { getDatabase, ref, push, onValue, get, set } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
-  
+    
     var firebaseConfig = {
       apiKey: "AIzaSyD_3RVuR8gKoGlUFT5i1bViGFvHjeJyLxc",
       authDomain: "writers-coalition-database.firebaseapp.com",
@@ -611,6 +621,8 @@
       if (user) {
         loginBox.style.display = "none";
         siteContent.style.display = "flex";
+        updateStreak(user);
+        onValue(ref(db, "bookmarks/" + user.uid), displayBookmarks);
       } else {
         loginBox.style.display = "block";
         siteContent.style.display = "none";
@@ -674,6 +686,7 @@
     
       snapshot.forEach(function(child) {
         var poem = child.val();
+        var poemId = child.key;
         var poemCard = document.createElement("div");
         poemCard.className = "prompt-box";
     
@@ -687,10 +700,57 @@
           poemCard.appendChild(lineEl);
         }
     
+        var bookmarkBtn = document.createElement("button");
+        bookmarkBtn.className = "secondary-btn";
+        bookmarkBtn.innerText = "🔖 Save to Reading List";
+        bookmarkBtn.onclick = function() {
+          addBookmark(poemId, poem);
+        };
+        poemCard.appendChild(bookmarkBtn);
+    
         galleryDiv.appendChild(poemCard);
       });
     }
     onValue(ref(db, "poems"), displayPoemGallery);
+
+    function addBookmark(poemId, poem) {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      set(ref(db, "bookmarks/" + user.uid + "/" + poemId), {
+        title: poem.title,
+        author: poem.author,
+        lines: poem.lines
+      });
+    }
+    
+    function displayBookmarks(snapshot) {
+      var listDiv = document.getElementById("bookmark-list");
+      if (!listDiv) {
+        return;
+      }
+      listDiv.innerHTML = "";
+    
+      snapshot.forEach(function(child) {
+        var bookmark = child.val();
+        var card = document.createElement("div");
+        card.className = "prompt-box";
+    
+        var titleEl = document.createElement("h3");
+        titleEl.innerText = bookmark.title + " — by " + bookmark.author;
+        card.appendChild(titleEl);
+    
+        for (var i = 0; i < bookmark.lines.length; i++) {
+          var lineEl = document.createElement("p");
+          lineEl.innerText = bookmark.lines[i];
+          card.appendChild(lineEl);
+        }
+    
+        listDiv.appendChild(card);
+      });
+    }
 
     function sendMessage() {
       var input = document.getElementById("chat-input");
