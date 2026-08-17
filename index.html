@@ -432,8 +432,6 @@
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
       <button class="nav-btn" onclick="switchTab('gallery')">Gallery</button>
-      <button class="nav-btn" onclick="switchTab('reading-list')">My Reading List</button>
-      <button class="nav-btn" onclick="switchTab('profile')">My Profile</button>
       <button class="nav-btn" onclick="switchTab('chat')">Chat</button>
       <button id="logout" onclick="logout()">Log Out</button>
     </nav>
@@ -545,15 +543,6 @@
       </div>
     </div>
 
-    <!-- TAB 4: READING LIST -->
-    <div id="reading-list" class="tab-content">
-      <div class="card">
-        <h2>My Reading List</h2>
-        <p>Poems and stories you've saved to read later!</p>
-        <div id="bookmark-list"></div>
-      </div>
-    </div>
-
     <!-- TAB 5: CHAT -->
     <div id="chat" class="tab-content">
     <div class="card">
@@ -561,17 +550,6 @@
       <div id="chat-messages" style="background: rgba(2, 6, 23, 0.8); border: 1px solid #334155; border-radius: 4px; padding: 0.8rem; height: 200px; overflow-y: auto; margin-bottom: 1rem;"></div>
       <input type="text" id="chat-input" placeholder="Type a message..." style="width: 70%;">
       <button class="action-btn" onclick="sendMessage()">Send</button>
-    </div>
-  </div>
-
-  <!-- TAB 6: PROFILE -->
-  <div id="profile" class="tab-content">
-    <div class="card">
-      <h2 id="profile-name">Loading profile...</h2>
-      <p id="profile-piece-count"></p>
-      <p id="profile-bookmark-count"></p>
-      <h3 style="margin-top: 1.5rem;">Your Saved Work</h3>
-      <div id="profile-pieces"></div>
     </div>
   </div>
 
@@ -633,42 +611,6 @@
         });
     }
     window.logout = logout;
-
-    function loadProfile(user) {
-      var displayName = getDisplayName(user.email);
-      document.getElementById("profile-name").innerText = displayName + "'s Profile";
-    
-      // Saved poems/stories by this person
-      get(ref(db, "poems")).then(function(snapshot) {
-        var piecesDiv = document.getElementById("profile-pieces");
-        piecesDiv.innerHTML = "";
-        var pieceCount = 0;
-    
-        snapshot.forEach(function(child) {
-          var poem = child.val();
-          if (poem.author === displayName) {
-            pieceCount++;
-    
-            var pieceCard = document.createElement("div");
-            pieceCard.className = "prompt-box";
-    
-            var titleEl = document.createElement("h3");
-            titleEl.innerText = poem.title;
-            pieceCard.appendChild(titleEl);
-    
-            piecesDiv.appendChild(pieceCard);
-          }
-        });
-    
-        document.getElementById("profile-piece-count").innerText = "Pieces saved: " + pieceCount;
-      });
-    
-      // Bookmark count
-      get(ref(db, "bookmarks/" + user.uid)).then(function(snapshot) {
-        var bookmarkCount = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
-        document.getElementById("profile-bookmark-count").innerText = "Items in reading list: " + bookmarkCount;
-      });
-    }
   
     function handleAuthChange(user) {
       var loginBox = document.getElementById("login-box");
@@ -677,14 +619,11 @@
       if (user) {
         loginBox.style.display = "none";
         siteContent.style.display = "flex";
-        onValue(ref(db, "bookmarks/" + user.uid), displayBookmarks);
-        loadProfile(user);
       } else {
         loginBox.style.display = "block";
         siteContent.style.display = "none";
       }
     }
-    onAuthStateChanged(auth, handleAuthChange);
 
     function savePoem() {
       var title = document.getElementById("poem-title").value.trim();
@@ -730,7 +669,7 @@
         lines: [storyText],
         author: authorName,
         time: Date.now()
-      });
+    });
     
       document.getElementById("story-save-status").innerText = "Saved to gallery!";
     }
@@ -755,12 +694,6 @@
           lineEl.innerText = poem.lines[i];
           poemCard.appendChild(lineEl);
         }
-    
-        var bookmarkBtn = document.createElement("button");
-        bookmarkBtn.className = "secondary-btn";
-        bookmarkBtn.innerText = "🔖 Save to Reading List";
-        bookmarkBtn.onclick = function() {
-          addBookmark(poemId, poem);
         };
         poemCard.appendChild(bookmarkBtn);
     
@@ -768,62 +701,6 @@
       });
     }
     onValue(ref(db, "poems"), displayPoemGallery);
-
-    function addBookmark(poemId, poem) {
-      var user = auth.currentUser;
-      if (!user) {
-        return;
-      }
-    
-      set(ref(db, "bookmarks/" + user.uid + "/" + poemId), {
-        title: poem.title,
-        author: poem.author,
-        lines: poem.lines
-      });
-    }
-    
-    function displayBookmarks(snapshot) {
-      var listDiv = document.getElementById("bookmark-list");
-      if (!listDiv) {
-        return;
-      }
-      listDiv.innerHTML = "";
-    
-      snapshot.forEach(function(child) {
-        var bookmark = child.val();
-        var bookmarkId = child.key;
-        var card = document.createElement("div");
-        card.className = "prompt-box";
-    
-        var titleEl = document.createElement("h3");
-        titleEl.innerText = bookmark.title + " — by " + bookmark.author;
-        card.appendChild(titleEl);
-    
-        for (var i = 0; i < bookmark.lines.length; i++) {
-          var lineEl = document.createElement("p");
-          lineEl.innerText = bookmark.lines[i];
-          card.appendChild(lineEl);
-        }
-    
-        var removeBtn = document.createElement("button");
-        removeBtn.className = "secondary-btn";
-        removeBtn.innerText = "Remove from List";
-        removeBtn.onclick = function() {
-          removeBookmark(bookmarkId);
-        };
-        card.appendChild(removeBtn);
-    
-        listDiv.appendChild(card);
-      });
-    }
-    
-    function removeBookmark(bookmarkId) {
-      var user = auth.currentUser;
-      if (!user) {
-        return;
-      }
-      remove(ref(db, "bookmarks/" + user.uid + "/" + bookmarkId));
-    }
 
     function sendMessage() {
       var input = document.getElementById("chat-input");
