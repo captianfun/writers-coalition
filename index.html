@@ -548,8 +548,9 @@
     <div class="card">
       <h2>Chat</h2>
       <div id="chat-messages" style="background: rgba(2, 6, 23, 0.8); border: 1px solid #334155; border-radius: 4px; padding: 0.8rem; height: 200px; overflow-y: auto; margin-bottom: 1rem;"></div>
-      <input type="text" id="chat-input" placeholder="Type a message..." style="width: 70%;">
+      <input type="text" id="chat-input" placeholder="Type a message..." style="width: 70%;" maxlength="200">
       <button class="action-btn" onclick="sendMessage()">Send</button>
+      <p id="char-counter" style="font-size:0.8rem; color:#94a3b8;">0/200</p>
     </div>
   </div>
 
@@ -719,6 +720,7 @@
       });
     
       input.value = "";
+      document.getElementById("char-counter").innerText = "0/200";
     }
     window.sendMessage = sendMessage;
     
@@ -1034,6 +1036,12 @@
         document.getElementById("poem-save").style.display = "inline-block";
     }
     poemSub.addEventListener("click", createTemp);
+
+    var chatInput = document.getElementById("chat-input");
+    var charCounter = document.getElementById("char-counter");
+    chatInput.addEventListener("input", function() {
+      charCounter.innerText = chatInput.value.length + "/200";
+    });
 
     // Page Initialization on Window Load
     window.onload = function() {
