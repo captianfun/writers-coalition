@@ -729,7 +729,10 @@
       snapshot.forEach(function(child) {
         var msg = child.val();
         var msgElement = document.createElement("p");
-        msgElement.innerText = msg.sender + ": " + msg.text;
+    
+        var initial = msg.sender.charAt(0).toUpperCase();
+        msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + msg.text;
+    
         messagesDiv.appendChild(msgElement);
       });
     }
