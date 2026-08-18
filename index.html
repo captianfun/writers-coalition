@@ -624,6 +624,7 @@
         siteContent.style.display = "none";
       }
     }
+    onAuthStateChanged(auth, handleAuthChange);
 
     function savePoem() {
       var title = document.getElementById("poem-title").value.trim();
