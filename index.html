@@ -378,6 +378,15 @@
       justify-content:center;
     }
 
+    .owl-eye {
+      transform-origin: center;
+      transition: transform 0.15s ease;
+    }
+    
+    .owl-eye.blinking {
+      transform: scaleY(0.1);
+    }
+    
     #site-content {
       min-height:100vh;
       display:flex;
@@ -413,14 +422,14 @@
           <polygon points="25,25 35,5 45,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
           <polygon points="75,25 65,5 55,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
           
-          <circle cx="36" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
-          <circle cx="64" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
+          <circle cx="36" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2" class="owl-eye"/>
+          <circle cx="64" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2" class="owl-eye"/>
           
-          <circle cx="36" cy="38" r="7" fill="#0b0d17"/>
-          <circle cx="64" cy="38" r="7" fill="#0b0d17"/>
+          <circle cx="36" cy="38" r="7" fill="#0b0d17" class="owl-eye"/>
+          <circle cx="64" cy="38" r="7" fill="#0b0d17" class="owl-eye"/>
           
-          <circle cx="34" cy="36" r="2.5" fill="#00f0ff"/>
-          <circle cx="62" cy="36" r="2.5" fill="#00f0ff"/>
+          <circle cx="34" cy="36" r="2.5" fill="#00f0ff" class="owl-eye"/>
+          <circle cx="62" cy="36" r="2.5" fill="#00f0ff" class="owl-eye"/>
           
           <polygon points="50,42 44,52 56,52" fill="#1b67e3"/>
           
@@ -887,6 +896,29 @@
         highlights[i].setAttribute("transform", "translate(" + moveX + "," + moveY + ")");
       }
     });
+
+    function blinkOwl() {
+      var eyes = document.querySelectorAll(".owl-eye");
+      eyes.forEach(function(eye) {
+        eye.classList.add("blinking");
+      });
+    
+      setTimeout(function() {
+        eyes.forEach(function(eye) {
+          eye.classList.remove("blinking");
+        });
+      }, 150);
+    }
+    
+    function scheduleNextBlink() {
+      var randomDelay = 3000 + Math.random() * 4000; // between 3-7 seconds
+      setTimeout(function() {
+        blinkOwl();
+        scheduleNextBlink();
+      }, randomDelay);
+    }
+    
+    scheduleNextBlink();
 
     var lastSparkleTime = 0;
     document.addEventListener("mousemove", function(e) {
