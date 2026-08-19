@@ -441,6 +441,10 @@
 
     <!-- TAB 1: HOME PAGE -->
     <div id="home" class="tab-content active">
+      <div id="birthday-banner" class="card" style="display:none; text-align:center; border: 2px solid #00f0ff;">
+        <h2>🎉 Hey, it's my birthday!</h2>
+        <p>The Writers Coalition launched on this very day!</p>
+      </div>
       <div class="card">
         <h2>Welcome to Our Writing Club</h2>
         <p>The Writers Coalition is an elementary school club where young authors come together to share stories, explore new ideas, and build creative writing skills in a supportive, fun environment.</p>
@@ -902,12 +906,23 @@
         sparkle.remove();
       }, 600);
     });
+
+    function checkBirthday() {
+      var today = new Date();
+      var isAugust = today.getMonth() === 7; // August is month index 7 (zero-indexed)
+      var isTwelfth = today.getDate() === 12;
+    
+      if (isAugust && isTwelfth) {
+        document.getElementById("birthday-banner").style.display = "block";
+      }
+    }
     
     // Page Initialization on Window Load
     window.onload = function() {
       updateTimerDisplay();
       initWordCounter();
       startCyoa();
+      checkBirthday();
     };
   </script>
 </body>
