@@ -441,7 +441,7 @@
 
     <!-- TAB 1: HOME PAGE -->
     <div id="home" class="tab-content active">
-      <div id="birthday-banner" class="card" style="display:none; text-align:center; border: 2px solid #00f0ff;">
+      <div id="birthday-banner" class="card" style="display:none; border: 2px solid #00f0ff;">
         <h2>🎉 Hey, it's my birthday!</h2>
         <p>The Writers Coalition launched on this very day!</p>
       </div>
@@ -910,7 +910,7 @@
     function checkBirthday() {
       var today = new Date();
       var isAugust = today.getMonth() === 7; // August is month index 7 (zero-indexed)
-      var isTwelfth = today.getDate() === 19;
+      var isTwelfth = today.getDate() === 12;
     
       if (isAugust && isTwelfth) {
         document.getElementById("birthday-banner").style.display = "block";
