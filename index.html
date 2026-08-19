@@ -378,28 +378,6 @@
       justify-content:center;
     }
 
-    #poem-con {
-      display:grid;
-    }
-
-    #poem-word, #poem-sub, #poem-con input, #poem-title, #poem-save {
-      margin-bottom:5px;
-    }
-
-    #poem-gallery-list {
-      display:grid;
-      grid-template-columns:repeat(2, 1fr);
-      gap:5px;
-    }
-
-    #poem-gallery-list div {
-      border:2px solid white;
-      color:white;
-      padding:5px;
-      text-align:center;
-      border-radius:8px;
-    }
-
     #site-content {
       min-height:100vh;
       display:flex;
@@ -454,7 +432,6 @@
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
-      <button class="nav-btn" onclick="switchTab('gallery')">Gallery</button>
       <button class="nav-btn" onclick="switchTab('chat')">Chat</button>
       <button id="logout" onclick="logout()">Log Out</button>
     </nav>
@@ -470,38 +447,6 @@
         <p>The Writers Coalition is an elementary school club where young authors come together to share stories, explore new ideas, and build creative writing skills in a supportive, fun environment.</p>
         <p>Whether you love writing realistic fiction, poetry, fantasy, or mystery stories, you will find a friendly place to share your work here!</p>
       </div>
-      <div class = "card">
-        <h2>CrAZy MaD LIbS</h2>
-        <select id="story-select">
-            <option>Story One</option>
-            <option>Story Two</option>
-        </select>
-        <div id = "input-slots">
-            <input placeholder = "noun here">
-            <input placeholder = "adjective here">
-            <input placeholder = "name here">
-            <input placeholder = "animal here">
-            <input placeholder = "adjective here">
-            <input placeholder = "noun here">
-            <input placeholder = "noun here">
-            <input placeholder = "name here">
-            <input placeholder = "verb here">
-        </div>
-        <button id="return">Read story</button>
-        <p id="story-con"></p>
-        <button id="story-save" class="action-btn" style="display:none;" onclick="saveStory()">Save to Gallery</button>
-        <p id="story-save-status" style="font-size:0.85rem; color:#94a3b8;"></p>
-    </div>
-    <div class="card">
-      <h2>Acrostic poem template</h2>
-      <p>Enter your word that you're making your acrostic poem about below.</p>
-      <input id="poem-word">
-      <button id="poem-sub">Generate Template</button>
-      <div id="poem-con"></div>
-      <input id="poem-title" placeholder="Give your poem a title" style="display:none;"><br>
-      <button id="poem-save" class="action-btn" style="display:none;" onclick="savePoem()">Save to Gallery</button>
-      <p id="poem-save-status" style="font-size:0.85rem; color:#94a3b8;"></p>
-    </div>
   </div>
     
     <!-- TAB 2: ACTIVITIES (Timer, Story Starter, CYOA) -->
@@ -554,15 +499,6 @@
 
         <div id="cyoaChoices"></div>
         <button class="secondary-btn" id="restartCyoaBtn" onclick="startCyoa()" style="margin-top: 1rem; display: none;">Restart Adventure</button>
-      </div>
-    </div>
-
-    <!-- TAB 3: GALLERY -->
-    <div id="gallery" class="tab-content">
-      <div class="card">
-        <h2>Poem and Story Gallery</h2>
-        <p>See acrostic poems written by everyone in the club!</p>
-        <div id="poem-gallery-list"></div>
       </div>
     </div>
 
@@ -649,81 +585,6 @@
       }
     }
     onAuthStateChanged(auth, handleAuthChange);
-
-    function savePoem() {
-      var title = document.getElementById("poem-title").value.trim();
-      var poemInputs = document.querySelectorAll("#poem-con input");
-      var lines = [];
-    
-      for (var i = 0; i < poemInputs.length; i++) {
-        lines.push(poemInputs[i].value);
-      }
-    
-      if (title === "" || lines.length === 0) {
-        document.getElementById("poem-save-status").innerText = "Add a title and fill in your poem first!";
-        return;
-      }
-    
-      var user = auth.currentUser;
-      var authorName = user ? getDisplayName(user.email) : "Unknown";
-    
-      push(ref(db, "poems"), {
-        title: title,
-        lines: lines,
-        author: authorName,
-        time: Date.now()
-      });
-    
-      document.getElementById("poem-save-status").innerText = "Saved to gallery!";
-    }
-    window.savePoem = savePoem;
-
-    function saveStory() {
-      var storyText = document.getElementById("story-con").textContent;
-    
-      if (storyText === "") {
-        document.getElementById("story-save-status").innerText = "Generate a story first!";
-        return;
-      }
-    
-      var user = auth.currentUser;
-      var authorName = user ? getDisplayName(user.email) : "Unknown";
-    
-      push(ref(db, "poems"), {
-        title: "Mad Libs Story",
-        lines: [storyText],
-        author: authorName,
-        time: Date.now()
-    });
-    
-      document.getElementById("story-save-status").innerText = "Saved to gallery!";
-    }
-    window.saveStory = saveStory;
-    
-    function displayPoemGallery(snapshot) {
-      var galleryDiv = document.getElementById("poem-gallery-list");
-      galleryDiv.innerHTML = "";
-    
-      snapshot.forEach(function(child) {
-        var poem = child.val();
-        var poemId = child.key;
-        var poemCard = document.createElement("div");
-        poemCard.className = "prompt-box";
-    
-        var titleEl = document.createElement("h3");
-        titleEl.innerText = poem.title + " — by " + poem.author;
-        poemCard.appendChild(titleEl);
-    
-        for (var i = 0; i < poem.lines.length; i++) {
-          var lineEl = document.createElement("p");
-          lineEl.innerText = poem.lines[i];
-          poemCard.appendChild(lineEl);
-        }
-    
-        galleryDiv.appendChild(poemCard);
-      });
-    }
-    onValue(ref(db, "poems"), displayPoemGallery);
 
     function sendMessage() {
       var input = document.getElementById("chat-input");
@@ -997,30 +858,6 @@
       renderCyoaNode("start");
     }
     
-    var storyCon = document.getElementById("story-con");
-    var inputSlots = document.querySelectorAll("#input-slots input");
-    var storyBtn = document.getElementById("return");
-    var select = document.getElementById("story-select");
-    function writeStory() {
-        var words = [];
-        for (var i = 0; i < inputSlots.length; i++) {
-            if (inputSlots[i].value === "") {
-              alert("Fill in all feilds first.")
-              return
-            }
-            words.push(inputSlots[i].value);
-        }
-        var storyText = "";
-        if (select.value === "Story One") {
-            storyText = "Once, a long time ago, there was a " + words[1] + " " + words[0] + " who longed to be king. He lived a modest life, and was very noble. His name was " + words[2] + ". After a while, the king " + words[7] + " IV hired " + words[2] + " to tend for the royal " + words[3] + ". After a while, " + words[2] + " was promoted to Duke of Yarbodle by " + words[7] + " IV's " + words[4] + " " + words[5] + ". And, after a long time, " + words[2] + " was " + words[8] + "ed to Earl of the royal " + words[6] + "."
-        } else {
-            storyText = "I woke up. I suddendly realised that it was April fools day! I had to act quick before anybody could " + words[8] + " me! So I qickly ran to the kitchen and checked all the " + words[0] + " shakers and made sure there were no " + words[1] + " " + words[6] + "s stuck to me and that nobody had stolen my " + words[3] + ". I even checked the ceiling so no " + words[4] + " " + words[5] + "s fell on me. I interrogated my brothers, " + words[2] + " and " + words[7] + ". Finnaly, I made it through the day without being pranked!"
-        }
-        storyCon.textContent = storyText;
-        document.getElementById("story-save").style.display = "inline-block";
-    };
-    storyBtn.addEventListener("click", writeStory);
-    
     document.addEventListener("mousemove", function(e) {
       var owlSvg = document.getElementById("owl");
       var rect = owlSvg.getBoundingClientRect();
@@ -1062,23 +899,7 @@
         sparkle.remove();
       }, 600);
     });
-
-    var poemWord = document.getElementById("poem-word");
-    var poemCon = document.getElementById("poem-con");
-    var poemSub = document.getElementById("poem-sub");
-    function createTemp() {
-        var poemLets = Array.from(poemWord.value);
-        poemCon.innerHTML = "";
-        for (var i = 0; i < poemLets.length; i++) {
-            var input = document.createElement("input");
-            input.placeholder = poemLets[i].toUpperCase();
-            poemCon.appendChild(input);
-        }
-        document.getElementById("poem-title").style.display = "inline-block";
-        document.getElementById("poem-save").style.display = "inline-block";
-    }
-    poemSub.addEventListener("click", createTemp);
-
+    
     var chatInput = document.getElementById("chat-input");
     var charCounter = document.getElementById("char-counter");
     chatInput.addEventListener("input", function() {
