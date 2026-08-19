@@ -432,7 +432,6 @@
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
-      <button class="nav-btn" onclick="switchTab('chat')">Chat</button>
       <button id="logout" onclick="logout()">Log Out</button>
     </nav>
   </header>
@@ -512,17 +511,6 @@
       </div>
     </div>
 
-    <!-- TAB 5: CHAT -->
-    <div id="chat" class="tab-content">
-    <div class="card">
-      <h2>Chat</h2>
-      <div id="chat-messages" style="background: rgba(2, 6, 23, 0.8); border: 1px solid #334155; border-radius: 4px; padding: 0.8rem; height: 200px; overflow-y: auto; margin-bottom: 1rem;"></div>
-      <input type="text" id="chat-input" placeholder="Type a message..." style="width: 70%;" maxlength="200">
-      <button class="action-btn" onclick="sendMessage()">Send</button>
-      <p id="char-counter" style="font-size:0.8rem; color:#94a3b8;">0/200</p>
-    </div>
-  </div>
-
   </main>
 
   <!-- Footer -->
@@ -595,44 +583,6 @@
       }
     }
     onAuthStateChanged(auth, handleAuthChange);
-
-    function sendMessage() {
-      var input = document.getElementById("chat-input");
-      var text = input.value.trim();
-    
-      if (text === "") {
-        return;
-      }
-    
-      var user = auth.currentUser;
-      var senderName = user ? getDisplayName(user.email) : "Unknown";
-    
-      push(ref(db, "chat"), {
-        sender: senderName,
-        text: text,
-        time: Date.now()
-      });
-    
-      input.value = "";
-      document.getElementById("char-counter").innerText = "0/200";
-    }
-    window.sendMessage = sendMessage;
-    
-    function displayMessages(snapshot) {
-      var messagesDiv = document.getElementById("chat-messages");
-      messagesDiv.innerHTML = "";
-    
-      snapshot.forEach(function(child) {
-        var msg = child.val();
-        var msgElement = document.createElement("p");
-    
-        var initial = msg.sender.charAt(0).toUpperCase();
-        msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + msg.text;
-    
-        messagesDiv.appendChild(msgElement);
-      });
-    }
-    onValue(ref(db, "chat"), displayMessages);
       
     window.addEventListener("load", function() {
       console.log("Firebase ready.");
@@ -953,12 +903,6 @@
       }, 600);
     });
     
-    var chatInput = document.getElementById("chat-input");
-    var charCounter = document.getElementById("char-counter");
-    chatInput.addEventListener("input", function() {
-      charCounter.innerText = chatInput.value.length + "/200";
-    });
-
     // Page Initialization on Window Load
     window.onload = function() {
       updateTimerDisplay();
