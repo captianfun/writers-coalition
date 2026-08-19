@@ -447,6 +447,16 @@
         <p>The Writers Coalition is an elementary school club where young authors come together to share stories, explore new ideas, and build creative writing skills in a supportive, fun environment.</p>
         <p>Whether you love writing realistic fiction, poetry, fantasy, or mystery stories, you will find a friendly place to share your work here!</p>
       </div>
+      <div class="card">
+        <h2>Silly Sentence Mixer</h2>
+        <p>Click the button for a random silly sentence!</p>
+      
+        <div class="prompt-box" id="sillySentence">
+          Click "Mix It Up!" to get a silly sentence!
+        </div>
+      
+        <button class="action-btn" onclick="generateSillySentence()">Mix It Up!</button>
+      </div>
   </div>
     
     <!-- TAB 2: ACTIVITIES (Timer, Story Starter, CYOA) -->
@@ -750,6 +760,49 @@
       initialSeconds = minutes * 60;
       timerSeconds = initialSeconds;
       updateTimerDisplay();
+    }
+
+    // Silly Sentence Mixer Arrays
+    var sillySubjects = [
+      "A dinosaur",
+      "My grandma",
+      "A ninja penguin",
+      "The class hamster",
+      "A robot",
+      "A pirate",
+      "An alien",
+      "A talking sandwich"
+    ];
+    
+    var sillyVerbs = [
+      "secretly juggles",
+      "accidentally married",
+      "loudly sneezed on",
+      "tried to trade",
+      "quietly stole",
+      "dramatically hugged",
+      "mysteriously painted",
+      "clumsily tripped over"
+    ];
+    
+    var sillyObjects = [
+      "a pile of socks",
+      "the moon",
+      "seventeen tacos",
+      "a grumpy cat",
+      "a giant rubber duck",
+      "the principal's shoes",
+      "a bowl of spaghetti",
+      "a mysterious treasure chest"
+    ];
+    
+    function generateSillySentence() {
+      var randomSubject = sillySubjects[Math.floor(Math.random() * sillySubjects.length)];
+      var randomVerb = sillyVerbs[Math.floor(Math.random() * sillyVerbs.length)];
+      var randomObject = sillyObjects[Math.floor(Math.random() * sillyObjects.length)];
+    
+      var sentence = randomSubject + " " + randomVerb + " " + randomObject + "!";
+      document.getElementById("sillySentence").innerText = sentence;
     }
 
     function updateTimerDisplay() {
