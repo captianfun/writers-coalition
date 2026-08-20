@@ -529,6 +529,11 @@
   <!-- Footer -->
   <footer>
     The Writers Coalition &bull; Elementary School Creative Writing Club
+    <div class = "card">
+      <p style = "color:#39FF14" id = "co-motto">
+        loading coalitionMotto.txt...
+      </p>
+    </div>
   </footer>
   </div>
    <script type="module">
@@ -917,8 +922,43 @@
         scheduleNextBlink();
       }, randomDelay);
     }
-    
     scheduleNextBlink();
+
+    var mottos = [
+      "Write. Share. Repeat.",
+      "The biggest stories start with the smallest ideas.",
+      "We love writing like a dog loves its toy.",
+      "Passion is the foundation for greatness."
+    ];
+    
+    var lastMotto = -1;
+    var newMotto = -1;
+    
+    function readyMottoType() {
+      while (lastMotto === newMotto) {
+        newMotto = Math.floor(Math.random() * mottos.length);
+      }
+      lastMotto = newMotto;
+      MottoType(mottos[newMotto]);
+    }
+    
+    function MottoType(motto) {
+      var coMotto = document.getElementById("co-motto");
+      coMotto.textContent = "";
+      var i = 0;
+    
+      function typeNextLetter() {
+        if (i < motto.length) {
+          coMotto.textContent += motto[i];
+          i++;
+          setTimeout(typeNextLetter, 50);
+        } else {
+          setTimeout(readyMottoType, 3000);
+        }
+      }
+    
+      typeNextLetter();
+    }
 
     var lastSparkleTime = 0;
     document.addEventListener("mousemove", function(e) {
