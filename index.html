@@ -932,13 +932,13 @@
 
     function tiltOwl() {
       var owlHead = document.getElementById("owl-head");
-      var randomTilt = (Math.random() * 10 - 5);
+      var randomTilt = (Math.random() * 30 - 15); // now between -15 and 15 degrees
     
       owlHead.style.transform = "rotate(" + randomTilt + "deg)";
     
       setTimeout(function() {
         owlHead.style.transform = "rotate(0deg)";
-      }, 800);
+      }, 1000);
     }
     
     function scheduleNextTilt() {
