@@ -397,6 +397,106 @@
       transition: transform 0.6s ease-in-out;
       transform-origin: 50px 55px;
     }
+
+    /* Light Mode Overrides */
+    body.light-mode {
+      background-color: #f4f6fa;
+      color: #1e293b;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(0, 150, 200, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(121, 40, 202, 0.06) 0%, transparent 40%);
+    }
+    
+    body.light-mode header {
+      background: rgba(255, 255, 255, 0.9);
+      border-bottom: 2px solid #0088cc;
+      box-shadow: 0 0 15px rgba(0, 150, 200, 0.15);
+    }
+    
+    body.light-mode .site-title {
+      color: #1e293b;
+      text-shadow: none;
+    }
+    
+    body.light-mode .nav-btn, body.light-mode #logout {
+      background: rgba(226, 232, 240, 0.9);
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+    
+    body.light-mode .nav-btn:hover, body.light-mode #logout:hover {
+      color: #0088cc;
+      border-color: #0088cc;
+    }
+    
+    body.light-mode .nav-btn.active {
+      background: rgba(0, 150, 200, 0.15);
+      color: #0088cc;
+      border-color: #0088cc;
+    }
+    
+    body.light-mode .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    body.light-mode h2 {
+      color: #0088cc;
+    }
+    
+    body.light-mode h3, body.light-mode p {
+      color: #334155;
+    }
+    
+    body.light-mode .prompt-box {
+      background: #f1f5f9;
+      color: #1e293b;
+      border-left: 3px solid #7928ca;
+    }
+    
+    body.light-mode .timer-display {
+      background: #f1f5f9;
+      color: #0088cc;
+      border: 1px solid #0088cc;
+    }
+    
+    body.light-mode input, body.light-mode button, body.light-mode select {
+      color: #1e293b;
+      background-color: #ffffff;
+      border: 2px solid #cbd5e1;
+    }
+    
+    body.light-mode textarea {
+      background: #ffffff;
+      color: #0088cc;
+      border: 1px solid #cbd5e1;
+    }
+    
+    body.light-mode footer {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      color: #64748b;
+    }
+    
+    body.light-mode #login-box {
+      background-color: #ffffff;
+      color: #1e293b;
+      border: 2px solid #0088cc;
+    }
+    
+    body.light-mode #chat-messages {
+      background: #f1f5f9 !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+
+    body.light-mode #owl {
+      filter: brightness(1.15) saturate(0.85);
+    }
+    
+    body.light-mode .sparkle {
+      background: radial-gradient(circle, #0088cc, #9333ea);
+    }
   </style>
 </head>
   <body>
@@ -448,6 +548,7 @@
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
       <button id="logout" onclick="logout()">Log Out</button>
+      <button id="theme-toggle" class="nav-btn" onclick="toggleTheme()">☀️ Light Mode</button>
     </nav>
   </header>
 
@@ -1026,6 +1127,21 @@
         document.getElementById("birthday-banner").style.display = "block";
       }
     }
+
+    function toggleTheme() {
+      var isLight = document.body.classList.toggle("light-mode");
+      var btn = document.getElementById("theme-toggle");
+      btn.innerText = isLight ? "🌙 Dark Mode" : "☀️ Light Mode";
+      localStorage.setItem("theme", isLight ? "light" : "dark");
+    }
+    
+    function applyStoredTheme() {
+      var savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "light") {
+        document.body.classList.add("light-mode");
+        document.getElementById("theme-toggle").innerText = "🌙 Dark Mode";
+      }
+    }
     
     // Page Initialization on Window Load
     window.onload = function() {
@@ -1034,6 +1150,7 @@
       startCyoa();
       checkBirthday();
       readyMottoType();
+      applyStoredTheme();
     };
   </script>
 </body>
