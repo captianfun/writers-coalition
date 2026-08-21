@@ -707,6 +707,28 @@
         });
     }
     window.logout = logout;
+
+    function toggleTheme() {
+      var isLight = document.body.classList.toggle("light-mode");
+      var btn = document.getElementById("theme-toggle");
+      btn.innerText = isLight ? "🌙 Dark Mode" : "☀️ Light Mode";
+    
+      var user = auth.currentUser;
+      if (user) {
+        set(ref(db, "themes/" + user.uid), isLight ? "light" : "dark");
+      }
+    }
+    window.toggleTheme = toggleTheme;
+
+    function applyStoredTheme(user) {
+      get(ref(db, "themes/" + user.uid)).then(function(snapshot) {
+        var savedTheme = snapshot.exists() ? snapshot.val() : "dark";
+        if (savedTheme === "light") {
+          document.body.classList.add("light-mode");
+          document.getElementById("theme-toggle").innerText = "🌙 Dark Mode";
+        }
+      });
+    }
   
     function handleAuthChange(user) {
       var loginBox = document.getElementById("login-box");
@@ -715,12 +737,12 @@
       if (user) {
         loginBox.style.display = "none";
         siteContent.style.display = "flex";
+        applyStoredTheme(user);
       } else {
         loginBox.style.display = "block";
         siteContent.style.display = "none";
       }
     }
-    onAuthStateChanged(auth, handleAuthChange);
       
     window.addEventListener("load", function() {
       console.log("Firebase ready.");
@@ -1140,21 +1162,6 @@
         document.getElementById("birthday-banner").style.display = "block";
       }
     }
-
-    function toggleTheme() {
-      var isLight = document.body.classList.toggle("light-mode");
-      var btn = document.getElementById("theme-toggle");
-      btn.innerText = isLight ? "🌙 Dark Mode" : "☀️ Light Mode";
-      localStorage.setItem("theme", isLight ? "light" : "dark");
-    }
-    
-    function applyStoredTheme() {
-      var savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "light") {
-        document.body.classList.add("light-mode");
-        document.getElementById("theme-toggle").innerText = "🌙 Dark Mode";
-      }
-    }
     
     // Page Initialization on Window Load
     window.onload = function() {
@@ -1163,7 +1170,6 @@
       startCyoa();
       checkBirthday();
       readyMottoType();
-      applyStoredTheme();
     };
   </script>
 </body>
