@@ -685,14 +685,29 @@
       var name = email.split("@")[0];
       return name.charAt(0).toUpperCase() + name.slice(1);
     }
+
+    function getFriendlyError(errorCode) {
+      var messages = {
+        "auth/invalid-email": "That doesn't look like a valid email address.",
+        "auth/user-not-found": "We couldn't find an account with that email.",
+        "auth/wrong-password": "That password doesn't look right, try again!",
+        "auth/invalid-credential": "That email or password doesn't match our records.",
+        "auth/too-many-requests": "Too many tries! Please wait a bit and try again.",
+        "auth/network-request-failed": "Having trouble connecting, check your internet and try again.",
+        "auth/missing-password": "Don't forget to type in a password!"
+      };
+    
+      return messages[errorCode] || "Something went wrong, please try again.";
+    }
+    window.getFriendlyError = getFriendlyError;
   
     function login() {
       var email = document.getElementById("email").value;
       var password = document.getElementById("password").value;
-  
+    
       signInWithEmailAndPassword(auth, email, password)
         .catch(function(error) {
-          document.getElementById("login-status").innerText = "Login failed: " + error.message;
+          document.getElementById("login-status").innerText = getFriendlyError(error.code);
         });
     }
     window.login = login;
