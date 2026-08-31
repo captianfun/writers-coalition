@@ -561,8 +561,11 @@
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
-      <button id="theme-toggle" class="nav-btn" onclick="toggleTheme()">☀️ Light Mode</button>
-      <button id="logout" onclick="logout()">Log Out</button>
+      <select class="nav-btn" id = "tab-sel">
+        <option value = "num1" id="theme-toggle">☀️ Light Mode</option>
+        <option value = "num2">Log Out</option>
+        <option value = "num3">Build Adventures</option>
+      </select>
     </nav>
   </header>
 
@@ -630,19 +633,55 @@
 
         <button class="action-btn" onclick="generateStoryStarter()">Generate Story Idea</button>
       </div>
+    </div>
 
-      <!-- Choose Your Own Adventure Story -->
+    <!-- TAB: CUSTOM ADVENTURES -->
+    <div id="adventures" class="tab-content">
+    
+      <!-- Section switcher -->
       <div class="card">
-        <h2>Interactive Sci-Fi Adventure: The Lost Signal</h2>
-        <p>Read through this mini-adventure story and make choices to decide what happens next!</p>
-        
-        <div class="prompt-box" id="cyoaText">
-          Loading adventure...
-        </div>
-
-        <div id="cyoaChoices"></div>
-        <button class="secondary-btn" id="restartCyoaBtn" onclick="startCyoa()" style="margin-top: 1rem; display: none;">Restart Adventure</button>
+        <button class="secondary-btn" onclick="showAdventureSection('browse')">Browse Stories</button>
+        <button class="secondary-btn" onclick="showAdventureSection('build')">Build a Story</button>
       </div>
+    
+      <!-- BROWSE SECTION -->
+      <div id="adventure-browse" class="card">
+        <h2>Custom Adventures</h2>
+        <p>Play stories written by other club members!</p>
+        <div id="custom-story-list"></div>
+      </div>
+    
+      <!-- BUILD SECTION -->
+      <div id="adventure-build" class="card" style="display:none;">
+        <h2>Build Your Own Adventure</h2>
+        <p>Every story needs a node called <strong>start</strong>. Each node has some text and a list of choices. Each choice needs a "next" node ID to jump to. A node with no choices is an ending.</p>
+    
+        <input id="story-title-input" placeholder="Story title"><br><br>
+    
+        <input id="node-id-input" placeholder="Node ID (e.g. start)"><br>
+        <textarea id="node-text-input" placeholder="What happens in this part of the story?"></textarea>
+    
+        <div id="choice-rows"></div>
+        <button class="secondary-btn" onclick="addChoiceRow()">+ Add a Choice</button><br><br>
+    
+        <button class="action-btn" onclick="addNodeToBuilder()">Save This Node</button>
+        <p id="builder-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+    
+        <h3 style="margin-top:1.5rem;">Nodes So Far:</h3>
+        <div id="builder-node-list"></div>
+    
+        <button class="action-btn" onclick="publishStory()" style="margin-top:1rem;">Publish Story</button>
+        <p id="publish-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+      </div>
+    
+      <!-- PLAYER SECTION -->
+      <div id="adventure-player" class="card" style="display:none;">
+        <h2 id="player-title"></h2>
+        <div class="prompt-box" id="player-text"></div>
+        <div id="player-choices"></div>
+        <button class="secondary-btn" onclick="showAdventureSection('browse')" style="margin-top:1rem;">Back to Stories</button>
+      </div>
+    
     </div>
 
   </main>
@@ -760,6 +799,159 @@
       }
     }
     onAuthStateChanged(auth, handleAuthChange);
+
+    // ----- Section switching -----
+    function showAdventureSection(section) {
+      document.getElementById("adventure-browse").style.display = section === "browse" ? "block" : "none";
+      document.getElementById("adventure-build").style.display = section === "build" ? "block" : "none";
+      document.getElementById("adventure-player").style.display = section === "player" ? "block" : "none";
+    }
+    window.showAdventureSection = showAdventureSection;
+    
+    // ----- Story Builder -----
+    var builderNodes = {};
+    
+    function addChoiceRow() {
+      var row = document.createElement("div");
+      row.innerHTML = "<input class='choice-text' placeholder='Choice text'> <input class='choice-next' placeholder='Next node ID'>";
+      document.getElementById("choice-rows").appendChild(row);
+    }
+    window.addChoiceRow = addChoiceRow;
+    
+    function addNodeToBuilder() {
+      var nodeId = document.getElementById("node-id-input").value.trim();
+      var nodeText = document.getElementById("node-text-input").value.trim();
+    
+      if (nodeId === "" || nodeText === "") {
+        document.getElementById("builder-status").innerText = "Add a node ID and some text first!";
+        return;
+      }
+    
+      var choiceRows = document.querySelectorAll("#choice-rows > div");
+      var choices = [];
+      choiceRows.forEach(function(row) {
+        var text = row.querySelector(".choice-text").value.trim();
+        var next = row.querySelector(".choice-next").value.trim();
+        if (text !== "" && next !== "") {
+          choices.push({ text: text, next: next });
+        }
+      });
+    
+      builderNodes[nodeId] = { text: nodeText, choices: choices };
+    
+      document.getElementById("node-id-input").value = "";
+      document.getElementById("node-text-input").value = "";
+      document.getElementById("choice-rows").innerHTML = "";
+      document.getElementById("builder-status").innerText = "Node '" + nodeId + "' saved!";
+    
+      renderBuilderNodeList();
+    }
+    window.addNodeToBuilder = addNodeToBuilder;
+    
+    function renderBuilderNodeList() {
+      var listDiv = document.getElementById("builder-node-list");
+      listDiv.innerHTML = "";
+      Object.keys(builderNodes).forEach(function(id) {
+        var p = document.createElement("p");
+        p.innerText = id + " (" + builderNodes[id].choices.length + " choices)";
+        listDiv.appendChild(p);
+      });
+    }
+    
+    function publishStory() {
+      var title = document.getElementById("story-title-input").value.trim();
+    
+      if (title === "" || !builderNodes.hasOwnProperty("start")) {
+        document.getElementById("publish-status").innerText = "Add a title and a 'start' node first!";
+        return;
+      }
+    
+      var user = auth.currentUser;
+      var authorName = user ? getDisplayName(user.email) : "Unknown";
+    
+      push(ref(db, "customStories"), {
+        title: title,
+        author: authorName,
+        startNode: "start",
+        nodes: builderNodes,
+        time: Date.now()
+      });
+    
+      document.getElementById("publish-status").innerText = "Story published! Check Browse Stories.";
+      builderNodes = {};
+      document.getElementById("story-title-input").value = "";
+      renderBuilderNodeList();
+    }
+    window.publishStory = publishStory;
+    
+    // ----- Browsing -----
+    function displayCustomStories(snapshot) {
+      var listDiv = document.getElementById("custom-story-list");
+      listDiv.innerHTML = "";
+    
+      snapshot.forEach(function(child) {
+        var story = child.val();
+        var card = document.createElement("div");
+        card.className = "prompt-box";
+    
+        var titleEl = document.createElement("h3");
+        titleEl.innerText = story.title + " — by " + story.author;
+        card.appendChild(titleEl);
+    
+        var playBtn = document.createElement("button");
+        playBtn.className = "action-btn";
+        playBtn.innerText = "Play";
+        playBtn.onclick = function() {
+          playCustomStory(story);
+        };
+        card.appendChild(playBtn);
+    
+        listDiv.appendChild(card);
+      });
+    }
+    onValue(ref(db, "customStories"), displayCustomStories);
+    
+    // ----- Player -----
+    var currentPlayingStory = null;
+    
+    function playCustomStory(story) {
+      currentPlayingStory = story;
+      document.getElementById("player-title").innerText = story.title;
+      showAdventureSection("player");
+      renderCustomNode(story.startNode);
+    }
+    
+    function renderCustomNode(nodeKey) {
+      var node = currentPlayingStory.nodes[nodeKey];
+      var textDiv = document.getElementById("player-text");
+      var choicesDiv = document.getElementById("player-choices");
+    
+      if (!node) {
+        textDiv.innerText = "Uh oh, this story has a broken link!";
+        choicesDiv.innerHTML = "";
+        return;
+      }
+    
+      textDiv.innerText = node.text;
+      choicesDiv.innerHTML = "";
+    
+      if (node.choices.length === 0) {
+        var theEnd = document.createElement("p");
+        theEnd.innerText = "THE END";
+        choicesDiv.appendChild(theEnd);
+        return;
+      }
+    
+      node.choices.forEach(function(choice) {
+        var btn = document.createElement("button");
+        btn.className = "cyoa-choice-btn";
+        btn.innerText = choice.text;
+        btn.onclick = function() {
+          renderCustomNode(choice.next);
+        };
+        choicesDiv.appendChild(btn);
+      });
+    }
       
     window.addEventListener("load", function() {
       console.log("Firebase ready.");
@@ -799,62 +991,6 @@
       "hides a big secret from their best friend.",
       "wins a contest with unexpected rules."
     ];
-
-    // CYOA Data Object
-    var cyoaStory = {
-      start: {
-        text: "You are standing inside the science lab during after-school detention when you notice a strange blinking blue light coming from an old radio monitor on the back shelf. What do you do?",
-        choices: [
-          { text: "Walk over and inspect the radio screen.", next: "inspectRadio" },
-          { text: "Ignore it and keep working on your homework.", next: "ignoreRadio" }
-        ]
-      },
-      inspectRadio: {
-        text: "You walk closer. The screen displays a message: 'Signal Received from Sector 4.' A small green button begins to flash beneath the dial. Do you push it?",
-        choices: [
-          { text: "Push the flashing green button.", next: "pushButton" },
-          { text: "Call the teacher over to take a look.", next: "callTeacher" }
-        ]
-      },
-      ignoreRadio: {
-        text: "You focus on your math worksheet, but the radio makes a loud chime and prints out a tiny strip of paper with numbers on it! Curiosity gets the best of you.",
-        choices: [
-          { text: "Pick up the paper strip.", next: "inspectRadio" },
-          { text: "Quickly pack your bag and leave.", next: "leaveRoom" }
-        ]
-      },
-      pushButton: {
-        text: "A calm audio recording plays through the speaker: 'Congratulations writer, you have unlocked the secret vault room in the library!' A secret panel opens in the wall, revealing a hidden room filled with vintage notebooks.",
-        choices: [
-          { text: "Step inside the vault to explore.", next: "endingSuccess" },
-          { text: "Grab one notebook and step back.", next: "endingSafe" }
-        ]
-      },
-      callTeacher: {
-        text: "Your teacher looks up, smiles, and says, 'Ah, you found Mr. Henderson's old puzzle box! It's a creative writing game from 10 years ago.' She hands you a special pen to start writing.",
-        choices: [
-          { text: "Sit down and start writing a new story.", next: "endingTeacher" }
-        ]
-      },
-      leaveRoom: {
-        text: "You decide to head home for the day. As you walk out, you wonder what that mysterious signal was all about. Maybe you will check it out tomorrow!",
-        choices: [
-          { text: "Try again tomorrow.", next: "start" }
-        ]
-      },
-      endingSuccess: {
-        text: "VICTORY: You discovered the historic library archive! You spend the rest of the semester reading forgotten stories written by former students. The End.",
-        choices: []
-      },
-      endingSafe: {
-        text: "SUCCESS: You take the notebook and write an amazing novel that wins first place in the school writing competition. The End.",
-        choices: []
-      },
-      endingTeacher: {
-        text: "SUCCESS: You and your teacher start the school's very first creative writing club together! The End.",
-        choices: []
-      }
-    };
 
     // Navigation Function
     function switchTab(tabId) {
@@ -1000,43 +1136,6 @@
       var fullPrompt = "Story Idea: " + randomChar + " " + randomSetting + " " + randomPlot;
       document.getElementById("generatedStoryStarter").innerText = fullPrompt;
     }
-
-    // Choose Your Own Adventure Engine
-    function renderCyoaNode(nodeKey) {
-      var node = cyoaStory[nodeKey];
-      var textElement = document.getElementById("cyoaText");
-      var choicesElement = document.getElementById("cyoaChoices");
-      var restartBtn = document.getElementById("restartCyoaBtn");
-
-      textElement.innerText = node.text;
-      choicesElement.innerHTML = "";
-
-      if (node.choices.length === 0) {
-        restartBtn.style.display = "inline-block";
-      } else {
-        restartBtn.style.display = "none";
-        var i = 0;
-        for (i = 0; i < node.choices.length; i++) {
-          var choice = node.choices[i];
-          var btn = document.createElement("button");
-          btn.className = "cyoa-choice-btn";
-          btn.innerText = (i + 1) + ". " + choice.text;
-          
-          // Create closure scope for loop index
-          (function(nextKey) {
-            btn.onclick = function() {
-              renderCyoaNode(nextKey);
-            };
-          })(choice.next);
-
-          choicesElement.appendChild(btn);
-        }
-      }
-    }
-
-    function startCyoa() {
-      renderCyoaNode("start");
-    }
     
     document.addEventListener("mousemove", function(e) {
       var owlSvg = document.getElementById("owl");
@@ -1179,6 +1278,17 @@
         document.getElementById("birthday-banner").style.display = "block";
       }
     }
+
+    var tabSel = document.getElementById("tab-sel");
+    tabSel.addEventListener("change", function() {
+      if (tabSel.value === "num1") {
+        toggleTheme();
+      } else if (tabSel.value === "num2") {
+        logout();
+      } else if (tabSel.value === "num3") {
+        switchTab("adventures");
+      }
+    })
     
     // Page Initialization on Window Load
     window.onload = function() {
