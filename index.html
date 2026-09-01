@@ -511,6 +511,10 @@
       background: rgba(0, 136, 204, 0.08);
       color: #0088cc;
     }
+
+    #email, #password, #login {
+      margin-bottom:5px;
+    }
   </style>
 </head>
   <body>
@@ -520,7 +524,7 @@
     <h2 id="sign-in">Sign In</h2>
     <input type="email" id="email" placeholder="Email"><br>
     <input type="password" id="password" placeholder="Password"><br>
-    <button onclick="login()">Log In</button>
+    <button onclick="login()" id="login">Log In</button>
     <p id="login-status"></p>
   </div>
   
