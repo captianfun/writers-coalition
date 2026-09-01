@@ -1315,9 +1315,7 @@
 
     // Hangman
     var hangmanWords = [
-      "story", "poem", "writer", "gallery", "chapter", "author",
-      "imagine", "creative", "sentence", "notebook", "adventure",
-      "character", "mystery", "dragon", "castle", "journey"
+      "build", "work", "ipad", "pizza", "random", "read", "show", "give", "member", "human", "dog", "cat", "earth", "space", "cheese", "photo", "camera", "world", "food"
     ];
     
     var hangmanWord = "";
@@ -1348,7 +1346,7 @@
     }
     
     function renderHangmanStatus() {
-      document.getElementById("hangman-status").innerText = "Wrong guesses: " + hangmanWrongCount + " / 20";
+      document.getElementById("hangman-status").innerText = "Wrong guesses: " + hangmanWrongCount + " / 10";
     }
     
     function renderHangmanLetters() {
@@ -1410,7 +1408,7 @@
     
       if (wordComplete) {
         document.getElementById("hangman-status").innerText = "🎉 You won! The word was " + hangmanWord.toUpperCase();
-      } else if (hangmanWrongCount >= 20) {
+      } else if (hangmanWrongCount >= 10) {
         document.getElementById("hangman-status").innerText = "😢 Game over! The word was " + hangmanWord.toUpperCase();
         var allButtons = document.querySelectorAll("#hangman-letters button");
         allButtons.forEach(function(btn) {
