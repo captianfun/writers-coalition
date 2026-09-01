@@ -997,19 +997,20 @@
       var contents = document.getElementsByClassName("tab-content");
       var navBtns = document.getElementsByClassName("nav-btn");
       var i = 0;
-
+    
       for (i = 0; i < contents.length; i++) {
         contents[i].classList.remove("active");
       }
       for (i = 0; i < navBtns.length; i++) {
         navBtns[i].classList.remove("active");
       }
-
+    
       document.getElementById(tabId).classList.add("active");
       
       // Update active state on button
       for (i = 0; i < navBtns.length; i++) {
-        if (navBtns[i].getAttribute("onclick").indexOf(tabId) !== -1) {
+        var onclickAttr = navBtns[i].getAttribute("onclick");
+        if (onclickAttr && onclickAttr.indexOf(tabId) !== -1) {
           navBtns[i].classList.add("active");
         }
       }
@@ -1294,7 +1295,6 @@
     window.onload = function() {
       updateTimerDisplay();
       initWordCounter();
-      startCyoa();
       checkBirthday();
       readyMottoType();
     };
