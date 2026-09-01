@@ -565,6 +565,7 @@
         <option value = "num1" id="theme-toggle">☀️ Light Mode</option>
         <option value = "num2">Log Out</option>
         <option value = "num3">Build Adventures</option>
+        <option value="num4">Hangman</option>
       </select>
     </nav>
   </header>
@@ -682,6 +683,24 @@
         <button class="secondary-btn" onclick="showAdventureSection('browse')" style="margin-top:1rem;">Back to Stories</button>
       </div>
     
+    </div>
+
+    <!-- TAB: HANGMAN -->
+    <div id="hangman" class="tab-content">
+      <div class="card">
+        <h2>Hangman</h2>
+        <p>Guess the word one letter at a time!</p>
+    
+        <div class="prompt-box" id="hangman-word-display" style="font-size: 1.8rem; letter-spacing: 0.5rem; text-align: center;">
+          _ _ _ _ _
+        </div>
+    
+        <p id="hangman-status" style="text-align: center;">Wrong guesses: 0 / 6</p>
+    
+        <div id="hangman-letters" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 1rem;"></div>
+    
+        <button class="action-btn" onclick="startHangman()" style="margin-top: 1rem;">New Word</button>
+      </div>
     </div>
 
   </main>
@@ -1288,8 +1307,116 @@
         logout();
       } else if (tabSel.value === "num3") {
         switchTab("adventures");
+      } else if (tabSel.value === "num4") {
+        switchTab("hangman");
       }
-    })
+    });
+
+    // Hangman
+    var hangmanWords = [
+      "story", "poem", "writer", "gallery", "chapter", "author",
+      "imagine", "creative", "sentence", "notebook", "adventure",
+      "character", "mystery", "dragon", "castle", "journey"
+    ];
+    
+    var hangmanWord = "";
+    var hangmanGuessed = [];
+    var hangmanWrongCount = 0;
+    
+    function startHangman() {
+      hangmanWord = hangmanWords[Math.floor(Math.random() * hangmanWords.length)];
+      hangmanGuessed = [];
+      hangmanWrongCount = 0;
+    
+      renderHangmanWord();
+      renderHangmanStatus();
+      renderHangmanLetters();
+    }
+    
+    function renderHangmanWord() {
+      var display = "";
+      for (var i = 0; i < hangmanWord.length; i++) {
+        var letter = hangmanWord[i];
+        if (hangmanGuessed.indexOf(letter) !== -1) {
+          display += letter.toUpperCase() + " ";
+        } else {
+          display += "_ ";
+        }
+      }
+      document.getElementById("hangman-word-display").innerText = display.trim();
+    }
+    
+    function renderHangmanStatus() {
+      document.getElementById("hangman-status").innerText = "Wrong guesses: " + hangmanWrongCount + " / 6";
+    }
+    
+    function renderHangmanLetters() {
+      var container = document.getElementById("hangman-letters");
+      container.innerHTML = "";
+    
+      var alphabet = "abcdefghijklmnopqrstuvwxyz";
+      for (var i = 0; i < alphabet.length; i++) {
+        var letter = alphabet[i];
+        var btn = document.createElement("button");
+        btn.innerText = letter.toUpperCase();
+        btn.className = "secondary-btn";
+    
+        if (hangmanGuessed.indexOf(letter) !== -1) {
+          if (hangmanWord.indexOf(letter) !== -1) {
+            btn.style.background = "#00cc66";
+            btn.style.color = "#0b0d17";
+          } else {
+            btn.style.background = "#555555";
+            btn.style.color = "#999999";
+          }
+          btn.disabled = true;
+        }
+    
+        (function(currentLetter, currentBtn) {
+          currentBtn.onclick = function() {
+            guessHangmanLetter(currentLetter);
+          };
+        })(letter, btn);
+    
+        container.appendChild(btn);
+      }
+    }
+    
+    function guessHangmanLetter(letter) {
+      if (hangmanGuessed.indexOf(letter) !== -1) {
+        return;
+      }
+    
+      hangmanGuessed.push(letter);
+    
+      if (hangmanWord.indexOf(letter) === -1) {
+        hangmanWrongCount++;
+      }
+    
+      renderHangmanWord();
+      renderHangmanStatus();
+      renderHangmanLetters();
+      checkHangmanEnd();
+    }
+    
+    function checkHangmanEnd() {
+      var wordComplete = true;
+      for (var i = 0; i < hangmanWord.length; i++) {
+        if (hangmanGuessed.indexOf(hangmanWord[i]) === -1) {
+          wordComplete = false;
+        }
+      }
+    
+      if (wordComplete) {
+        document.getElementById("hangman-status").innerText = "🎉 You won! The word was " + hangmanWord.toUpperCase();
+      } else if (hangmanWrongCount >= 6) {
+        document.getElementById("hangman-status").innerText = "😢 Game over! The word was " + hangmanWord.toUpperCase();
+        var allButtons = document.querySelectorAll("#hangman-letters button");
+        allButtons.forEach(function(btn) {
+          btn.disabled = true;
+        });
+      }
+    }
     
     // Page Initialization on Window Load
     window.onload = function() {
