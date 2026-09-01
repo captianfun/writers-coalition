@@ -562,6 +562,7 @@
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
       <select class="nav-btn" id = "tab-sel">
+        <option>Expand</option>
         <option value = "num1" id="theme-toggle">☀️ Light Mode</option>
         <option value = "num2">Log Out</option>
         <option value = "num3">Build Adventures</option>
@@ -1347,7 +1348,7 @@
     }
     
     function renderHangmanStatus() {
-      document.getElementById("hangman-status").innerText = "Wrong guesses: " + hangmanWrongCount + " / 6";
+      document.getElementById("hangman-status").innerText = "Wrong guesses: " + hangmanWrongCount + " / 20";
     }
     
     function renderHangmanLetters() {
@@ -1409,7 +1410,7 @@
     
       if (wordComplete) {
         document.getElementById("hangman-status").innerText = "🎉 You won! The word was " + hangmanWord.toUpperCase();
-      } else if (hangmanWrongCount >= 6) {
+      } else if (hangmanWrongCount >= 20) {
         document.getElementById("hangman-status").innerText = "😢 Game over! The word was " + hangmanWord.toUpperCase();
         var allButtons = document.querySelectorAll("#hangman-letters button");
         allButtons.forEach(function(btn) {
