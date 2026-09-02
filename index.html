@@ -1406,6 +1406,12 @@
       }
     }
     
+    var tabValueMap = {
+      "adventures": "num3",
+      "hangman": "num4",
+      "activities": "num5"
+    };
+    
     tabSel.addEventListener("change", function() {
       removeExpandOption();
     
@@ -1416,6 +1422,9 @@
           restoreExpandOption();
         } else {
           switchTab(activeTab.id);
+          if (tabValueMap[activeTab.id]) {
+            tabSel.value = tabValueMap[activeTab.id];
+          }
         }
       } else if (tabSel.value === "num2") {
         logout();
