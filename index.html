@@ -1016,6 +1016,7 @@
       "wins a contest with unexpected rules."
     ];
 
+    var tabSel = document.getElementById("tab-sel");
     function removeExpandOption() {
       var expandOption = document.getElementById("expand-placeholder");
       if (expandOption) {
@@ -1327,8 +1328,7 @@
         document.getElementById("birthday-banner").style.display = "block";
       }
     }
-
-    var tabSel = document.getElementById("tab-sel");
+    
     tabSel.addEventListener("change", function() {
       if (tabSel.value === "num1") {
         toggleTheme();
