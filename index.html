@@ -1016,7 +1016,27 @@
       "wins a contest with unexpected rules."
     ];
 
-    // Navigation Function
+    function removeExpandOption() {
+      var expandOption = document.getElementById("expand-placeholder");
+      if (expandOption) {
+        expandOption.remove();
+      }
+    }
+    
+    function restoreExpandOption() {
+      var existing = document.getElementById("expand-placeholder");
+      if (!existing) {
+        var option = document.createElement("option");
+        option.id = "expand-placeholder";
+        option.innerText = "Expand";
+        tabSel.insertBefore(option, tabSel.firstChild);
+        tabSel.selectedIndex = 0;
+      }
+    }
+    
+    tabSel.addEventListener("mousedown", removeExpandOption);
+
+    // Navigation function
     function switchTab(tabId) {
       var contents = document.getElementsByClassName("tab-content");
       var navBtns = document.getElementsByClassName("nav-btn");
@@ -1030,7 +1050,7 @@
       }
     
       document.getElementById(tabId).classList.add("active");
-      
+    
       // Update active state on button
       for (i = 0; i < navBtns.length; i++) {
         var onclickAttr = navBtns[i].getAttribute("onclick");
@@ -1038,8 +1058,12 @@
           navBtns[i].classList.add("active");
         }
       }
+    
+      if (tabId === "home" || tabId === "activities") {
+        restoreExpandOption();
+      }
     }
-
+    
     // Speed Writing Timer Functions
     function setTimerDuration(minutes) {
       if (timerRunning) {
@@ -1314,14 +1338,6 @@
         switchTab("adventures");
       } else if (tabSel.value === "num4") {
         switchTab("hangman");
-      }
-    });
-
-    var expandOption = document.getElementById("expand-placeholder");
-    tabSel.addEventListener("mousedown", function() {
-      if (expandOption) {
-        expandOption.remove();
-        expandOption = null;
       }
     });
 
