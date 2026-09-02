@@ -1407,8 +1407,13 @@
     
     tabSel.addEventListener("change", function() {
       removeExpandOption();
+    
       if (tabSel.value === "num1") {
         toggleTheme();
+        var activeTab = document.querySelector(".tab-content.active");
+        if (activeTab && (activeTab.id === "home" || activeTab.id === "messageboard")) {
+          restoreExpandOption();
+        }
       } else if (tabSel.value === "num2") {
         logout();
       } else if (tabSel.value === "num3") {
