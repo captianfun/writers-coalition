@@ -565,12 +565,12 @@
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
-      <select class="nav-btn" id = "tab-sel">
-        <option>Expand</option>
-        <option value = "num1" id="theme-toggle">☀️ Light Mode</option>
-        <option value = "num3">Build Adventures</option>
+      <select class="nav-btn" id="tab-sel">
+        <option id="expand-placeholder">Expand</option>
+        <option value="num1" id="theme-toggle">☀️ Light Mode</option>
+        <option value="num3">Build Adventures</option>
         <option value="num4">Hangman</option>
-        <option value = "num2">Log Out</option>
+        <option value="num2">Log Out</option>
       </select>
     </nav>
   </header>
@@ -1314,6 +1314,14 @@
         switchTab("adventures");
       } else if (tabSel.value === "num4") {
         switchTab("hangman");
+      }
+    });
+
+    var expandOption = document.getElementById("expand-placeholder");
+    tabSel.addEventListener("mousedown", function() {
+      if (expandOption) {
+        expandOption.remove();
+        expandOption = null;
       }
     });
 
