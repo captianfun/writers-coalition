@@ -564,12 +564,13 @@
     </div>
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
-      <button class="nav-btn" onclick="switchTab('activities')">Activities</button>
+      <button class="nav-btn" onclick="switchTab('messageboard')">Message Board</button>
       <select class="nav-btn" id="tab-sel">
         <option id="expand-placeholder">Expand</option>
         <option value="num1" id="theme-toggle">☀️ Light Mode</option>
         <option value="num3">Build Adventures</option>
         <option value="num4">Hangman</option>
+        <option value="num5">Activities</option>
         <option value="num2">Log Out</option>
       </select>
     </nav>
@@ -708,6 +709,20 @@
       </div>
     </div>
 
+    <!-- TAB: MESSAGE BOARD -->
+    <div id="messageboard" class="tab-content">
+      <div class="card">
+        <h2>Message Board</h2>
+        <p>Leave a message for the club to see!</p>
+    
+        <div id="board-messages"></div>
+    
+        <input type="text" id="board-input" placeholder="Type a message..." maxlength="200">
+        <button class="action-btn" onclick="postBoardMessage()">Post</button>
+        <p id="board-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+      </div>
+    </div>
+
   </main>
 
   <!-- Footer -->
@@ -831,6 +846,58 @@
       document.getElementById("adventure-player").style.display = section === "player" ? "block" : "none";
     }
     window.showAdventureSection = showAdventureSection;
+
+    function postBoardMessage() {
+      var input = document.getElementById("board-input");
+      var text = input.value.trim();
+    
+      if (text === "") {
+        return;
+      }
+    
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      push(ref(db, "messages/" + user.uid), {
+        sender: getDisplayName(user.email),
+        text: text,
+        time: Date.now()
+      });
+    
+      input.value = "";
+      document.getElementById("board-status").innerText = "Posted!";
+      loadBoardMessages();
+    }
+    window.postBoardMessage = postBoardMessage;
+    
+    function loadBoardMessages() {
+      get(ref(db, "messages")).then(function(snapshot) {
+        var allMessages = [];
+    
+        snapshot.forEach(function(userNode) {
+          userNode.forEach(function(msgNode) {
+            allMessages.push(msgNode.val());
+          });
+        });
+    
+        allMessages.sort(function(a, b) {
+          return a.time - b.time;
+        });
+    
+        var boardDiv = document.getElementById("board-messages");
+        boardDiv.innerHTML = "";
+    
+        allMessages.forEach(function(msg) {
+          var msgElement = document.createElement("p");
+          var initial = msg.sender.charAt(0).toUpperCase();
+          msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + msg.text;
+          boardDiv.appendChild(msgElement);
+        });
+      });
+    }
+    window.loadBoardMessages = loadBoardMessages;
     
     // ----- Story Builder -----
     var builderNodes = {};
@@ -1060,8 +1127,11 @@
         }
       }
     
-      if (tabId === "home" || tabId === "activities") {
+      if (tabId === "home" || tabId === "messageboard") {
         restoreExpandOption();
+      }
+      if (tabId === "messageboard") {
+        loadBoardMessages();
       }
     }
     
@@ -1338,6 +1408,8 @@
         switchTab("adventures");
       } else if (tabSel.value === "num4") {
         switchTab("hangman");
+      } else if (tabSel.value === "num5") {
+        switchTab("activities");
       }
     });
 
