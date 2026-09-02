@@ -1109,8 +1109,6 @@
         tabSel.selectedIndex = 0;
       }
     }
-    
-    tabSel.addEventListener("mousedown", removeExpandOption);
 
     // Navigation function
     function switchTab(tabId) {
@@ -1408,6 +1406,7 @@
     }
     
     tabSel.addEventListener("change", function() {
+      removeExpandOption();
       if (tabSel.value === "num1") {
         toggleTheme();
       } else if (tabSel.value === "num2") {
