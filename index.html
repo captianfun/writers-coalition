@@ -1414,6 +1414,8 @@
         var activeTab = document.querySelector(".tab-content.active");
         if (activeTab && (activeTab.id === "home" || activeTab.id === "messageboard")) {
           restoreExpandOption();
+        } else {
+          switchTab(activeTab.id);
         }
       } else if (tabSel.value === "num2") {
         logout();
