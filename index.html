@@ -1567,7 +1567,7 @@
       while (lastPrompt === thisPrompt) {
         thisPrompt = Math.floor(Math.random() * prompts.length);
       }
-      document.getElementById("board-input").textContent = thisPrompt;
+      document.getElementById("board-input").placeholder = thisPrompt;
       lastPrompt = thisPrompt;
       window.setTimeout(writeMessage, 5000);
     }
