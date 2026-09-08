@@ -1562,9 +1562,10 @@
       "Write something cool..."
     ]
 
+    var lastPrompt = 0;
+    var thisPrompt = 0;
+    
     function writeMessage() {
-      var lastPrompt = 0;
-      var thisPrompt = 0;
       while (lastPrompt === thisPrompt) {
         thisPrompt = Math.floor(Math.random() * prompts.length);
       }
