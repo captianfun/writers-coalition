@@ -1301,6 +1301,13 @@
       
       if (!timerRunning) {
         timerRunning = true;
+    
+        if (timerSeconds === initialSeconds) {
+          document.getElementById("speedWritingArea").value = "";
+          document.getElementById("wordCountDisplay").innerText = "Word count: 0";
+          document.getElementById("record-message").innerText = "";
+        }
+    
         btn.innerText = "Pause";
         btn.style.background = "linear-gradient(135deg, #ff0055, #ff5500)";
         
@@ -1314,7 +1321,7 @@
             btn.innerText = "Start Writing";
             btn.style.background = "linear-gradient(135deg, #00f0ff, #0088ff)";
             alert("Time's up! Great job writing. Take a moment to read over your work.");
-        
+    
             var finalText = document.getElementById("speedWritingArea").value.trim();
             var finalWordCount = finalText === "" ? 0 : finalText.split(/\s+/).length;
             var minutesUsed = initialSeconds / 60;
