@@ -517,8 +517,13 @@
     }
 
     #board-messages {
-      margin:10px;
+      margin:20px;
       margin-left:0px;
+    }
+
+    #board-input {
+      margin-right:5px;
+      padding:5px;
     }
 
     header {
@@ -728,10 +733,12 @@
         <h2>Message Board</h2>
         <p>Leave a message for the club to see!</p>
     
-        <div id="board-messages"></div>
+        <div id="board-messages"></div> <!-- increase margin -->
     
         <input type="text" id="board-input" placeholder="Type a message..." maxlength="200">
         <button class="action-btn" onclick="postBoardMessage()">Post</button>
+        <!-- Simply just make this look better -->
+        
         <p id="board-status" style="font-size:0.85rem; color:#94a3b8;"></p>
       </div>
     </div>
@@ -1143,6 +1150,7 @@
       }
       if (tabId === "messageboard") {
         loadBoardMessages();
+        writeMessage();
       }
     }
     
@@ -1543,6 +1551,25 @@
           btn.disabled = true;
         });
       }
+    }
+
+    var prompts = [
+      "Type a message...",
+      "Unleash your creativity...",
+      "Make an announcement...",
+      "Share something...",
+      "Write something cool..."
+    ]
+
+    function writeMessage() {
+      var lastPrompt = 0;
+      var thisPrompt = 0;
+      while (lastPrompt === thisPrompt) {
+        thisPrompt = Math.floor(Math.random() * prompts.length);
+      }
+      document.getElementById("board-input").textContent = thisPrompt;
+      lastPrompt = thisPrompt;
+      window.setTimeout(writeMessage, 5000);
     }
     
     // Page Initialization on Window Load
