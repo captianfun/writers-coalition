@@ -1150,7 +1150,7 @@
       }
       if (tabId === "messageboard") {
         loadBoardMessages();
-        writeMessage();
+        window.setTimeout(writeMessage, 5000);
       }
     }
     
@@ -1567,7 +1567,7 @@
       while (lastPrompt === thisPrompt) {
         thisPrompt = Math.floor(Math.random() * prompts.length);
       }
-      document.getElementById("board-input").placeholder = thisPrompt;
+      document.getElementById("board-input").placeholder = prompts[thisPrompt];
       lastPrompt = thisPrompt;
       window.setTimeout(writeMessage, 5000);
     }
