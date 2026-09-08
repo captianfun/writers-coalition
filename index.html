@@ -844,21 +844,23 @@
         var listDiv = document.getElementById("records-list");
         listDiv.innerHTML = "";
     
-        var durations = Object.keys(best).sort(function(a, b) {
-          return a - b;
-        });
+        var allDurations = ["1", "3", "5"];
     
-        if (durations.length === 0) {
-          listDiv.innerHTML = "<p>No records yet, be the first!</p>";
-          return;
-        }
-    
-        durations.forEach(function(minutes) {
-          var record = best[minutes];
+        allDurations.forEach(function(minutes) {
           var p = document.createElement("p");
-          p.innerText = "Record for " + minutes + " minute" + (minutes === "1" ? "" : "s") + ": " + record.words + " words (" + record.author + ")";
+    
+          if (best[minutes]) {
+            var record = best[minutes];
+            p.innerText = "Record for " + minutes + " minute" + (minutes === "1" ? "" : "s") + ": " + record.words + " words (" + record.author + ")";
+          } else {
+            p.innerText = "Record for " + minutes + " minute" + (minutes === "1" ? "" : "s") + ": not set yet";
+            p.style.color = "#64748b";
+          }
+    
           listDiv.appendChild(p);
         });
+      }).catch(function(error) {
+        console.log("Records load error:", error.message);
       });
     }
     window.loadHomeRecords = loadHomeRecords;
