@@ -930,13 +930,13 @@
         loginBox.style.display = "none";
         siteContent.style.display = "flex";
         applyStoredTheme(user);
+        loadHomeRecords();
       } else {
         loginBox.style.display = "block";
         siteContent.style.display = "none";
       }
     }
-    onAuthStateChanged(auth, handleAuthChange);
-
+     
     // ----- Section switching -----
     function showAdventureSection(section) {
       document.getElementById("adventure-browse").style.display = section === "browse" ? "block" : "none";
