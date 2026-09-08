@@ -610,6 +610,11 @@
         <p>Whether you love writing realistic fiction, poetry, fantasy, or mystery stories, you will find a friendly place to share your work here!</p>
       </div>
       <div class="card">
+        <h2>Speed Writing Records</h2>
+        <p>The best word counts our club has ever hit!</p>
+        <div id="records-list"></div>
+      </div>
+      <div class="card">
         <h2>Silly Sentence Mixer</h2>
         <p>Click the button for a random silly sentence!</p>
       
@@ -645,6 +650,7 @@
         <div style="margin-top: 1rem;">
           <textarea id="speedWritingArea" placeholder="Start typing your story here when the timer starts..."></textarea>
           <p id="wordCountDisplay" style="font-size: 0.9rem; color: #94a3b8;">Word count: 0</p>
+          <p id="record-message" style="font-size: 0.9rem; color: #00cc66; font-weight: bold;"></p>
         </div>
       </div>
 
@@ -785,6 +791,77 @@
       var name = email.split("@")[0];
       return name.charAt(0).toUpperCase() + name.slice(1);
     }
+
+    function checkRecord(minutes, wordCount) {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      get(ref(db, "records")).then(function(snapshot) {
+        var highest = 0;
+    
+        snapshot.forEach(function(userNode) {
+          var durationNode = userNode.child(String(minutes));
+          if (durationNode.exists()) {
+            var val = durationNode.val();
+            if (val.words > highest) {
+              highest = val.words;
+            }
+          }
+        });
+    
+        if (wordCount > highest) {
+          set(ref(db, "records/" + user.uid + "/" + minutes), {
+            author: getDisplayName(user.email),
+            words: wordCount,
+            time: Date.now()
+          });
+    
+          var minutesLabel = minutes + " minute" + (minutes === 1 ? "" : "s");
+          document.getElementById("record-message").innerText = "🎉 New record for " + minutesLabel + ": " + wordCount + " words!";
+    
+          loadHomeRecords();
+        }
+      });
+    }
+    window.checkRecord = checkRecord;
+    
+    function loadHomeRecords() {
+      get(ref(db, "records")).then(function(snapshot) {
+        var best = {};
+    
+        snapshot.forEach(function(userNode) {
+          userNode.forEach(function(durationNode) {
+            var minutes = durationNode.key;
+            var val = durationNode.val();
+            if (!best[minutes] || val.words > best[minutes].words) {
+              best[minutes] = val;
+            }
+          });
+        });
+    
+        var listDiv = document.getElementById("records-list");
+        listDiv.innerHTML = "";
+    
+        var durations = Object.keys(best).sort(function(a, b) {
+          return a - b;
+        });
+    
+        if (durations.length === 0) {
+          listDiv.innerHTML = "<p>No records yet, be the first!</p>";
+          return;
+        }
+    
+        durations.forEach(function(minutes) {
+          var record = best[minutes];
+          var p = document.createElement("p");
+          p.innerText = "Record for " + minutes + " minute" + (minutes === "1" ? "" : "s") + ": " + record.words + " words (" + record.author + ")";
+          listDiv.appendChild(p);
+        });
+      });
+    }
+    window.loadHomeRecords = loadHomeRecords;
 
     function getFriendlyError(errorCode) {
       var messages = {
@@ -1153,6 +1230,9 @@
         loadBoardMessages();
         window.setTimeout(writeMessage, 5000);
       }
+      if (tabId === "home") {
+        loadHomeRecords();
+      }
     }
     
     // Speed Writing Timer Functions
@@ -1234,6 +1314,13 @@
             btn.innerText = "Start Writing";
             btn.style.background = "linear-gradient(135deg, #00f0ff, #0088ff)";
             alert("Time's up! Great job writing. Take a moment to read over your work.");
+        
+            var finalText = document.getElementById("speedWritingArea").value.trim();
+            var finalWordCount = finalText === "" ? 0 : finalText.split(/\s+/).length;
+            var minutesUsed = initialSeconds / 60;
+            if (window.checkRecord) {
+              window.checkRecord(minutesUsed, finalWordCount);
+            }
           }
         }, 1000);
       } else {
