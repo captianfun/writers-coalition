@@ -603,6 +603,7 @@
       <select class="nav-btn" id="tab-sel">
         <option id="expand-placeholder">Expand</option>
         <option value="num1" id="theme-toggle">☀️ Light Mode</option>
+        <option value="num6">Profile</option>
         <option value="num3">Build Adventures</option>
         <option value="num4">Hangman</option>
         <option value="num5">Activities</option>
@@ -766,6 +767,43 @@
       </div>
     </div>
 
+    <!-- TAB: PROFILE -->
+    <div id="profile" class="tab-content">
+      <div class="card" style="text-align:center;">
+        <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:0.5rem;">
+          <ellipse cx="50" cy="55" rx="35" ry="40" fill="#1b67e3" stroke="#00f0ff" stroke-width="3"/>
+          <ellipse cx="50" cy="65" rx="22" ry="25" fill="#1b67e3" stroke="#7928ca" stroke-width="2"/>
+          <path class="left-wing" d="M15 50 Q10 75 28 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
+          <path class="right-wing" d="M85 50 Q90 75 72 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
+          <path d="M42 55 Q50 60 58 55 M40 63 Q50 68 60 63 M44 71 Q50 75 56 71" fill="blue" stroke="#00f0ff" stroke-width="2" stroke-linecap="round"/>
+          <polygon points="25,25 35,5 45,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
+          <polygon points="75,25 65,5 55,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
+          <circle cx="36" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
+          <circle cx="64" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
+          <circle cx="36" cy="38" r="7" fill="#0b0d17"/>
+          <circle cx="64" cy="38" r="7" fill="#0b0d17"/>
+          <circle cx="34" cy="36" r="2.5" fill="#00f0ff"/>
+          <circle cx="62" cy="36" r="2.5" fill="#00f0ff"/>
+          <polygon points="50,42 44,52 56,52" fill="#1b67e3"/>
+          <ellipse cx="40" cy="93" rx="6" ry="3" fill="#ff9900"/>
+          <ellipse cx="60" cy="93" rx="6" ry="3" fill="#ff9900"/>
+        </svg>
+        <h2 id="profile-display-name">Loading...</h2>
+        <p id="profile-level-name" style="color:#00f0ff; font-weight:bold;"></p>
+    
+        <div style="background: rgba(2, 6, 23, 0.8); border-radius: 8px; height: 16px; overflow: hidden; margin: 0.75rem 0;">
+          <div id="profile-xp-bar" style="background: linear-gradient(135deg, #00f0ff, #7928ca); height: 100%; width: 0%; transition: width 0.5s ease;"></div>
+        </div>
+        <p id="profile-xp-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+      </div>
+    
+      <div class="card">
+        <h3>Stats</h3>
+        <p id="profile-messages-count">Messages posted: 0</p>
+        <p id="profile-hangman-wins">Hangman games won: 0</p>
+      </div>
+    </div>
+
   </main>
 
   <!-- Footer -->
@@ -807,6 +845,117 @@
       var name = email.split("@")[0];
       return name.charAt(0).toUpperCase() + name.slice(1);
     }
+
+    var levelThresholds = [0, 50, 120, 220, 350, 500];
+    var levelNames = ["Scribbler", "Storyteller", "Wordsmith", "Chronicler", "Master Wordsmith", "Legendary Author"];
+    
+    function getLevelInfo(xp) {
+      var level = 1;
+      for (var i = levelThresholds.length - 1; i >= 0; i--) {
+        if (xp >= levelThresholds[i]) {
+          level = i + 1;
+          break;
+        }
+      }
+    
+      var currentThreshold = levelThresholds[level - 1];
+      var nextThreshold = levelThresholds[level] !== undefined ? levelThresholds[level] : currentThreshold;
+      var progress = nextThreshold > currentThreshold ? (xp - currentThreshold) / (nextThreshold - currentThreshold) : 1;
+    
+      return {
+        level: level,
+        name: levelNames[level - 1],
+        progress: progress,
+        nextThreshold: nextThreshold,
+        isMaxLevel: level >= levelThresholds.length
+      };
+    }
+    
+    function addXP(amount) {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      get(ref(db, "xp/" + user.uid)).then(function(snapshot) {
+        var currentXP = snapshot.exists() ? snapshot.val() : 0;
+        var newXP = currentXP + amount;
+        set(ref(db, "xp/" + user.uid), newXP);
+        displayXP(newXP);
+      });
+    }
+    window.addXP = addXP;
+
+    function incrementStat(statName) {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      get(ref(db, "stats/" + user.uid + "/" + statName)).then(function(snapshot) {
+        var current = snapshot.exists() ? snapshot.val() : 0;
+        set(ref(db, "stats/" + user.uid + "/" + statName), current + 1);
+      });
+    }
+    window.incrementStat = incrementStat;
+    
+    function displayXP(xp) {
+      var info = getLevelInfo(xp);
+      document.getElementById("xp-title").innerText = "Level " + info.level + ": " + info.name;
+      document.getElementById("xp-bar").style.width = (info.progress * 100) + "%";
+    
+      if (info.isMaxLevel) {
+        document.getElementById("xp-status").innerText = xp + " XP (Max Level!)";
+      } else {
+        document.getElementById("xp-status").innerText = xp + " / " + info.nextThreshold + " XP";
+      }
+    }
+    
+    function loadXP() {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+      get(ref(db, "xp/" + user.uid)).then(function(snapshot) {
+        var xp = snapshot.exists() ? snapshot.val() : 0;
+        displayXP(xp);
+      });
+    }
+    window.loadXP = loadXP;
+
+    function loadProfile() {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      document.getElementById("profile-display-name").innerText = getDisplayName(user.email);
+    
+      get(ref(db, "xp/" + user.uid)).then(function(snapshot) {
+        var xp = snapshot.exists() ? snapshot.val() : 0;
+        var info = getLevelInfo(xp);
+    
+        document.getElementById("profile-level-name").innerText = "Level " + info.level + ": " + info.name;
+        document.getElementById("profile-xp-bar").style.width = (info.progress * 100) + "%";
+    
+        if (info.isMaxLevel) {
+          document.getElementById("profile-xp-status").innerText = xp + " XP (Max Level!)";
+        } else {
+          document.getElementById("profile-xp-status").innerText = xp + " / " + info.nextThreshold + " XP";
+        }
+      });
+    
+      get(ref(db, "stats/" + user.uid + "/messagesPosted")).then(function(snapshot) {
+        var count = snapshot.exists() ? snapshot.val() : 0;
+        document.getElementById("profile-messages-count").innerText = "Messages posted: " + count;
+      });
+    
+      get(ref(db, "stats/" + user.uid + "/hangmanWins")).then(function(snapshot) {
+        var count = snapshot.exists() ? snapshot.val() : 0;
+        document.getElementById("profile-hangman-wins").innerText = "Hangman games won: " + count;
+      });
+    }
+    window.loadProfile = loadProfile;
 
     function checkRecord(minutes, wordCount) {
       var user = auth.currentUser;
@@ -949,6 +1098,7 @@
         siteContent.style.display = "flex";
         applyStoredTheme(user);
         loadHomeRecords();
+        loadXP();
       } else {
         loginBox.style.display = "block";
         siteContent.style.display = "none";
@@ -987,6 +1137,8 @@
       input.value = "";
       document.getElementById("board-status").innerText = "Posted!";
       loadBoardMessages();
+      window.addXp(5);
+      window.incrementStat("messagesPosted");
     }
     window.postBoardMessage = postBoardMessage;
     
@@ -1087,6 +1239,7 @@
       });
     
       document.getElementById("publish-status").innerText = "Story published! Check Browse Stories.";
+      window.addXP(25);
       builderNodes = {};
       document.getElementById("story-title-input").value = "";
       renderBuilderNodeList();
@@ -1252,6 +1405,9 @@
       }
       if (tabId === "home") {
         loadHomeRecords();
+      }
+      if (tabId === "profile") {
+        loadProfile();
       }
     }
     
@@ -1539,7 +1695,8 @@
     var tabValueMap = {
       "adventures": "num3",
       "hangman": "num4",
-      "activities": "num5"
+      "activities": "num5",
+      "profile": "num6"
     };
     
     tabSel.addEventListener("change", function() {
@@ -1564,6 +1721,8 @@
         switchTab("hangman");
       } else if (tabSel.value === "num5") {
         switchTab("activities");
+      } else if (tabSel.value === "num6") {
+        switchTab("profile");
       }
     });
 
@@ -1662,12 +1821,18 @@
     
       if (wordComplete) {
         document.getElementById("hangman-status").innerText = "🎉 You won! The word was " + hangmanWord.toUpperCase();
+        if (window.addXP) {
+          window.addXP(10);
+        }
+        if (window.incrementStat) {
+          window.incrementStat("hangmanWins");
+        }
       } else if (hangmanWrongCount >= 10) {
-        document.getElementById("hangman-status").innerText = "😢 Game over! The word was " + hangmanWord.toUpperCase();
-        var allButtons = document.querySelectorAll("#hangman-letters button");
-        allButtons.forEach(function(btn) {
-          btn.disabled = true;
-        });
+          document.getElementById("hangman-status").innerText = "😢 Game over! The word was " + hangmanWord.toUpperCase();
+          var allButtons = document.querySelectorAll("#hangman-letters button");
+          allButtons.forEach(function(btn) {
+            btn.disabled = true;
+          });
       }
     }
 
