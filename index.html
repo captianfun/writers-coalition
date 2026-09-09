@@ -770,24 +770,7 @@
     <!-- TAB: PROFILE -->
     <div id="profile" class="tab-content">
       <div class="card" style="text-align:center;">
-        <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:0.5rem;">
-          <ellipse cx="50" cy="55" rx="35" ry="40" fill="#1b67e3" stroke="#00f0ff" stroke-width="3"/>
-          <ellipse cx="50" cy="65" rx="22" ry="25" fill="#1b67e3" stroke="#7928ca" stroke-width="2"/>
-          <path class="left-wing" d="M15 50 Q10 75 28 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
-          <path class="right-wing" d="M85 50 Q90 75 72 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
-          <path d="M42 55 Q50 60 58 55 M40 63 Q50 68 60 63 M44 71 Q50 75 56 71" fill="blue" stroke="#00f0ff" stroke-width="2" stroke-linecap="round"/>
-          <polygon points="25,25 35,5 45,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
-          <polygon points="75,25 65,5 55,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
-          <circle cx="36" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
-          <circle cx="64" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2"/>
-          <circle cx="36" cy="38" r="7" fill="#0b0d17"/>
-          <circle cx="64" cy="38" r="7" fill="#0b0d17"/>
-          <circle cx="34" cy="36" r="2.5" fill="#00f0ff"/>
-          <circle cx="62" cy="36" r="2.5" fill="#00f0ff"/>
-          <polygon points="50,42 44,52 56,52" fill="#1b67e3"/>
-          <ellipse cx="40" cy="93" rx="6" ry="3" fill="#ff9900"/>
-          <ellipse cx="60" cy="93" rx="6" ry="3" fill="#ff9900"/>
-        </svg>
+        <div id="profile-avatar" style="display:inline-flex; align-items:center; justify-content:center; width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:2rem; margin-bottom:0.5rem;"></div>
         <p id="profile-level-name" style="color:#00f0ff; font-weight:bold;"></p>
     
         <div style="background: rgba(2, 6, 23, 0.8); border-radius: 8px; height: 16px; overflow: hidden; margin: 0.75rem 0;">
@@ -927,6 +910,9 @@
       if (!user) {
         return;
       }
+    
+      var displayName = getDisplayName(user.email);
+      document.getElementById("profile-avatar").innerText = displayName.charAt(0).toUpperCase();
     
       get(ref(db, "xp/" + user.uid)).then(function(snapshot) {
         var xp = snapshot.exists() ? snapshot.val() : 0;
