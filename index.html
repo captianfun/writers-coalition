@@ -1151,6 +1151,42 @@
       });
     }
     window.loadBoardMessages = loadBoardMessages;
+
+    function loadMembers() {
+      get(ref(db, "xp")).then(function(xpSnapshot) {
+        get(ref(db, "stats")).then(function(statsSnapshot) {
+          var listDiv = document.getElementById("members-list");
+          listDiv.innerHTML = "";
+    
+          clubMembers.forEach(function(member) {
+            var uid = member.uid;
+            var name = member.name;
+    
+            var xp = xpSnapshot.child(uid).exists() ? xpSnapshot.child(uid).val() : 0;
+            var info = getLevelInfo(xp);
+    
+            var messagesPosted = statsSnapshot.child(uid).child("messagesPosted").exists() ? statsSnapshot.child(uid).child("messagesPosted").val() : 0;
+            var hangmanWins = statsSnapshot.child(uid).child("hangmanWins").exists() ? statsSnapshot.child(uid).child("hangmanWins").val() : 0;
+    
+            var card = document.createElement("div");
+            card.className = "prompt-box";
+    
+            var initial = name.charAt(0).toUpperCase();
+            card.innerHTML =
+              "<div style='display:flex; align-items:center; gap:10px;'>" +
+                "<div style='display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; flex-shrink:0;'>" + initial + "</div>" +
+                "<div>" +
+                  "<strong>" + name + "</strong> — Level " + info.level + ": " + info.name + "<br>" +
+                  "<span style='font-size:0.85rem; color:#94a3b8;'>" + xp + " XP · " + messagesPosted + " messages · " + hangmanWins + " hangman wins</span>" +
+                "</div>" +
+              "</div>";
+    
+            listDiv.appendChild(card);
+          });
+        });
+      });
+    }
+    window.loadMembers = loadMembers;
     
     // ----- Story Builder -----
     var builderNodes = {};
@@ -1393,6 +1429,15 @@
         loadProfile();
       }
     }
+
+    var clubMembers = [
+      { uid: "p8DMUSm5INc4XQTvxpY2o4sa6VV2", name: "Oz" },
+      { uid: "IkF8n3sO0zVd3cnXeLfyzhmUqql1", name: "Aadhya" },
+      { uid: "VSCRGhTpI1Zn8qHCyf2eZ2qkDwj2", name: "Liam" },
+      { uid: "Jg95dq8UnyLaONF5uXbExu0rA4U2", name: "Gal" },
+      { uid: "Fz8o1pDlrDYDTkga7swllMC9KLO2", name: "Immanuel" },
+      { uid: "SnnnvHXFV2cO6MyfB3rZP3Hi2rG3", name: "Teemo" }
+    ];
     
     // Speed Writing Timer Functions
     function setTimerDuration(minutes) {
