@@ -607,6 +607,7 @@
         <option value="num3">Build Adventures</option>
         <option value="num4">Hangman</option>
         <option value="num5">Activities</option>
+        <option value="num7">Members</option>
         <option value="num2">Log Out</option>
       </select>
     </nav>
@@ -783,6 +784,15 @@
         <h3>Stats</h3>
         <p id="profile-messages-count">Messages posted: 0</p>
         <p id="profile-hangman-wins">Hangman games won: 0</p>
+      </div>
+    </div>
+
+    <!-- TAB: MEMBERS -->
+    <div id="members" class="tab-content">
+      <div class="card">
+        <h2>Club Members</h2>
+        <p>Everyone in The Writers Coalition!</p>
+        <div id="members-list"></div>
       </div>
     </div>
 
@@ -1724,7 +1734,8 @@
       "adventures": "num3",
       "hangman": "num4",
       "activities": "num5",
-      "profile": "num6"
+      "profile": "num6",
+      "members": "num7"
     };
     
     tabSel.addEventListener("change", function() {
