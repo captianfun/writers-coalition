@@ -890,30 +890,6 @@
       });
     }
     window.incrementStat = incrementStat;
-    
-    function displayXP(xp) {
-      var info = getLevelInfo(xp);
-      document.getElementById("xp-title").innerText = "Level " + info.level + ": " + info.name;
-      document.getElementById("xp-bar").style.width = (info.progress * 100) + "%";
-    
-      if (info.isMaxLevel) {
-        document.getElementById("xp-status").innerText = xp + " XP (Max Level!)";
-      } else {
-        document.getElementById("xp-status").innerText = xp + " / " + info.nextThreshold + " XP";
-      }
-    }
-    
-    function loadXP() {
-      var user = auth.currentUser;
-      if (!user) {
-        return;
-      }
-      get(ref(db, "xp/" + user.uid)).then(function(snapshot) {
-        var xp = snapshot.exists() ? snapshot.val() : 0;
-        displayXP(xp);
-      });
-    }
-    window.loadXP = loadXP;
 
     function loadProfile() {
       var user = auth.currentUser;
@@ -1130,7 +1106,7 @@
       input.value = "";
       document.getElementById("board-status").innerText = "Posted!";
       loadBoardMessages();
-      window.addXp(5);
+      window.addXP(5);
       window.incrementStat("messagesPosted");
     }
     window.postBoardMessage = postBoardMessage;
