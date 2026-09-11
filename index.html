@@ -1171,9 +1171,11 @@
     }
     window.loadBoardMessages = loadBoardMessages;
 
-    function replyToMessage(name, messageWrapper) {
+    function replyToMessage(name, messageId, messageWrapper) {
       var compose = document.getElementById("board-compose");
       messageWrapper.insertAdjacentElement("afterend", compose);
+    
+      document.getElementById("board-input").dataset.replyToId = messageId;
     
       var textarea = document.getElementById("board-input");
       textarea.value = "@" + name + " ";
