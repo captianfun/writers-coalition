@@ -954,7 +954,8 @@
     
           var minutesLabel = minutes + " minute" + (minutes === 1 ? "" : "s");
           document.getElementById("record-message").innerText = "🎉 New record for " + minutesLabel + ": " + wordCount + " words!";
-          window.addXP(60 / minutes)
+          console.log("Awarding XP:", 60 / minutes, "for minutes:", minutes);
+          window.addXP(60 / minutes);
     
           loadHomeRecords();
         }
