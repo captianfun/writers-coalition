@@ -758,13 +758,13 @@
         <h2>Message Board</h2>
         <p>Leave a message for the club to see!</p>
     
-        <div id="board-messages"></div> <!-- increase margin -->
-    
-        <textarea id="board-input" placeholder="Type a message..." maxlength="500"></textarea>
-        <button class="action-btn" onclick="postBoardMessage()">Post</button>
-        <!-- Simply just make this look better -->
-        
-        <p id="board-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+        <div id="board-messages"></div>
+
+        <div id="board-compose">
+          <textarea id="board-input" placeholder="Type a message..." maxlength="500"></textarea>
+          <button class="action-btn" onclick="postBoardMessage()">Post</button>
+          <p id="board-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+        </div>
       </div>
     </div>
 
@@ -1105,6 +1105,10 @@
     
       input.value = "";
       document.getElementById("board-status").innerText = "Posted!";
+    
+      var boardDiv = document.getElementById("board-messages");
+      boardDiv.insertAdjacentElement("afterend", document.getElementById("board-compose"));
+    
       loadBoardMessages();
       window.addXP(5);
       window.incrementStat("messagesPosted");
@@ -1129,14 +1133,40 @@
         boardDiv.innerHTML = "";
     
         allMessages.forEach(function(msg) {
+          var wrapper = document.createElement("div");
+          wrapper.style.marginBottom = "8px";
+    
           var msgElement = document.createElement("p");
           var initial = msg.sender.charAt(0).toUpperCase();
           msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + msg.text;
-          boardDiv.appendChild(msgElement);
+    
+          var replyBtn = document.createElement("button");
+          replyBtn.className = "secondary-btn";
+          replyBtn.innerText = "Reply";
+          replyBtn.style.fontSize = "0.7rem";
+          replyBtn.style.padding = "2px 8px";
+          replyBtn.style.marginLeft = "6px";
+          replyBtn.onclick = function() {
+            replyToMessage(msg.sender, wrapper);
+          };
+    
+          msgElement.appendChild(replyBtn);
+          wrapper.appendChild(msgElement);
+          boardDiv.appendChild(wrapper);
         });
       });
     }
     window.loadBoardMessages = loadBoardMessages;
+
+    function replyToMessage(name, messageWrapper) {
+      var compose = document.getElementById("board-compose");
+      messageWrapper.insertAdjacentElement("afterend", compose);
+    
+      var textarea = document.getElementById("board-input");
+      textarea.value = "@" + name + " ";
+      textarea.focus();
+    }
+    window.replyToMessage = replyToMessage;
 
     function loadMembers() {
       get(ref(db, "xp")).then(function(xpSnapshot) {
