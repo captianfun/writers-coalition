@@ -1097,20 +1097,17 @@
         return;
       }
     
-      var replyToName = null;
-      var mentionMatch = text.match(/^@(\S+)\s/);
-      if (mentionMatch) {
-        replyToName = mentionMatch[1];
-      }
+      var replyToId = input.dataset.replyToId || null;
     
       push(ref(db, "messages/" + user.uid), {
         sender: getDisplayName(user.email),
         text: text,
         time: Date.now(),
-        replyToName: replyToName
+        replyToId: replyToId
       });
     
       input.value = "";
+      delete input.dataset.replyToId;
       document.getElementById("board-status").innerText = "Posted!";
     
       var boardDiv = document.getElementById("board-messages");
@@ -1128,7 +1125,9 @@
     
         snapshot.forEach(function(userNode) {
           userNode.forEach(function(msgNode) {
-            allMessages.push(msgNode.val());
+            var msg = msgNode.val();
+            msg.id = msgNode.key;
+            allMessages.push(msg);
           });
         });
     
@@ -1139,11 +1138,13 @@
         var boardDiv = document.getElementById("board-messages");
         boardDiv.innerHTML = "";
     
+        var wrappersById = {};
+    
         allMessages.forEach(function(msg) {
           var wrapper = document.createElement("div");
           wrapper.style.marginBottom = "8px";
     
-          if (msg.replyToName) {
+          if (msg.replyToId) {
             wrapper.style.marginLeft = "30px";
             wrapper.style.borderLeft = "2px solid #7928ca";
             wrapper.style.paddingLeft = "10px";
@@ -1165,19 +1166,25 @@
     
           msgElement.appendChild(replyBtn);
           wrapper.appendChild(msgElement);
-          boardDiv.appendChild(wrapper);
+    
+          wrappersById[msg.id] = wrapper;
+    
+          if (msg.replyToId && wrappersById[msg.replyToId]) {
+            wrappersById[msg.replyToId].insertAdjacentElement("afterend", wrapper);
+          } else {
+            boardDiv.appendChild(wrapper);
+          }
         });
       });
     }
     window.loadBoardMessages = loadBoardMessages;
-
+    
     function replyToMessage(name, messageId, messageWrapper) {
       var compose = document.getElementById("board-compose");
       messageWrapper.insertAdjacentElement("afterend", compose);
     
-      document.getElementById("board-input").dataset.replyToId = messageId;
-    
       var textarea = document.getElementById("board-input");
+      textarea.dataset.replyToId = messageId;
       textarea.value = "@" + name + " ";
       textarea.focus();
     }
