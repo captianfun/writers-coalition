@@ -1097,10 +1097,17 @@
         return;
       }
     
+      var replyToName = null;
+      var mentionMatch = text.match(/^@(\S+)\s/);
+      if (mentionMatch) {
+        replyToName = mentionMatch[1];
+      }
+    
       push(ref(db, "messages/" + user.uid), {
         sender: getDisplayName(user.email),
         text: text,
-        time: Date.now()
+        time: Date.now(),
+        replyToName: replyToName
       });
     
       input.value = "";
@@ -1135,6 +1142,12 @@
         allMessages.forEach(function(msg) {
           var wrapper = document.createElement("div");
           wrapper.style.marginBottom = "8px";
+    
+          if (msg.replyToName) {
+            wrapper.style.marginLeft = "30px";
+            wrapper.style.borderLeft = "2px solid #7928ca";
+            wrapper.style.paddingLeft = "10px";
+          }
     
           var msgElement = document.createElement("p");
           var initial = msg.sender.charAt(0).toUpperCase();
