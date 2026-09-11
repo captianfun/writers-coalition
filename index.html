@@ -1160,7 +1160,7 @@
           replyBtn.style.padding = "2px 8px";
           replyBtn.style.marginLeft = "6px";
           replyBtn.onclick = function() {
-            replyToMessage(msg.sender, wrapper);
+            replyToMessage(msg.sender, msg.id, wrapper);
           };
     
           msgElement.appendChild(replyBtn);
