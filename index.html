@@ -510,6 +510,10 @@
       background: radial-gradient(circle, #0088cc, #9333ea);
     }
 
+    body.light-mode #profile-level-name {
+      -webkit-text-stroke:2px darkblue;
+    }
+
     body.light-mode #co-motto {
       color: #0088cc;
     }
@@ -683,7 +687,12 @@
 
         <button class="action-btn" onclick="generateStoryStarter()">Generate Story Idea</button>
       </div>
-      <!--put character card creator with name an what they would do in senarios, displayed on your profile, no using claude unless error-->
+      <!--<div class="card">
+        <h2>Character creator</h2>
+        <input id="chara-name" placeholder="enter your character's name...">
+        <textarea id="chara-info" placeholder="Say some things about your character..."></textarea>
+        <button class="action-button" onclick="saveCharacter()">Save character</button>
+      </div>-->
     </div>
 
     <!-- TAB: CUSTOM ADVENTURES -->
@@ -1037,6 +1046,15 @@
         });
     }
     window.logout = logout;
+
+    var charName = document.getElementById("chara-name");
+    var charInfo = document.getElementById("chara-info");
+    function saveCharacter() {
+      if (charName.value === "" || charInfo.value === "") {
+        alert("Fill in all feilds first!");
+        return;
+      }
+    }
 
     function toggleTheme() {
       var isLight = document.body.classList.toggle("light-mode");
