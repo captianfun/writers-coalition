@@ -516,7 +516,7 @@
     }
 
     body.light-mode #profile-level-name {
-      -webkit-text-stroke:1px darkblue;
+      color:darkblue;
       font-size:20px;
     }
 
@@ -693,12 +693,12 @@
 
         <button class="action-btn" onclick="generateStoryStarter()">Generate Story Idea</button>
       </div>
-      <!--<div class="card">
+      <div class="card">
         <h2>Character creator</h2>
         <input id="chara-name" placeholder="enter your character's name...">
         <textarea id="chara-info" placeholder="Say some things about your character..."></textarea>
         <button class="action-button" onclick="saveCharacter()">Save character</button>
-      </div>-->
+      </div>
     </div>
 
     <!-- TAB: CUSTOM ADVENTURES -->
@@ -800,6 +800,11 @@
         <h3>Stats</h3>
         <p id="profile-messages-count">Messages posted: 0</p>
         <p id="profile-hangman-wins">Hangman games won: 0</p>
+      </div>
+      
+      <div class="card">
+        <h3>My Characters</h3>
+        <div id="profile-characters-list"></div>
       </div>
     </div>
 
@@ -937,6 +942,43 @@
       get(ref(db, "stats/" + user.uid + "/hangmanWins")).then(function(snapshot) {
         var count = snapshot.exists() ? snapshot.val() : 0;
         document.getElementById("profile-hangman-wins").innerText = "Hangman games won: " + count;
+      });
+    
+      get(ref(db, "characters")).then(function(snapshot) {
+        var listDiv = document.getElementById("profile-characters-list");
+        listDiv.innerHTML = "";
+    
+        var myCharacters = [];
+        snapshot.forEach(function(child) {
+          var character = child.val();
+          if (character.author === displayName) {
+            myCharacters.push(character);
+          }
+        });
+    
+        if (myCharacters.length === 0) {
+          listDiv.innerHTML = "<p>You haven't created any characters yet!</p>";
+          return;
+        }
+    
+        myCharacters.sort(function(a, b) {
+          return b.time - a.time;
+        });
+    
+        myCharacters.forEach(function(character) {
+          var card = document.createElement("div");
+          card.className = "prompt-box";
+    
+          var titleEl = document.createElement("h3");
+          titleEl.innerText = character.name;
+          card.appendChild(titleEl);
+    
+          var infoEl = document.createElement("p");
+          infoEl.innerText = character.info;
+          card.appendChild(infoEl);
+    
+          listDiv.appendChild(card);
+        });
       });
     }
     window.loadProfile = loadProfile;
@@ -1099,6 +1141,35 @@
       }
     }
     onAuthStateChanged(auth, handleAuthChange);
+
+    function saveCharacter() {
+      var charName = document.getElementById("chara-name");
+      var charInfo = document.getElementById("chara-info");
+    
+      if (charName.value.trim() === "" || charInfo.value.trim() === "") {
+        alert("Fill in all fields first!");
+        return;
+      }
+    
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      push(ref(db, "characters"), {
+        name: charName.value.trim(),
+        info: charInfo.value.trim(),
+        author: getDisplayName(user.email),
+        time: Date.now()
+      });
+    
+      charName.value = "";
+      charInfo.value = "";
+      document.getElementById("chara-status").innerText = "Character saved!";
+    
+      window.addXP(15);
+    }
+    window.saveCharacter = saveCharacter;
     
      
     // ----- Section switching -----
