@@ -643,6 +643,11 @@
         <div id="records-list"></div>
       </div>
       <div class="card">
+        <h2>Character Gallery</h2>
+        <p>Characters dreamed up by the club!</p>
+        <div id="character-gallery-list"></div>
+      </div>
+      <div class="card">
         <h2>Silly Sentence Mixer</h2>
         <p>Click the button for a random silly sentence!</p>
       
@@ -1058,6 +1063,43 @@
     }
     window.loadHomeRecords = loadHomeRecords;
 
+    function loadCharacterGallery() {
+      get(ref(db, "characters")).then(function(snapshot) {
+        var listDiv = document.getElementById("character-gallery-list");
+        listDiv.innerHTML = "";
+    
+        var allCharacters = [];
+        snapshot.forEach(function(child) {
+          allCharacters.push(child.val());
+        });
+    
+        if (allCharacters.length === 0) {
+          listDiv.innerHTML = "<p>No characters yet, be the first to create one!</p>";
+          return;
+        }
+    
+        allCharacters.sort(function(a, b) {
+          return b.time - a.time;
+        });
+    
+        allCharacters.forEach(function(character) {
+          var card = document.createElement("div");
+          card.className = "prompt-box";
+    
+          var titleEl = document.createElement("h3");
+          titleEl.innerText = character.name + " — by " + character.author;
+          card.appendChild(titleEl);
+    
+          var infoEl = document.createElement("p");
+          infoEl.innerText = character.info;
+          card.appendChild(infoEl);
+    
+          listDiv.appendChild(card);
+        });
+      });
+    }
+    window.loadCharacterGallery = loadCharacterGallery;
+
     function getFriendlyError(errorCode) {
       var messages = {
         "auth/invalid-email": "That doesn't look like a valid email address.",
@@ -1162,6 +1204,7 @@
       document.getElementById("chara-status").innerText = "Character saved!";
     
       window.addXP(15);
+      loadCharacterGallery();
     }
     window.saveCharacter = saveCharacter;
     
@@ -1552,6 +1595,7 @@
       }
       if (tabId === "home") {
         loadHomeRecords();
+        loadCharacterGallery();
       }
       if (tabId === "profile") {
         loadProfile();
