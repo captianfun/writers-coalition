@@ -647,6 +647,7 @@
           <div id="quest-two" onclick="answerQuestion('two')" style="cursor:pointer;"></div>
         </div>
         <p style="color:#94a3b8;" id="cells-b">You have <span id="cells"></span> brain cells!</p>
+        <button class="action-btn" style="display:none;" onclick = "smartChallenge();" id="restart">Restart</button>
       </div>
       <div class="card">
         <h2>Speed Writing Records</h2>
@@ -1966,6 +1967,7 @@
     
     var cells = 15;
     var currentQuestion = 0;
+    var restart = document.getElementById("restart");
     
     function smartChallenge() {
       cells = 15;
@@ -1974,6 +1976,7 @@
       showQuestion();
       document.getElementById("hr").style.display = "block";
       cellsPar.style.display = "block";
+      restart.style.display = "none";
     }
     
     function showQuestion() {
@@ -1983,6 +1986,7 @@
         questTwo.innerText = "";
         document.getElementById("hr").style.display = "none";
         cellsPar.style.display = "none";
+        restart.style.display = "block";
     
         if (window.addXP) {
           window.addXP(cells * 2);
@@ -2004,6 +2008,7 @@
           questTwo.innerText = "";
           document.getElementById("hr").style.display = "none";
           cellsPar.style.display = "none";
+          restart.style.display = "block";
           return;
         }
       } else {
