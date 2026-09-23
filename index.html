@@ -1979,6 +1979,7 @@
         questOne.innerText = "";
         questTwo.innerText = "";
         document.getElementById("hr").style.display = "none";
+        cellsCon.style.display = "none";
     
         if (window.addXP) {
           window.addXP(cells * 2);
@@ -1995,7 +1996,7 @@
         cells -= 5;
         cellsCon.innerText = cells;
         if (cells <= 0) {
-          quest.innerText = "Out of cells! Game over.";
+          quest.innerText = "Out of brain cells! Game over.";
           questOne.innerText = "";
           questTwo.innerText = "";
           return;
