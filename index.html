@@ -1971,6 +1971,8 @@
       currentQuestion = 0;
       cellsCon.innerText = cells;
       showQuestion();
+      document.getElementById("hr").style.display = "block";
+      cellsCon.style.display = "block";
     }
     
     function showQuestion() {
@@ -1999,6 +2001,8 @@
           quest.innerText = "Out of brain cells! Game over.";
           questOne.innerText = "";
           questTwo.innerText = "";
+          document.getElementById("hr").style.display = "none";
+          cellsCon.style.display = "none";
           return;
         }
       } else {
