@@ -646,7 +646,7 @@
           <hr id="hr">
           <div id="quest-two" onclick="answerQuestion('two')" style="cursor:pointer;"></div>
         </div>
-        <p style="color:#94a3b8;">You have <span id="cells"></span> brain cells!</p>
+        <p style="color:#94a3b8;" id="cells-b">You have <span id="cells"></span> brain cells!</p>
       </div>
       <div class="card">
         <h2>Speed Writing Records</h2>
@@ -1949,6 +1949,7 @@
     var questTwo = document.getElementById("quest-two");
     var quest = document.getElementById("quest");
     var cellsCon = document.getElementById("cells");
+    var cellsPar = document.getElementById("cells-b");
     
     var questions = [
       "What is |-5|?",
@@ -1972,7 +1973,7 @@
       cellsCon.innerText = cells;
       showQuestion();
       document.getElementById("hr").style.display = "block";
-      cellsCon.style.display = "inline-block";
+      cellsPar.style.display = "block";
     }
     
     function showQuestion() {
@@ -1981,7 +1982,7 @@
         questOne.innerText = "";
         questTwo.innerText = "";
         document.getElementById("hr").style.display = "none";
-        cellsCon.style.display = "none";
+        cellsPar.style.display = "none";
     
         if (window.addXP) {
           window.addXP(cells * 2);
@@ -2002,7 +2003,7 @@
           questOne.innerText = "";
           questTwo.innerText = "";
           document.getElementById("hr").style.display = "none";
-          cellsCon.style.display = "none";
+          cellsPar.style.display = "none";
           return;
         }
       } else {
