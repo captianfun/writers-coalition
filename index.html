@@ -638,6 +638,17 @@
         <p>Whether you love writing realistic fiction, poetry, fantasy, or mystery stories, you will find a friendly place to share your work here!</p>
       </div>
       <div class="card">
+        <h2>The Icy "are you smart" challenge</h2>
+        <p>Answer the questions right and you get brain cells... answer them wrong and you lose them!</p>
+        <h3 id="quest"></h3>
+        <div id="quest-con" style="display:grid;">
+          <div id="quest-one"></div>
+          <hr>
+          <div id="quest-two"></div>
+        </div>
+        <p style="color:#94a3b8;">You have <span id="cells"></span> brain cells!</p>
+      </div>
+      <div class="card">
         <h2>Speed Writing Records</h2>
         <p>The best word counts our club has ever hit!</p>
         <div id="records-list"></div>
@@ -1933,6 +1944,65 @@
         switchTab("members")
       }
     });
+
+    var questOne = document.getElementById("quest-one");
+    var questTwo = document.getElementById("quest-two");
+    var quest = document.getElementById("quest");
+    var cellsCon = document.getElementById("cells");
+    
+    var questions = [
+      "What is |-5|?",
+      "What was the original name of Frankenstein's monster?",
+      "True or false: nutella has walnuts in it.",
+      "What is the name of our sun?",
+      "True or false: the inner core of Earth is solid.",
+      "What was the first human invention to break the sound barrier?"
+    ];
+    
+    var oneAns = ["The absolute value of -5", "Joe", "True", "Sol", "True", "A fighter jet"];
+    var twoAns = ["-5", "Adam", "False", "Helios", "False", "A whip"];
+    var correctSide = ["two", "two", "two", "one", "one", "two"]; // which side is right, per question
+    
+    var cells = 15;
+    var currentQuestion = 0;
+    
+    function smartChallenge() {
+      cells = 15;
+      currentQuestion = 0;
+      cellsCon.innerText = cells;
+      showQuestion();
+    }
+    
+    function showQuestion() {
+      if (currentQuestion >= questions.length) {
+        quest.innerText = "You finished! Cells remaining: " + cells;
+        questOne.innerText = "";
+        questTwo.innerText = "";
+    
+        if (window.addXP) {
+          window.addXP(cells * 2);
+        }
+        return;
+      }
+      quest.innerText = questions[currentQuestion];
+      questOne.innerText = oneAns[currentQuestion];
+      questTwo.innerText = twoAns[currentQuestion];
+    }
+    
+    function answerQuestion(side) {
+      if (side !== correctSide[currentQuestion]) {
+        cells--;
+        cellsCon.innerText = cells;
+        if (cells <= 0) {
+          quest.innerText = "Out of cells! Game over.";
+          questOne.innerText = "";
+          questTwo.innerText = "";
+          return;
+        }
+      }
+      currentQuestion++;
+      showQuestion();
+    }
 
     // Hangman
     var hangmanWords = [
