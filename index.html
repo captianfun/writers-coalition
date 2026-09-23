@@ -643,7 +643,7 @@
         <h3 id="quest"></h3>
         <div id="quest-con" style="display:grid;">
           <div id="quest-one" onclick="answerQuestion('one')" style="cursor:pointer;"></div>
-          <hr>
+          <hr id="hr">
           <div id="quest-two" onclick="answerQuestion('two')" style="cursor:pointer;"></div>
         </div>
         <p style="color:#94a3b8;">You have <span id="cells"></span> brain cells!</p>
@@ -1975,9 +1975,10 @@
     
     function showQuestion() {
       if (currentQuestion >= questions.length) {
-        quest.innerText = "You finished! Cells remaining: " + cells;
+        quest.innerText = "You finished! Brain cells remaining: " + cells;
         questOne.innerText = "";
         questTwo.innerText = "";
+        document.getElementById("hr").style.display = "none";
     
         if (window.addXP) {
           window.addXP(cells * 2);
