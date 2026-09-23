@@ -1991,7 +1991,7 @@
     
     function answerQuestion(side) {
       if (side !== correctSide[currentQuestion]) {
-        cells--;
+        cells -= 5;
         cellsCon.innerText = cells;
         if (cells <= 0) {
           quest.innerText = "Out of cells! Game over.";
@@ -2000,7 +2000,7 @@
           return;
         }
       }
-      currentQuestion++;
+      currentQuestion += 5;
       showQuestion();
     }
 
