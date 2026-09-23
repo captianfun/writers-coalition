@@ -1961,7 +1961,7 @@
     
     var oneAns = ["The absolute value of -5", "Joe", "True", "Sol", "True", "A fighter jet"];
     var twoAns = ["-5", "Adam", "False", "Helios", "False", "A whip"];
-    var correctSide = ["two", "two", "two", "one", "one", "two"]; // which side is right, per question
+    var correctSide = ["one", "two", "two", "one", "one", "two"];
     
     var cells = 15;
     var currentQuestion = 0;
@@ -1999,8 +1999,10 @@
           questTwo.innerText = "";
           return;
         }
+      } else {
+        cells += 5;
       }
-      currentQuestion += 5;
+      currentQuestion++;
       showQuestion();
     }
 
