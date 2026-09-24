@@ -550,11 +550,12 @@
       resize:vertical;
     }
 
-    /*@keyframes float { 0% { transform: translateY(0px); } 100% { transform: translateY(-5px); } }*/
-
-    .quest:hover {
-      /*animation:0.6s float ease-in-out;*/
+    #quest-one:hover {
       transform:translateY(-5px);
+    }
+
+    #quest-two:hover {
+      transform:translateY(5px);
     }
 
     header {
@@ -649,9 +650,9 @@
         <p>Answer the questions right and you get brain cells... answer them wrong and you lose them!</p>
         <h3 id="quest"></h3>
         <div id="quest-con" style="display:grid;">
-          <div class="quest" id="quest-one" onclick="answerQuestion('one')" style="cursor:pointer;"></div>
+          <div id="quest-one" onclick="answerQuestion('one')" style="cursor:pointer;"></div>
           <hr id="hr">
-          <div class="quest" id="quest-two" onclick="answerQuestion('two')" style="cursor:pointer;"></div>
+          <div id="quest-two" onclick="answerQuestion('two')" style="cursor:pointer;"></div>
         </div>
         <p style="color:#94a3b8;" id="cells-b">You have <span id="cells"></span> brain cells!</p>
         <button class="action-btn" style="display:none;" onclick = "smartChallenge();" id="restart">Restart</button>
