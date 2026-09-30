@@ -888,7 +888,7 @@
     
       var displayName = getDisplayName(user.email);
       document.getElementById("profile-avatar").innerText = displayName.charAt(0).toUpperCase();
-      document.getElmentById("profile-name").innerText = displayName.toUpperCase();
+      document.getElementById("profile-name").innerText = displayName.toUpperCase();
     
       get(ref(db, "stats/" + user.uid + "/messagesPosted")).then(function(snapshot) {
         var count = snapshot.exists() ? snapshot.val() : 0;
