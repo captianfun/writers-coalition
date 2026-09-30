@@ -351,7 +351,7 @@
         margin-bottom:5px;
     }
 
-    #profile-level-name {
+    #profile-name {
       color:#00f0ff;
       font-weight:bold;
     }
@@ -515,7 +515,7 @@
       background: radial-gradient(circle, #0088cc, #9333ea);
     }
 
-    body.light-mode #profile-level-name {
+    body.light-mode #profile-name {
       color:darkblue;
       font-size:20px;
     }
@@ -644,18 +644,6 @@
         <h2>Welcome to Our Writing Club</h2>
         <p>The Writers Coalition is an elementary school club where young authors come together to share stories, explore new ideas, and build creative writing skills in a supportive, fun environment.</p>
         <p>Whether you love writing realistic fiction, poetry, fantasy, or mystery stories, you will find a friendly place to share your work here!</p>
-      </div>
-      <div class="card">
-        <h2>The Icy "are you smart" challenge</h2>
-        <p>Answer the questions right and you get brain cells... answer them wrong and you lose them!</p>
-        <h3 id="quest"></h3>
-        <div id="quest-con" style="display:grid;">
-          <div id="quest-one" onclick="answerQuestion('one')" style="cursor:pointer;"></div>
-          <hr id="hr">
-          <div id="quest-two" onclick="answerQuestion('two')" style="cursor:pointer;"></div>
-        </div>
-        <p style="color:#94a3b8;" id="cells-b">You have <span id="cells"></span> brain cells!</p>
-        <button class="action-btn" style="display:none;" onclick = "smartChallenge();" id="restart">Restart</button>
       </div>
       <div class="card">
         <h2>Speed Writing Records</h2>
@@ -813,12 +801,7 @@
     <div id="profile" class="tab-content">
       <div class="card" style="text-align:center;">
         <div id="profile-avatar" style="display:inline-flex; align-items:center; justify-content:center; width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:2rem; margin-bottom:0.5rem;"></div>
-        <p id="profile-level-name"></p>
-    
-        <div style="background: rgba(2, 6, 23, 0.8); border-radius: 8px; height: 16px; overflow: hidden; margin: 0.75rem 0;">
-          <div id="profile-xp-bar" style="background: linear-gradient(135deg, #00f0ff, #7928ca); height: 100%; width: 0%; transition: width 0.5s ease;"></div>
-        </div>
-        <p id="profile-xp-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+        <p id="profile-name"></p>
       </div>
     
       <div class="card">
@@ -883,18 +866,6 @@
       var name = email.split("@")[0];
       return name.charAt(0).toUpperCase() + name.slice(1);
     }
-
-    var levelThresholds = [0, 50, 120, 220, 350, 500];
-    var levelNames = ["Scribbler", "Storyteller", "Wordsmith", "Chronicler", "Master Wordsmith", "Legendary Author"];
-    
-    function getLevelInfo(xp) {
-      var level = 1;
-      for (var i = levelThresholds.length - 1; i >= 0; i--) {
-        if (xp >= levelThresholds[i]) {
-          level = i + 1;
-          break;
-        }
-      }
     
       var currentThreshold = levelThresholds[level - 1];
       var nextThreshold = levelThresholds[level] !== undefined ? levelThresholds[level] : currentThreshold;
@@ -908,20 +879,6 @@
         isMaxLevel: level >= levelThresholds.length
       };
     }
-    
-    function addXP(amount) {
-      var user = auth.currentUser;
-      if (!user) {
-        return;
-      }
-    
-      get(ref(db, "xp/" + user.uid)).then(function(snapshot) {
-        var currentXP = snapshot.exists() ? snapshot.val() : 0;
-        var newXP = currentXP + amount;
-        set(ref(db, "xp/" + user.uid), newXP);
-      });
-    }
-    window.addXP = addXP;
 
     function incrementStat(statName) {
       var user = auth.currentUser;
@@ -944,20 +901,7 @@
     
       var displayName = getDisplayName(user.email);
       document.getElementById("profile-avatar").innerText = displayName.charAt(0).toUpperCase();
-    
-      get(ref(db, "xp/" + user.uid)).then(function(snapshot) {
-        var xp = snapshot.exists() ? snapshot.val() : 0;
-        var info = getLevelInfo(xp);
-    
-        document.getElementById("profile-level-name").innerText = "Level " + info.level + ": " + info.name;
-        document.getElementById("profile-xp-bar").style.width = (info.progress * 100) + "%";
-    
-        if (info.isMaxLevel) {
-          document.getElementById("profile-xp-status").innerText = xp + " XP (Max Level!)";
-        } else {
-          document.getElementById("profile-xp-status").innerText = xp + " / " + info.nextThreshold + " XP";
-        }
-      });
+      document.getElmentById("profile-name").innerText = displayName.toUpperCase();
     
       get(ref(db, "stats/" + user.uid + "/messagesPosted")).then(function(snapshot) {
         var count = snapshot.exists() ? snapshot.val() : 0;
@@ -1037,7 +981,6 @@
           var minutesLabel = minutes + " minute" + (minutes === 1 ? "" : "s");
           document.getElementById("record-message").innerText = "🎉 New record for " + minutesLabel + ": " + wordCount + " words!";
           console.log("Awarding XP:", 60 / minutes, "for minutes:", minutes);
-          window.addXP(60 / minutes);
     
           loadHomeRecords();
         }
@@ -1223,8 +1166,6 @@
       charName.value = "";
       charInfo.value = "";
       document.getElementById("chara-status").innerText = "Character saved!";
-    
-      window.addXP(15);
       loadCharacterGallery();
     }
     window.saveCharacter = saveCharacter;
@@ -1268,7 +1209,6 @@
       boardDiv.insertAdjacentElement("afterend", document.getElementById("board-compose"));
     
       loadBoardMessages();
-      window.addXP(5);
       window.incrementStat("messagesPosted");
     }
     window.postBoardMessage = postBoardMessage;
@@ -1345,36 +1285,31 @@
     window.replyToMessage = replyToMessage;
 
     function loadMembers() {
-      get(ref(db, "xp")).then(function(xpSnapshot) {
-        get(ref(db, "stats")).then(function(statsSnapshot) {
-          var listDiv = document.getElementById("members-list");
-          listDiv.innerHTML = "";
+      get(ref(db, "stats")).then(function(statsSnapshot) {
+        var listDiv = document.getElementById("members-list");
+        listDiv.innerHTML = "";
     
-          clubMembers.forEach(function(member) {
-            var uid = member.uid;
-            var name = member.name;
+        clubMembers.forEach(function(member) {
+          var uid = member.uid;
+          var name = member.name;
     
-            var xp = xpSnapshot.child(uid).exists() ? xpSnapshot.child(uid).val() : 0;
-            var info = getLevelInfo(xp);
+          var messagesPosted = statsSnapshot.child(uid).child("messagesPosted").exists() ? statsSnapshot.child(uid).child("messagesPosted").val() : 0;
+          var hangmanWins = statsSnapshot.child(uid).child("hangmanWins").exists() ? statsSnapshot.child(uid).child("hangmanWins").val() : 0;
     
-            var messagesPosted = statsSnapshot.child(uid).child("messagesPosted").exists() ? statsSnapshot.child(uid).child("messagesPosted").val() : 0;
-            var hangmanWins = statsSnapshot.child(uid).child("hangmanWins").exists() ? statsSnapshot.child(uid).child("hangmanWins").val() : 0;
+          var card = document.createElement("div");
+          card.className = "prompt-box";
     
-            var card = document.createElement("div");
-            card.className = "prompt-box";
+          var initial = name.charAt(0).toUpperCase();
+          card.innerHTML =
+            "<div style='display:flex; align-items:center; gap:10px;'>" +
+              "<div style='display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; flex-shrink:0;'>" + initial + "</div>" +
+              "<div>" +
+                "<strong>" + name + "</strong><br>" +
+                "<span style='font-size:0.85rem; color:#94a3b8;'>" + messagesPosted + " messages · " + hangmanWins + " hangman wins</span>" +
+              "</div>" +
+            "</div>";
     
-            var initial = name.charAt(0).toUpperCase();
-            card.innerHTML =
-              "<div style='display:flex; align-items:center; gap:10px;'>" +
-                "<div style='display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; flex-shrink:0;'>" + initial + "</div>" +
-                "<div>" +
-                  "<strong>" + name + "</strong> — Level " + info.level + ": " + info.name + "<br>" +
-                  "<span style='font-size:0.85rem; color:#94a3b8;'>" + xp + " XP · " + messagesPosted + " messages · " + hangmanWins + " hangman wins</span>" +
-                "</div>" +
-              "</div>";
-    
-            listDiv.appendChild(card);
-          });
+          listDiv.appendChild(card);
         });
       });
     }
@@ -1450,7 +1385,6 @@
       });
     
       document.getElementById("publish-status").innerText = "Story published! Check Browse Stories.";
-      window.addXP(25);
       builderNodes = {};
       document.getElementById("story-title-input").value = "";
       renderBuilderNodeList();
@@ -1976,56 +1910,6 @@
     var cells = 15;
     var currentQuestion = 0;
     var restart = document.getElementById("restart");
-    
-    function smartChallenge() {
-      cells = 15;
-      currentQuestion = 0;
-      cellsCon.innerText = cells;
-      showQuestion();
-      document.getElementById("hr").style.display = "block";
-      cellsPar.style.display = "block";
-      restart.style.display = "none";
-    }
-    
-    function showQuestion() {
-      if (currentQuestion >= questions.length) {
-        quest.innerText = "You finished! Brain cells remaining: " + cells;
-        questOne.innerText = "";
-        questTwo.innerText = "";
-        document.getElementById("hr").style.display = "none";
-        cellsPar.style.display = "none";
-        restart.style.display = "block";
-    
-        if (window.addXP) {
-          window.addXP(cells * 2);
-        }
-        return;
-      }
-      quest.innerText = questions[currentQuestion];
-      questOne.innerText = oneAns[currentQuestion];
-      questTwo.innerText = twoAns[currentQuestion];
-    }
-    
-    function answerQuestion(side) {
-      if (side !== correctSide[currentQuestion]) {
-        cells -= 5;
-        cellsCon.innerText = cells;
-        if (cells <= 0) {
-          quest.innerText = "Out of brain cells! Game over.";
-          questOne.innerText = "";
-          questTwo.innerText = "";
-          document.getElementById("hr").style.display = "none";
-          cellsPar.style.display = "none";
-          restart.style.display = "block";
-          return;
-        }
-      } else {
-        cells += 5;
-        cellsCon.innerText = cells;
-      }
-      currentQuestion++;
-      showQuestion();
-    }
 
     // Hangman
     var hangmanWords = [
@@ -2122,9 +2006,6 @@
     
       if (wordComplete) {
         document.getElementById("hangman-status").innerText = "🎉 You won! The word was " + hangmanWord.toUpperCase();
-        if (window.addXP) {
-          window.addXP(10);
-        }
         if (window.incrementStat) {
           window.incrementStat("hangmanWins");
         }
@@ -2164,7 +2045,6 @@
       checkBirthday();
       readyMottoType();
       startHangman();
-      smartChallenge();
       restoreExpandOption();
     };
   </script>
