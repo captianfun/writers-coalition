@@ -802,6 +802,7 @@
       <div class="card" style="text-align:center;">
         <div id="profile-avatar" style="display:inline-flex; align-items:center; justify-content:center; width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:2rem; margin-bottom:0.5rem;"></div>
         <p id="profile-name"></p>
+        <p id="profile-tagline" style="color:#94a3b8; font-size:0.9rem;"></p>
       </div>
     
       <div class="card">
@@ -880,6 +881,29 @@
     }
     window.incrementStat = incrementStat;
 
+    function getProfileTagline(messagesPosted, hangmanWins, characterCount) {
+      var titles = [];
+    
+      if (characterCount >= 3) {
+        titles.push("Prolific Character Creator");
+      }
+      if (hangmanWins >= 5) {
+        titles.push("Hangman Champion");
+      }
+      if (messagesPosted >= 10) {
+        titles.push("Chatty Club Member");
+      }
+      if (messagesPosted === 0 && hangmanWins === 0 && characterCount === 0) {
+        titles.push("New to the Club");
+      }
+    
+      if (titles.length === 0) {
+        titles.push("Member of The Writers Coalition");
+      }
+    
+      return titles[Math.floor(Math.random() * titles.length)];
+    }
+
     function loadProfile() {
       var user = auth.currentUser;
       if (!user) {
@@ -890,14 +914,28 @@
       document.getElementById("profile-avatar").innerText = displayName.charAt(0).toUpperCase();
       document.getElementById("profile-name").innerText = displayName.toUpperCase();
     
-      get(ref(db, "stats/" + user.uid + "/messagesPosted")).then(function(snapshot) {
-        var count = snapshot.exists() ? snapshot.val() : 0;
-        document.getElementById("profile-messages-count").innerText = "Messages posted: " + count;
-      });
+      Promise.all([
+        get(ref(db, "stats/" + user.uid + "/messagesPosted")),
+        get(ref(db, "stats/" + user.uid + "/hangmanWins")),
+        get(ref(db, "characters"))
+      ]).then(function(results) {
+        var messagesSnapshot = results[0];
+        var hangmanSnapshot = results[1];
+        var charactersSnapshot = results[2];
     
-      get(ref(db, "stats/" + user.uid + "/hangmanWins")).then(function(snapshot) {
-        var count = snapshot.exists() ? snapshot.val() : 0;
-        document.getElementById("profile-hangman-wins").innerText = "Hangman games won: " + count;
+        var messagesPosted = messagesSnapshot.exists() ? messagesSnapshot.val() : 0;
+        var hangmanWins = hangmanSnapshot.exists() ? hangmanSnapshot.val() : 0;
+    
+        var characterCount = 0;
+        charactersSnapshot.forEach(function(child) {
+          if (child.val().author === displayName) {
+            characterCount++;
+          }
+        });
+    
+        document.getElementById("profile-messages-count").innerText = "Messages posted: " + messagesPosted;
+        document.getElementById("profile-hangman-wins").innerText = "Hangman games won: " + hangmanWins;
+        document.getElementById("profile-tagline").innerText = getProfileTagline(messagesPosted, hangmanWins, characterCount);
       });
     
       get(ref(db, "characters")).then(function(snapshot) {
