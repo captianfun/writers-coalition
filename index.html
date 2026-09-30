@@ -866,19 +866,6 @@
       var name = email.split("@")[0];
       return name.charAt(0).toUpperCase() + name.slice(1);
     }
-    
-      var currentThreshold = levelThresholds[level - 1];
-      var nextThreshold = levelThresholds[level] !== undefined ? levelThresholds[level] : currentThreshold;
-      var progress = nextThreshold > currentThreshold ? (xp - currentThreshold) / (nextThreshold - currentThreshold) : 1;
-    
-      return {
-        level: level,
-        name: levelNames[level - 1],
-        progress: progress,
-        nextThreshold: nextThreshold,
-        isMaxLevel: level >= levelThresholds.length
-      };
-    }
 
     function incrementStat(statName) {
       var user = auth.currentUser;
