@@ -884,13 +884,13 @@
     function getProfileTagline(messagesPosted, hangmanWins, characterCount) {
       var titles = [];
     
-      if (characterCount >= 3) {
+      if (characterCount >= 5) {
         titles.push("Prolific Character Creator");
       }
       if (hangmanWins >= 100) {
         titles.push("Hangman Champion");
       }
-      if (messagesPosted >= 10) {
+      if (messagesPosted >= 50) {
         titles.push("Chatty Club Member");
       }
       if (messagesPosted === 0 && hangmanWins === 0 && characterCount === 0) {
