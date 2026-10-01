@@ -707,6 +707,18 @@
         <button class="action-btn" onclick="generateStoryStarter()">Generate Story Idea</button>
       </div>
       <div class="card">
+        <h2>Name Generator</h2>
+        <p>Need a name for your character? Click to generate one!</p>
+      
+        <div class="prompt-box" id="generatedName">
+          Click "Generate Name!" to get a random name!
+        </div>
+      
+        <button class="action-btn" onclick="generateCharacterName()">Generate Name!</button>
+        <button class="secondary-btn" onclick="useGeneratedName()">Use This Name</button>
+      </div>
+      
+      <div class="card">
         <h2>Character creator</h2>
         <input id="chara-name" style="margin-bottom:5px;" placeholder="enter name...">
         <textarea id="chara-info" placeholder="Say some things about your character..."></textarea>
@@ -1603,6 +1615,34 @@
       initialSeconds = minutes * 60;
       timerSeconds = initialSeconds;
       updateTimerDisplay();
+    }
+
+    // Character Name Generator Arrays
+    var nameFirstParts = [
+      "Wren", "Thorne", "Lysa", "Cade", "Branwen", "Osric", "Sable",
+      "Fenwick", "Ivory", "Corin", "Seraphina", "Dask", "Marrow", "Pip"
+    ];
+    
+    var nameLastParts = [
+      "Stormrider", "Quillheart", "Ashwood", "Nightshade", "Brightwater",
+      "Thistledown", "Ironfoot", "Moonwhisper", "Blackthorn", "Fernwood"
+    ];
+    
+    var currentGeneratedName = "";
+    
+    function generateCharacterName() {
+      var first = nameFirstParts[Math.floor(Math.random() * nameFirstParts.length)];
+      var last = nameLastParts[Math.floor(Math.random() * nameLastParts.length)];
+      currentGeneratedName = first + " " + last;
+      document.getElementById("generatedName").innerText = currentGeneratedName;
+    }
+    
+    function useGeneratedName() {
+      if (currentGeneratedName === "") {
+        alert("Generate a name first!");
+        return;
+      }
+      document.getElementById("chara-name").value = currentGeneratedName;
     }
 
     // Silly Sentence Mixer Arrays
