@@ -617,7 +617,7 @@
     </div>
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
-      <button class="nav-btn" onclick="switchTab('messageboard')">Message Board</button>
+      <button class="nav-btn" onclick="switchTab('messageboard')">Chat</button>
       <select class="nav-btn" id="tab-sel" autocomplete="off">
         <option id="expand-placeholder">Expand</option>
         <option value="num1" id="theme-toggle">☀️ Light Mode</option>
@@ -796,13 +796,17 @@
     <!-- TAB: MESSAGE BOARD -->
     <div id="messageboard" class="tab-content">
       <div class="card">
-        <h2>Message Board</h2>
+        <h2>WC Chat</h2>
         <p>Leave a message for the club to see!</p>
     
+        <button class="secondary-btn" onclick="scrollToBottom()" style="margin-bottom:0.5rem;">Go to Bottom ↓</button>
+    
         <div id="board-messages"></div>
-
+    
+        <button class="secondary-btn" onclick="scrollToTop()" style="margin-top:0.5rem; margin-bottom:0.5rem;">Go to Top ↑</button>
+    
         <div id="board-compose">
-          <textarea id="board-input" placeholder="Type a message..." maxlength="1000"></textarea>
+          <textarea id="board-input" placeholder="Type a message..." maxlength="500"></textarea>
           <button class="action-btn" onclick="postBoardMessage()">Post</button>
           <p id="board-status" style="font-size:0.85rem; color:#94a3b8;"></p>
         </div>
@@ -1885,6 +1889,16 @@
       }
     
       typeNextLetter();
+    }
+
+    function scrollToBottom() {
+      var boardDiv = document.getElementById("board-messages");
+      boardDiv.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+    
+    function scrollToTop() {
+      var boardDiv = document.getElementById("board-messages");
+      boardDiv.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
     var lastSparkleTime = 0;
