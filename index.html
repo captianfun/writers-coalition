@@ -1892,13 +1892,11 @@
     }
 
     function scrollToBottom() {
-      var boardDiv = document.getElementById("board-messages");
-      boardDiv.scrollIntoView({ behavior: "smooth", block: "end" });
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
     }
     
     function scrollToTop() {
-      var boardDiv = document.getElementById("board-messages");
-      boardDiv.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     var lastSparkleTime = 0;
