@@ -1586,19 +1586,34 @@
         correctIdiom: "Bark up the wrong tree"
       },
       {
-        words: ["HAND", "BAND", "BEND", "BELL"],
+        words: ["HAND", "HARD", "BARD", "BARN"],
         changes: [1, 1, 1],
-        meanings: ["a group of musicians", "to curve something", "a device that rings"],
+        meanings: ["firm or solid, not soft", "a poet or storyteller", "a building that stores hay or animals"],
         idiomOptions: ["Ring a bell", "Spill the beans", "Hit the hay", "Jump the gun"],
-        correctIdiom: "Ring a bell"
+        correctIdiom: "Hit the hay"
       }
     ];
     
     var currentLadderSet = null;
     var currentLadderStep = 0;
+    var usedLadderSets = [];
     
     function startWordLadder() {
-      currentLadderSet = wordLadderSets[Math.floor(Math.random() * wordLadderSets.length)];
+      if (usedLadderSets.length >= wordLadderSets.length) {
+        usedLadderSets = [];
+      }
+    
+      var availableIndexes = [];
+      for (var i = 0; i < wordLadderSets.length; i++) {
+        if (usedLadderSets.indexOf(i) === -1) {
+          availableIndexes.push(i);
+        }
+      }
+    
+      var chosenIndex = availableIndexes[Math.floor(Math.random() * availableIndexes.length)];
+      usedLadderSets.push(chosenIndex);
+    
+      currentLadderSet = wordLadderSets[chosenIndex];
       currentLadderStep = 0;
     
       document.getElementById("ladder-start").innerText = "Start word: " + currentLadderSet.words[0];
@@ -1627,6 +1642,7 @@
     
       var input = document.createElement("input");
       input.placeholder = "Type your answer...";
+      input.style.marginRight = "6px";
       stepDiv.appendChild(input);
     
       var btn = document.createElement("button");
@@ -1668,7 +1684,15 @@
       var select = document.getElementById("ladder-idiom-select");
       select.innerHTML = "";
     
-      currentLadderSet.idiomOptions.forEach(function(idiom) {
+      var shuffledOptions = currentLadderSet.idiomOptions.slice();
+      for (var i = shuffledOptions.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = shuffledOptions[i];
+        shuffledOptions[i] = shuffledOptions[j];
+        shuffledOptions[j] = temp;
+      }
+    
+      shuffledOptions.forEach(function(idiom) {
         var option = document.createElement("option");
         option.value = idiom;
         option.innerText = idiom;
