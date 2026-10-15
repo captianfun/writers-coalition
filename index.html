@@ -724,6 +724,21 @@
         <textarea id="chara-info" placeholder="Say some things about your character..."></textarea>
         <button class="action-button" onclick="saveCharacter()">Save character</button>
       </div>
+
+      <div class="card">
+        <h2>Word Ladder</h2>
+        <p id="ladder-start" style="font-weight:bold; font-size:1.1rem;"></p>
+        <div id="ladder-steps"></div>
+      
+        <div id="ladder-idiom-section" style="display:none;">
+          <p>Which idiom do you think the final word is related to?</p>
+          <select id="ladder-idiom-select"></select>
+          <button class="action-btn" onclick="checkIdiom()">Check</button>
+          <p id="ladder-idiom-result"></p>
+        </div>
+      
+        <button class="secondary-btn" onclick="startWordLadder()" style="margin-top:1rem;">Restart</button>
+      </div>
     </div>
 
     <!-- TAB: CUSTOM ADVENTURES -->
@@ -1561,6 +1576,119 @@
       }
     }
 
+    // Word Ladder Sets
+    var wordLadderSets = [
+      {
+        words: ["CARD", "CARE", "BARE", "BARK"],
+        changes: [1, 1, 1],
+        meanings: ["to look after someone", "without any covering", "the sound a dog makes"],
+        idiomOptions: ["Bark up the wrong tree", "Let the cat out of the bag", "Bite the bullet", "Break the ice"],
+        correctIdiom: "Bark up the wrong tree"
+      },
+      {
+        words: ["HAND", "BAND", "BEND", "BELL"],
+        changes: [1, 1, 1],
+        meanings: ["a group of musicians", "to curve something", "a device that rings"],
+        idiomOptions: ["Ring a bell", "Spill the beans", "Hit the hay", "Jump the gun"],
+        correctIdiom: "Ring a bell"
+      }
+    ];
+    
+    var currentLadderSet = null;
+    var currentLadderStep = 0;
+    
+    function startWordLadder() {
+      currentLadderSet = wordLadderSets[Math.floor(Math.random() * wordLadderSets.length)];
+      currentLadderStep = 0;
+    
+      document.getElementById("ladder-start").innerText = "Start word: " + currentLadderSet.words[0];
+      document.getElementById("ladder-steps").innerHTML = "";
+      document.getElementById("ladder-idiom-section").style.display = "none";
+      document.getElementById("ladder-idiom-result").innerText = "";
+    
+      showNextLadderStep();
+    }
+    
+    function showNextLadderStep() {
+      if (currentLadderStep >= currentLadderSet.changes.length) {
+        showIdiomSection();
+        return;
+      }
+    
+      var stepDiv = document.createElement("div");
+      stepDiv.style.marginBottom = "10px";
+    
+      var changeCount = currentLadderSet.changes[currentLadderStep];
+      var meaning = currentLadderSet.meanings[currentLadderStep];
+    
+      var label = document.createElement("p");
+      label.innerText = "Change " + changeCount + " letter" + (changeCount === 1 ? "" : "s") + " so this word means: " + meaning;
+      stepDiv.appendChild(label);
+    
+      var input = document.createElement("input");
+      input.placeholder = "Type your answer...";
+      stepDiv.appendChild(input);
+    
+      var btn = document.createElement("button");
+      btn.className = "secondary-btn";
+      btn.innerText = "Submit";
+      stepDiv.appendChild(btn);
+    
+      var feedback = document.createElement("p");
+      feedback.style.fontSize = "0.85rem";
+      stepDiv.appendChild(feedback);
+    
+      btn.onclick = function() {
+        checkLadderStep(input, feedback);
+      };
+    
+      document.getElementById("ladder-steps").appendChild(stepDiv);
+    }
+    
+    function checkLadderStep(input, feedback) {
+      var answer = currentLadderSet.words[currentLadderStep + 1].toUpperCase();
+      var guess = input.value.trim().toUpperCase();
+    
+      if (guess === answer) {
+        feedback.style.color = "#00cc66";
+        feedback.innerText = "Correct!";
+        input.disabled = true;
+        currentLadderStep++;
+        showNextLadderStep();
+      } else {
+        feedback.style.color = "#ff0055";
+        feedback.innerText = "Not quite, try again!";
+      }
+    }
+    
+    function showIdiomSection() {
+      var section = document.getElementById("ladder-idiom-section");
+      section.style.display = "block";
+    
+      var select = document.getElementById("ladder-idiom-select");
+      select.innerHTML = "";
+    
+      currentLadderSet.idiomOptions.forEach(function(idiom) {
+        var option = document.createElement("option");
+        option.value = idiom;
+        option.innerText = idiom;
+        select.appendChild(option);
+      });
+    }
+    
+    function checkIdiom() {
+      var select = document.getElementById("ladder-idiom-select");
+      var result = document.getElementById("ladder-idiom-result");
+    
+      if (select.value === currentLadderSet.correctIdiom) {
+        result.style.color = "#00cc66";
+        result.innerText = "Correct! Great job!";
+      } else {
+        result.style.color = "#ff0055";
+        result.innerText = "Not quite, the answer was: " + currentLadderSet.correctIdiom;
+      }
+    }
+
     // Navigation function
     function switchTab(tabId) {
       var contents = document.getElementsByClassName("tab-content");
@@ -2122,6 +2250,7 @@
       readyMottoType();
       startHangman();
       restoreExpandOption();
+      startWordLadder();
     };
   </script>
 </body>
