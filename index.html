@@ -1672,6 +1672,12 @@
         checkLadderStep(input, feedback);
       };
     
+      input.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+          checkLadderStep(input, feedback);
+        }
+      });
+    
       document.getElementById("ladder-steps").appendChild(stepDiv);
     }
     
@@ -2287,8 +2293,26 @@
       checkBirthday();
       readyMottoType();
       startHangman();
+      smartChallenge();
       restoreExpandOption();
       startWordLadder();
+    
+      document.getElementById("email").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+          login();
+        }
+      });
+      document.getElementById("password").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+          login();
+        }
+      });
+      document.getElementById("board-input").addEventListener("keypress", function(e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          postBoardMessage();
+        }
+      });
     };
   </script>
 </body>
