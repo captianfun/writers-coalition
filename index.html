@@ -346,6 +346,11 @@
         gap:5px;
         margin-bottom:5px;
     }
+
+    .mention {
+      font-weight:bold;
+      color:00f0ff;
+    }
     
     #story-select {
         margin-bottom:5px;
@@ -533,6 +538,11 @@
       border-color: #0088cc;
       background: rgba(0, 136, 204, 0.08);
       color: #0088cc;
+    }
+
+    body.light-mode .mention {
+      font-weight:bold;
+      color:darkblue;
     }
 
     #email, #password, #login {
@@ -1291,8 +1301,11 @@
         boardDiv.innerHTML = "";
     
         var wrappersById = {};
+        var messagesById = {};
     
         allMessages.forEach(function(msg) {
+          messagesById[msg.id] = msg;
+    
           var wrapper = document.createElement("div");
           wrapper.style.marginBottom = "8px";
     
@@ -1300,12 +1313,24 @@
             wrapper.style.marginLeft = "30px";
             wrapper.style.borderLeft = "2px solid #7928ca";
             wrapper.style.paddingLeft = "10px";
+    
+            var parentMsg = messagesById[msg.replyToId];
+            if (parentMsg) {
+              var replyLabel = document.createElement("p");
+              replyLabel.style.fontSize = "0.75rem";
+              replyLabel.style.color = "#7928ca";
+              replyLabel.style.marginBottom = "2px";
+              replyLabel.innerText = "Replying to " + parentMsg.sender + ":";
+              wrapper.appendChild(replyLabel);
+            }
           }
     
+          var messageText = msg.text.replace(/^(@\S+)/, "<span class='mention'>$1</span>");
+
           var msgElement = document.createElement("p");
           var initial = msg.sender.charAt(0).toUpperCase();
-          msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + " (" + msg.sender + ") " + msg.text;
-    
+          msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + messageText;
+              
           var replyBtn = document.createElement("button");
           replyBtn.className = "secondary-btn";
           replyBtn.innerText = "Reply";
