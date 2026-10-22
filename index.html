@@ -1270,6 +1270,30 @@
       window.incrementStat("messagesPosted");
     }
     window.postBoardMessage = postBoardMessage;
+
+    function getRelativeTime(timestamp) {
+      var now = Date.now();
+      var diffMs = now - timestamp;
+      var diffSeconds = Math.floor(diffMs / 1000);
+      var diffMinutes = Math.floor(diffSeconds / 60);
+      var diffHours = Math.floor(diffMinutes / 60);
+      var diffDays = Math.floor(diffHours / 24);
+    
+      if (diffSeconds < 60) {
+        return "just now";
+      } else if (diffMinutes < 60) {
+        return diffMinutes + " minute" + (diffMinutes === 1 ? "" : "s") + " ago";
+      } else if (diffHours < 24) {
+        return diffHours + " hour" + (diffHours === 1 ? "" : "s") + " ago";
+      } else if (diffDays === 1) {
+        return "yesterday";
+      } else if (diffDays < 7) {
+        return diffDays + " days ago";
+      } else {
+        var date = new Date(timestamp);
+        return date.toLocaleDateString();
+      }
+    }
     
     function loadBoardMessages() {
       get(ref(db, "messages")).then(function(snapshot) {
@@ -1304,8 +1328,8 @@
     
           var msgElement = document.createElement("p");
           var initial = msg.sender.charAt(0).toUpperCase();
-          msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + " (" + msg.sender + ") | " + msg.text;
-    
+          msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + msg.text + " <span style='color:#64748b; font-size:0.75rem;'>· " + getRelativeTime(msg.time) + "</span>";h:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + " (" + msg.sender + ") | " + msg.text;
+              
           var replyBtn = document.createElement("button");
           replyBtn.className = "secondary-btn";
           replyBtn.innerText = "Reply";
