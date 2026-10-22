@@ -1329,6 +1329,8 @@
           var msgElement = document.createElement("p");
           var initial = msg.sender.charAt(0).toUpperCase();
           msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + " (" + msg.sender + ") | " + msg.text + " <span style='color:#64748b; font-size:0.75rem;'>· " + getRelativeTime(msg.time) + "</span>";
+
+          var replyBtn = document.createElement("button");
           replyBtn.className = "secondary-btn";
           replyBtn.innerText = "Reply";
           replyBtn.style.fontSize = "0.7rem";
