@@ -1,8 +1,2271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <title>The Writers Coalition</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cellipse cx='50' cy='55' rx='35' ry='40' fill='%231b67e3' stroke='%2300f0ff' stroke-width='3'/%3E%3Cellipse cx='50' cy='65' rx='22' ry='25' fill='%231b67e3' stroke='%237928ca' stroke-width='2'/%3E%3Cpath d='M42 55 Q50 60 58 55 M40 63 Q50 68 60 63 M44 71 Q50 75 56 71' fill='blue' stroke='%2300f0ff' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M15 50 Q10 75 28 70' fill='%23114499' stroke='%2300f0ff' stroke-width='3'/%3E%3Cpath d='M85 50 Q90 75 72 70' fill='%23114499' stroke='%2300f0ff' stroke-width='3'/%3E%3Cpolygon points='25,25 35,5 45,20' fill='%237928ca' stroke='%2300f0ff' stroke-width='2'/%3E%3Cpolygon points='75,25 65,5 55,20' fill='%237928ca' stroke='%2300f0ff' stroke-width='2'/%3E%3Ccircle cx='36' cy='38' r='14' fill='%23ffffff' stroke='%2300f0ff' stroke-width='2'/%3E%3Ccircle cx='64' cy='38' r='14' fill='%23ffffff' stroke='%2300f0ff' stroke-width='2'/%3E%3Ccircle cx='36' cy='38' r='7' fill='%230b0d17'/%3E%3Ccircle cx='64' cy='38' r='7' fill='%230b0d17'/%3E%3Ccircle cx='34' cy='36' r='2.5' fill='%2300f0ff'/%3E%3Ccircle cx='62' cy='36' r='2.5' fill='%2300f0ff'/%3E%3Cpolygon points='50,42 44,52 56,52' fill='%231b67e3'/%3E%3Cellipse cx='40' cy='93' rx='6' ry='3' fill='%23ff9900'/%3E%3Cellipse cx='60' cy='93' rx='6' ry='3' fill='%23ff9900'/%3E%3C/svg%3E">
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0b0d17;
+      color: #e0e6ed;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(157, 78, 221, 0.08) 0%, transparent 40%);
+      background-attachment:fixed;
+    }
+
+    /* Header & Navigation */
+    header {
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 2px solid #00f0ff;
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sparkle {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #00f0ff, #7928ca);
+      pointer-events: none;
+      z-index: 9999;
+      animation: sparkle-fade 0.6s ease-out forwards;
+    }
+
+    @keyframes sparkle-fade {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.2) translateY(10px);
+      }
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #00f0ff, #7928ca);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0b0d17;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    h1.site-title {
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+    }
+
+    nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-btn {
+      background: rgba(30, 41, 59, 0.8);
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+
+    #logout {
+      background: rgba(30, 41, 59, 0.8);
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+
+    #logout:hover {
+      color: #00f0ff;
+      border-color: #00f0ff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .nav-btn:hover {
+      color: #00f0ff;
+      border-color: #00f0ff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .nav-btn.active {
+      background: rgba(0, 240, 255, 0.15);
+      color: #00f0ff;
+      border-color: #00f0ff;
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+    }
+
+    /* Main Container & Page Layout */
+    main {
+      flex: 1;
+      max-width: 1000px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Card UI Style */
+    .card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, #00f0ff, #7928ca);
+    }
+
+    h2 {
+      color: #00f0ff;
+      margin-bottom: 1rem;
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    h3 {
+      color: #e2e8f0;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    p {
+      color: #cbd5e1;
+      margin-bottom: 1rem;
+    }
+
+    /* Form & Interactive Elements */
+    button.action-btn {
+      background: linear-gradient(135deg, #00f0ff, #0088ff);
+      color: #0b0d17;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+
+    button.action-btn:hover {
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+      transform: translateY(-1px);
+    }
+
+    button.secondary-btn {
+      background: rgba(30, 41, 59, 0.8);
+      color: #00f0ff;
+      border: 1px solid #00f0ff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.2s ease;
+    }
+
+    button.secondary-btn:hover {
+      background: rgba(0, 240, 255, 0.1);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    textarea {
+      width: 100%;
+      height: 140px;
+      background: rgba(2, 6, 23, 0.8);
+      border: 1px solid #334155;
+      color: #00f0ff;
+      padding: 0.8rem;
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      margin-bottom: 1rem;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #00f0ff;
+      box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+    }
+
+    /* Activity Specific Styles */
+    .timer-display {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #00f0ff;
+      font-family: monospace;
+      background: rgba(2, 6, 23, 0.9);
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 6px;
+      border: 1px solid #00f0ff;
+      box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.2);
+      margin-bottom: 1rem;
+    }
+
+    .prompt-box {
+      background: rgba(2, 6, 23, 0.8);
+      border-left: 3px solid #7928ca;
+      padding: 1rem;
+      border-radius: 0 4px 4px 0;
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+      color: #f1f5f9;
+    }
+
+    .cyoa-choice-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid #334155;
+      color: #e2e8f0;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cyoa-choice-btn:hover {
+      border-color: #00f0ff;
+      background: rgba(0, 240, 255, 0.1);
+      color: #00f0ff;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(15, 23, 42, 0.9);
+      border-top: 1px solid #1e293b;
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-top: auto;
+    }
+
+    .control-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    input, button, select {
+        color:white;
+        background-color:black;
+        border:2px solid white;
+        border-radius:8px;
+        padding:5px;
+        font-family:monospace;
+    }
+    
+    #input-slots {
+        display:grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap:5px;
+        margin-bottom:5px;
+    }
+    
+    #story-select {
+        margin-bottom:5px;
+    }
+
+    #profile-name {
+      color:#00f0ff;
+      font-weight:bold;
+    }
+    
+    @keyframes flap-left { 0% { transform: rotate(0deg); } 50% { transform: rotate(-20deg); } 100% { transform: rotate(0deg); } }
+    @keyframes flap-right { 0% { transform: rotate(0deg); } 50% { transform: rotate(20deg); } 100% { transform: rotate(0deg); } }
+    
+    #owl:hover .left-wing {
+        animation: 0.3s flap-left infinite ease-in-out;
+        transform-origin: 28px 70px; 
+    }
+
+    #co-motto {
+      color:#39FF14;
+    }
+    
+    #owl:hover .right-wing {
+        animation: 0.3s flap-right infinite ease-in-out; 
+        transform-origin: 72px 70px; 
+    }
+
+    #login-box {
+      border:2px solid white;
+      border-radius:8px;
+      background-color:rgb(15, 23, 42);
+      color:white;
+      margin:10%;
+      padding:5px;
+      text-align:center;
+    }
+
+    #sign-in {
+      justify-content:center;
+    }
+
+    .owl-eye {
+      transform-origin: center;
+      transition: transform 0.15s ease;
+    }
+    
+    .owl-eye.blinking {
+      transform: scaleY(0.1);
+    }
+    
+    #site-content {
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    #owl-head {
+      transition: transform 0.6s ease-in-out;
+      transform-origin: 50px 55px;
+    }
+
+    .logo-container p {
+      font-size:0.7rem;
+      color:#7928ca;
+      letter-spacing:1px;
+      margin:0;
+      filter: brightness(1.85) saturate(1.9);
+    }
+
+    /* Light Mode Overrides */
+    body.light-mode {
+      background-color: #f4f6fa;
+      color: #1e293b;
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(0, 150, 200, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(121, 40, 202, 0.06) 0%, transparent 40%);
+    }
+    
+    body.light-mode header {
+      background: rgba(255, 255, 255, 0.9);
+      border-bottom: 2px solid #0088cc;
+      box-shadow: 0 0 15px rgba(0, 150, 200, 0.15);
+    }
+    
+    body.light-mode .site-title {
+      color: #1e293b;
+      text-shadow: none;
+    }
+    
+    body.light-mode .nav-btn, body.light-mode #logout {
+      background: rgba(226, 232, 240, 0.9);
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+    
+    body.light-mode .nav-btn:hover, body.light-mode #logout:hover {
+      color: #0088cc;
+      border-color: #0088cc;
+    }
+    
+    body.light-mode .nav-btn.active {
+      background: rgba(0, 150, 200, 0.15);
+      color: #0088cc;
+      border-color: #0088cc;
+    }
+    
+    body.light-mode .card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+    
+    body.light-mode h2 {
+      color: #0088cc;
+    }
+    
+    body.light-mode h3, body.light-mode p {
+      color: #334155;
+    }
+    
+    body.light-mode .prompt-box {
+      background: #f1f5f9;
+      color: #1e293b;
+      border-left: 3px solid #7928ca;
+    }
+    
+    body.light-mode .timer-display {
+      background: #f1f5f9;
+      color: #0088cc;
+      border: 1px solid #0088cc;
+    }
+    
+    body.light-mode input, body.light-mode button, body.light-mode select {
+      color: #1e293b;
+      background-color: #ffffff;
+      border: 2px solid #cbd5e1;
+    }
+    
+    body.light-mode textarea {
+      background: #ffffff;
+      color: #0088cc;
+      border: 1px solid #cbd5e1;
+    }
+    
+    body.light-mode footer {
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      color: #64748b;
+    }
+    
+    body.light-mode #login-box {
+      background-color: #ffffff;
+      color: #1e293b;
+      border: 2px solid #0088cc;
+    }
+    
+    body.light-mode #chat-messages {
+      background: #f1f5f9 !important;
+      border: 1px solid #cbd5e1 !important;
+    }
+
+    body.light-mode #owl {
+      filter: brightness(0.85) saturate(0.9);
+    }
+    
+    body.light-mode .sparkle {
+      background: radial-gradient(circle, #0088cc, #9333ea);
+    }
+
+    body.light-mode #profile-name {
+      color:darkblue;
+      font-size:20px;
+    }
+
+    body.light-mode #co-motto {
+      color: #0088cc;
+    }
+
+    body.light-mode .logo-container p {
+      color: #7928ca;
+      filter: brightness(1) saturate(1);
+    }
+
+    body.light-mode .cyoa-choice-btn:hover {
+      border-color: #0088cc;
+      background: rgba(0, 136, 204, 0.08);
+      color: #0088cc;
+    }
+
+    #email, #password, #login {
+      margin-bottom:5px;
+    }
+
+    #board-messages {
+      margin:20px;
+      margin-left:0px;
+    }
+
+    #board-input {
+      margin-right:5px;
+      padding:5px;
+      resize:vertical;
+    }
+
+    #quest-one:hover {
+      transform:translateY(-5px);
+    }
+
+    #quest-two:hover {
+      transform:translateY(5px);
+    }
+
+    header {
+      box-shadow: 0 -100vh 0 100vh rgba(15, 23, 42, 0.9);
+    }
+
+    footer {
+      box-shadow: 0 100vh 0 100vh rgba(15, 23, 42, 0.9);
+    }
+  </style>
+</head>
+  <body>
+
+  <!-- Login Section -->
+  <div id="login-box">
+    <h2 id="sign-in">Sign In</h2>
+    <input type="email" id="email" placeholder="Email"><br>
+    <input type="password" id="password" placeholder="Password"><br>
+    <button onclick="login()" id="login">Log In</button>
+    <p id="login-status"></p>
+  </div>
+  
+  <div id="site-content" style="display:none;">
+  <!-- Header Section -->
+  <header>
+    <div class="logo-container">
+      <svg width="48" height="48" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" id="owl">
+          <ellipse cx="50" cy="55" rx="35" ry="40" fill="#1b67e3" stroke="#00f0ff" stroke-width="3"/>
+          <ellipse cx="50" cy="65" rx="22" ry="25" fill="#1b67e3" stroke="#7928ca" stroke-width="2"/>
+          
+          <path class="left-wing" d="M15 50 Q10 75 28 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
+          <path class="right-wing" d="M85 50 Q90 75 72 70" fill="#114499" stroke="#00f0ff" stroke-width="3"/>
+          
+          <g id="owl-head">
+            <path d="M42 55 Q50 60 58 55 M40 63 Q50 68 60 63 M44 71 Q50 75 56 71" fill="blue" stroke="#00f0ff" stroke-width="2" stroke-linecap="round"/>
+          
+            <polygon points="25,25 35,5 45,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
+            <polygon points="75,25 65,5 55,20" fill="#7928ca" stroke="#00f0ff" stroke-width="2"/>
+          
+            <circle cx="36" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2" class="owl-eye"/>
+            <circle cx="64" cy="38" r="14" fill="#ffffff" stroke="#00f0ff" stroke-width="2" class="owl-eye"/>
+          
+            <circle cx="36" cy="38" r="7" fill="#0b0d17" class="owl-eye"/>
+            <circle cx="64" cy="38" r="7" fill="#0b0d17" class="owl-eye"/>
+          
+            <circle cx="34" cy="36" r="2.5" fill="#00f0ff" class="owl-eye"/>
+            <circle cx="62" cy="36" r="2.5" fill="#00f0ff" class="owl-eye"/>
+          
+            <polygon points="50,42 44,52 56,52" fill="#1b67e3"/>
+          </g>
+          
+          <ellipse cx="40" cy="93" rx="6" ry="3" fill="#ff9900"/>
+          <ellipse cx="60" cy="93" rx="6" ry="3" fill="#ff9900"/>
+        </svg>
+      <div>
+        <h1 class="site-title">The Writers Coalition</h1>
+        <p>🦉 meet The Wise Owl</p>
+      </div>
+    </div>
+    <nav>
+      <button class="nav-btn active" onclick="switchTab('home')">Home</button>
+      <button class="nav-btn" onclick="switchTab('messageboard')">Chat</button>
+      <select class="nav-btn" id="tab-sel" autocomplete="off">
+        <option id="expand-placeholder">Expand</option>
+        <option value="num1" id="theme-toggle">☀️ Light Mode</option>
+        <option value="num6">Profile</option>
+        <option value="num3">Build Adventures</option>
+        <option value="num4">Hangman</option>
+        <option value="num5">Activities</option>
+        <option value="num7">Members</option>
+        <option value="num2">Log Out</option>
+      </select>
+    </nav>
+  </header>
+    
+  <!-- Main Content Body -->
+  <main>
+
+    <!-- TAB 1: HOME PAGE -->
+    <div id="home" class="tab-content active">
+      <div id="birthday-banner" class="card" style="display:none; border: 2px solid #00f0ff;">
+        <h2>🎉 Hey, it's my birthday!</h2>
+        <p>The Writers Coalition launched on this very day!</p>
+      </div>
+      <div class="card">
+        <h2>Welcome to Our Writing Club</h2>
+        <p>The Writers Coalition is an elementary school club where young authors come together to share stories, explore new ideas, and build creative writing skills in a supportive, fun environment.</p>
+        <p>Whether you love writing realistic fiction, poetry, fantasy, or mystery stories, you will find a friendly place to share your work here!</p>
+      </div>
+      <div class="card">
+        <h2>Speed Writing Records</h2>
+        <p>The best word counts our club has ever hit!</p>
+        <div id="records-list"></div>
+      </div>
+      <div class="card">
+        <h2>Character Gallery</h2>
+        <p>Characters dreamed up by the club!</p>
+        <div id="character-gallery-list"></div>
+      </div>
+      <div class="card">
+        <h2>Silly Sentence Mixer</h2>
+        <p>Click the button for a random silly sentence!</p>
+      
+        <div class="prompt-box" id="sillySentence">
+          Click "Mix It Up!" to get a silly sentence!
+        </div>
+      
+        <button class="action-btn" onclick="generateSillySentence()">Mix It Up!</button>
+      </div>
+  </div>
+    
+    <!-- TAB 2: ACTIVITIES -->
+    <div id="activities" class="tab-content">
+      
+      <!-- Speed Writing Timer -->
+      <div class="card">
+        <h2>Speed Writing Timer</h2>
+        <p>Challenge yourself to write without stopping until the timer runs out!</p>
+        
+        <div class="control-group">
+          <button class="secondary-btn" onclick="setTimerDuration(1)">1 Min</button>
+          <button class="secondary-btn" onclick="setTimerDuration(3)">3 Mins</button>
+          <button class="secondary-btn" onclick="setTimerDuration(5)">5 Mins</button>
+        </div>
+
+        <div class="timer-display" id="timerDisplay">03:00</div>
+        
+        <div>
+          <button class="action-btn" id="startBtn" onclick="startTimer()">Start Writing</button>
+          <button class="secondary-btn" onclick="resetTimer()">Reset</button>
+        </div>
+
+        <div style="margin-top: 1rem;">
+          <textarea id="speedWritingArea" placeholder="Start typing your story here when the timer starts..."></textarea>
+          <p id="wordCountDisplay" style="font-size: 0.9rem; color: #94a3b8;">Word count: 0</p>
+          <p id="record-message" style="font-size: 0.9rem; color: #00cc66; font-weight: bold;"></p>
+        </div>
+      </div>
+
+      <!-- Story Starter Generator -->
+      <div class="card">
+        <h2>Story Starter Generator</h2>
+        <p>Need an idea for a story? Click the button below to generate a unique combination!</p>
+        
+        <div class="prompt-box" id="generatedStoryStarter">
+          Click "Generate Story Idea" to get your prompt!
+        </div>
+
+        <button class="action-btn" onclick="generateStoryStarter()">Generate Story Idea</button>
+      </div>
+      <div class="card">
+        <h2>Name Generator</h2>
+        <p>Need a name for your character? Click to generate one!</p>
+      
+        <div class="prompt-box" id="generatedName">
+          Click "Generate Name!" to get a random name!
+        </div>
+      
+        <button class="action-btn" onclick="generateCharacterName()">Generate Name!</button>
+        <button class="secondary-btn" onclick="useGeneratedName()">Use This Name</button>
+      </div>
+      
+      <div class="card">
+        <h2>Character creator</h2>
+        <input id="chara-name" style="margin-bottom:5px;" placeholder="enter name...">
+        <textarea id="chara-info" placeholder="Say some things about your character..."></textarea>
+        <button class="action-button" onclick="saveCharacter()">Save character</button>
+      </div>
+
+      <div class="card">
+        <h2>Word Ladder</h2>
+        <p id="ladder-start" style="font-weight:bold; font-size:1.1rem;"></p>
+        <div id="ladder-steps"></div>
+      
+        <div id="ladder-idiom-section" style="display:none;">
+          <p>Which idiom do you think the final word is related to?</p>
+          <select id="ladder-idiom-select"></select>
+          <button class="action-btn" onclick="checkIdiom()">Check</button>
+          <p id="ladder-idiom-result"></p>
+        </div>
+      
+        <button class="secondary-btn" onclick="startWordLadder()" style="margin-top:1rem;">Restart</button>
+      </div>
+    </div>
+
+    <!-- TAB: CUSTOM ADVENTURES -->
+    <div id="adventures" class="tab-content">
+    
+      <!-- Section switcher -->
+      <div class="card">
+        <button class="secondary-btn" onclick="showAdventureSection('browse')">Browse Stories</button>
+        <button class="secondary-btn" onclick="showAdventureSection('build')">Build a Story</button>
+      </div>
+    
+      <!-- BROWSE SECTION -->
+      <div id="adventure-browse" class="card">
+        <h2>Custom Adventures</h2>
+        <p>Play stories written by other club members!</p>
+        <div id="custom-story-list"></div>
+      </div>
+    
+      <!-- BUILD SECTION -->
+      <div id="adventure-build" class="card" style="display:none;">
+        <h2>Build Your Own Adventure</h2>
+        <p>Every story needs a node called <strong>start</strong>. Each node has some text and a list of choices. Each choice needs a "next" node ID to jump to. A node with no choices is an ending.</p>
+    
+        <input id="story-title-input" placeholder="Story title"><br><br>
+    
+        <input id="node-id-input" placeholder="Node ID (e.g. start)"><br>
+        <textarea id="node-text-input" placeholder="What happens in this part of the story?"></textarea>
+    
+        <div id="choice-rows"></div>
+        <button class="secondary-btn" onclick="addChoiceRow()">+ Add a Choice</button><br><br>
+    
+        <button class="action-btn" onclick="addNodeToBuilder()">Save This Node</button>
+        <p id="builder-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+    
+        <h3 style="margin-top:1.5rem;">Nodes So Far:</h3>
+        <div id="builder-node-list"></div>
+    
+        <button class="action-btn" onclick="publishStory()" style="margin-top:1rem;">Publish Story</button>
+        <p id="publish-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+      </div>
+    
+      <!-- PLAYER SECTION -->
+      <div id="adventure-player" class="card" style="display:none;">
+        <h2 id="player-title"></h2>
+        <div class="prompt-box" id="player-text"></div>
+        <div id="player-choices"></div>
+        <button class="secondary-btn" onclick="showAdventureSection('browse')" style="margin-top:1rem;">Back to Stories</button>
+      </div>
+    
+    </div>
+
+    <!-- TAB: HANGMAN -->
+    <div id="hangman" class="tab-content">
+      <div class="card">
+        <h2>Hangman</h2>
+        <p>Guess the word one letter at a time!</p>
+    
+        <div class="prompt-box" id="hangman-word-display" style="font-size: 1.8rem; letter-spacing: 0.5rem; text-align: center;">
+          _ _ _ _ _
+        </div>
+    
+        <p id="hangman-status" style="text-align: center;">Wrong guesses: 0 / 6</p>
+    
+        <div id="hangman-letters" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 1rem;"></div>
+    
+        <button class="action-btn" onclick="startHangman()" style="margin-top: 1rem;">New Word</button>
+      </div>
+    </div>
+
+    <!-- TAB: MESSAGE BOARD -->
+    <div id="messageboard" class="tab-content">
+      <div class="card">
+        <h2>WC Chat</h2>
+        <p>Leave a message for the club to see!</p>
+    
+        <button class="secondary-btn" onclick="scrollToBottom()" style="margin-bottom:0.5rem;">Go to Bottom ↓</button>
+    
+        <div id="board-messages"></div>
+    
+        <button class="secondary-btn" onclick="scrollToTop()" style="margin-top:0.5rem; margin-bottom:0.5rem;">Go to Top ↑</button>
+    
+        <div id="board-compose">
+          <textarea id="board-input" placeholder="Type a message..." maxlength="500"></textarea>
+          <button class="action-btn" onclick="postBoardMessage()">Post</button>
+          <p id="board-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: PROFILE -->
+    <div id="profile" class="tab-content">
+      <div class="card" style="text-align:center;">
+        <div id="profile-avatar" style="display:inline-flex; align-items:center; justify-content:center; width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:2rem; margin-bottom:0.5rem;"></div>
+        <p id="profile-name"></p>
+        <p id="profile-tagline" style="color:#94a3b8; font-size:0.9rem;"></p>
+      </div>
+    
+      <div class="card">
+        <h3>Stats</h3>
+        <p id="profile-messages-count">Messages posted: 0</p>
+        <p id="profile-hangman-wins">Hangman games won: 0</p>
+      </div>
+      
+      <div class="card">
+        <h3>My Characters</h3>
+        <div id="profile-characters-list"></div>
+      </div>
+    </div>
+
+    <!-- TAB: MEMBERS -->
+    <div id="members" class="tab-content">
+      <div class="card">
+        <h2>Club Members</h2>
+        <p>Everyone in The Writers Coalition!</p>
+        <div id="members-list"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    The Writers Coalition &bull; Elementary School Creative Writing Club
+    <div class = "card" style = "padding-top:30px; margin-top:5px;">
+      <p style = "font-family:monospace;" id = "co-motto">
+        loading coalitionMotto.txt...
+      </p>
+    </div>
+  </footer>
+  </div>
+   <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
+    import { getDatabase, ref, push, onValue, get, set, remove } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+    
+    var firebaseConfig = {
+      apiKey: "AIzaSyD_3RVuR8gKoGlUFT5i1bViGFvHjeJyLxc",
+      authDomain: "writers-coalition-database.firebaseapp.com",
+      databaseURL: "https://writers-coalition-database-default-rtdb.firebaseio.com",
+      projectId: "writers-coalition-database",
+      storageBucket: "writers-coalition-database.firebasestorage.app",
+      messagingSenderId: "868427458842",
+      appId: "1:868427458842:web:c23b0d652e284c76eb64a3"
+    };
+  
+    var app = initializeApp(firebaseConfig);
+    var auth = getAuth(app);
+    var db = getDatabase(app);
+  
+    window.firebaseAuth = auth;
+    window.firebaseDB = db;
+
+    function getDisplayName(email) {
+      if (!email) {
+        return "Unknown";
+      }
+      var name = email.split("@")[0];
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+
+    function incrementStat(statName) {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      get(ref(db, "stats/" + user.uid + "/" + statName)).then(function(snapshot) {
+        var current = snapshot.exists() ? snapshot.val() : 0;
+        set(ref(db, "stats/" + user.uid + "/" + statName), current + 1);
+      });
+        }
+        window.incrementStat = incrementStat;
+    
+    function getProfileTagline(messagesPosted, hangmanWins, characterCount) {
+      var titles = [];
+    
+      if (characterCount >= 5) {
+        titles.push("Prolific Character Creator");
+      }
+      if (hangmanWins >= 100) {
+        titles.push("Hangman Champion");
+      }
+      if (messagesPosted >= 50) {
+        titles.push("Chatty Club Member");
+      }
+      if (messagesPosted === 0 && hangmanWins === 0 && characterCount === 0) {
+        titles.push("New to the Club");
+      }
+    
+      if (titles.length === 0) {
+        titles.push("Member of The Writers Coalition");
+      }
+    
+      console.log("messagesPosted:", messagesPosted, "hangmanWins:", hangmanWins, "characterCount:", characterCount, "titles:", titles);
+    
+      return titles[Math.floor(Math.random() * titles.length)];
+    }
+
+    function loadProfile() {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      var displayName = getDisplayName(user.email);
+      document.getElementById("profile-avatar").innerText = displayName.charAt(0).toUpperCase();
+      document.getElementById("profile-name").innerText = displayName.toUpperCase();
+    
+      Promise.all([
+        get(ref(db, "stats/" + user.uid + "/messagesPosted")),
+        get(ref(db, "stats/" + user.uid + "/hangmanWins")),
+        get(ref(db, "characters"))
+      ]).then(function(results) {
+        var messagesSnapshot = results[0];
+        var hangmanSnapshot = results[1];
+        var charactersSnapshot = results[2];
+    
+        var messagesPosted = messagesSnapshot.exists() ? messagesSnapshot.val() : 0;
+        var hangmanWins = hangmanSnapshot.exists() ? hangmanSnapshot.val() : 0;
+    
+        var characterCount = 0;
+        charactersSnapshot.forEach(function(child) {
+          if (child.val().author === displayName) {
+            characterCount++;
+          }
+        });
+    
+        document.getElementById("profile-messages-count").innerText = "Messages posted: " + messagesPosted;
+        document.getElementById("profile-hangman-wins").innerText = "Hangman games won: " + hangmanWins;
+        document.getElementById("profile-tagline").innerText = getProfileTagline(messagesPosted, hangmanWins, characterCount);
+      });
+    
+      get(ref(db, "characters")).then(function(snapshot) {
+        var listDiv = document.getElementById("profile-characters-list");
+        listDiv.innerHTML = "";
+    
+        var myCharacters = [];
+        snapshot.forEach(function(child) {
+          var character = child.val();
+          if (character.author === displayName) {
+            myCharacters.push(character);
+          }
+        });
+    
+        if (myCharacters.length === 0) {
+          listDiv.innerHTML = "<p>You haven't created any characters yet!</p>";
+          return;
+        }
+    
+        myCharacters.sort(function(a, b) {
+          return b.time - a.time;
+        });
+    
+        myCharacters.forEach(function(character) {
+          var card = document.createElement("div");
+          card.className = "prompt-box";
+    
+          var titleEl = document.createElement("h3");
+          titleEl.innerText = character.name;
+          card.appendChild(titleEl);
+    
+          var infoEl = document.createElement("p");
+          infoEl.innerText = character.info;
+          card.appendChild(infoEl);
+    
+          listDiv.appendChild(card);
+        });
+      });
+    }
+    window.loadProfile = loadProfile;
+
+    function checkRecord(minutes, wordCount) {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      get(ref(db, "records")).then(function(snapshot) {
+        var highest = 0;
+    
+        snapshot.forEach(function(userNode) {
+          var durationNode = userNode.child(String(minutes));
+          if (durationNode.exists()) {
+            var val = durationNode.val();
+            if (val.words > highest) {
+              highest = val.words;
+            }
+          }
+        });
+    
+        if (wordCount > highest) {
+          set(ref(db, "records/" + user.uid + "/" + minutes), {
+            author: getDisplayName(user.email),
+            words: wordCount,
+            time: Date.now()
+          });
+    
+          var minutesLabel = minutes + " minute" + (minutes === 1 ? "" : "s");
+          document.getElementById("record-message").innerText = "🎉 New record for " + minutesLabel + ": " + wordCount + " words!";
+          console.log("Awarding XP:", 60 / minutes, "for minutes:", minutes);
+    
+          loadHomeRecords();
+        }
+      });
+    }
+    window.checkRecord = checkRecord;
+    
+    function loadHomeRecords() {
+      get(ref(db, "records")).then(function(snapshot) {
+        var best = {};
+    
+        snapshot.forEach(function(userNode) {
+          userNode.forEach(function(durationNode) {
+            var minutes = durationNode.key;
+            var val = durationNode.val();
+            if (!best[minutes] || val.words > best[minutes].words) {
+              best[minutes] = val;
+            }
+          });
+        });
+    
+        var listDiv = document.getElementById("records-list");
+        listDiv.innerHTML = "";
+    
+        var allDurations = ["1", "3", "5"];
+    
+        allDurations.forEach(function(minutes) {
+          var p = document.createElement("p");
+    
+          if (best[minutes]) {
+            var record = best[minutes];
+            p.innerText = "Record for " + minutes + " minute" + (minutes === "1" ? "" : "s") + ": " + record.words + " words (" + record.author + ")";
+          } else {
+            p.innerText = "Record for " + minutes + " minute" + (minutes === "1" ? "" : "s") + ": not set yet";
+            p.style.color = "#64748b";
+          }
+    
+          listDiv.appendChild(p);
+        });
+      }).catch(function(error) {
+        console.log("Records load error:", error.message);
+      });
+    }
+    window.loadHomeRecords = loadHomeRecords;
+
+    function loadCharacterGallery() {
+      get(ref(db, "characters")).then(function(snapshot) {
+        var listDiv = document.getElementById("character-gallery-list");
+        listDiv.innerHTML = "";
+    
+        var allCharacters = [];
+        snapshot.forEach(function(child) {
+          allCharacters.push(child.val());
+        });
+    
+        if (allCharacters.length === 0) {
+          listDiv.innerHTML = "<p>No characters yet, be the first to create one!</p>";
+          return;
+        }
+    
+        allCharacters.sort(function(a, b) {
+          return b.time - a.time;
+        });
+    
+        allCharacters.forEach(function(character) {
+          var card = document.createElement("div");
+          card.className = "prompt-box";
+    
+          var titleEl = document.createElement("h3");
+          titleEl.innerText = character.name + " — by " + character.author;
+          card.appendChild(titleEl);
+    
+          var infoEl = document.createElement("p");
+          infoEl.innerText = character.info;
+          card.appendChild(infoEl);
+    
+          listDiv.appendChild(card);
+        });
+      });
+    }
+    window.loadCharacterGallery = loadCharacterGallery;
+
+    function getFriendlyError(errorCode) {
+      var messages = {
+        "auth/invalid-email": "That doesn't look like a valid email address.",
+        "auth/user-not-found": "We couldn't find an account with that email.",
+        "auth/wrong-password": "That password doesn't look right, try again!",
+        "auth/invalid-credential": "That email or password doesn't match our records.",
+        "auth/too-many-requests": "Too many tries! Please wait a bit and try again.",
+        "auth/network-request-failed": "Having trouble connecting, check your internet and try again.",
+        "auth/missing-password": "Don't forget to type in a password!"
+      };
+    
+      return messages[errorCode] || "Something went wrong, please try again.";
+    }
+    window.getFriendlyError = getFriendlyError;
+  
+    function login() {
+      var email = document.getElementById("email").value;
+      var password = document.getElementById("password").value;
+    
+      signInWithEmailAndPassword(auth, email, password)
+        .catch(function(error) {
+          document.getElementById("login-status").innerText = getFriendlyError(error.code);
+        });
+    }
+    window.login = login;
+  
+    function logout() {
+      signOut(auth)
+        .then(function() {
+          document.getElementById("login-status").innerText = "Signed out.";
+        })
+        .catch(function(error) {
+          document.getElementById("login-status").innerText = "Logout failed: " + error.message;
+        });
+    }
+    window.logout = logout;
+
+    var charName = document.getElementById("chara-name");
+    var charInfo = document.getElementById("chara-info");
+
+    function toggleTheme() {
+      var isLight = document.body.classList.toggle("light-mode");
+      var btn = document.getElementById("theme-toggle");
+      btn.innerText = isLight ? "🌙 Dark Mode" : "☀️ Light Mode";
+    
+      var user = auth.currentUser;
+      if (user) {
+        set(ref(db, "themes/" + user.uid), isLight ? "light" : "dark");
+      }
+    }
+    window.toggleTheme = toggleTheme;
+
+    function applyStoredTheme(user) {
+      get(ref(db, "themes/" + user.uid)).then(function(snapshot) {
+        var savedTheme = snapshot.exists() ? snapshot.val() : "dark";
+        if (savedTheme === "light") {
+          document.body.classList.add("light-mode");
+          document.getElementById("theme-toggle").innerText = "🌙 Dark Mode";
+        }
+      });
+    }
+  
+    function handleAuthChange(user) {
+      var loginBox = document.getElementById("login-box");
+      var siteContent = document.getElementById("site-content");
+    
+      if (user) {
+        loginBox.style.display = "none";
+        siteContent.style.display = "flex";
+        applyStoredTheme(user);
+        loadHomeRecords();
+        loadCharacterGallery();
+      } else {
+        loginBox.style.display = "block";
+        siteContent.style.display = "none";
+      }
+    }
+    onAuthStateChanged(auth, handleAuthChange);
+
+    function saveCharacter() {
+      var charName = document.getElementById("chara-name");
+      var charInfo = document.getElementById("chara-info");
+    
+      if (charName.value.trim() === "" || charInfo.value.trim() === "") {
+        alert("Fill in all fields first!");
+        return;
+      }
+    
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      push(ref(db, "characters"), {
+        name: charName.value.trim(),
+        info: charInfo.value.trim(),
+        author: getDisplayName(user.email),
+        time: Date.now()
+      });
+    
+      charName.value = "";
+      charInfo.value = "";
+      document.getElementById("chara-status").innerText = "Character saved!";
+      loadCharacterGallery();
+    }
+    window.saveCharacter = saveCharacter;
+    
+     
+    // ----- Section switching -----
+    function showAdventureSection(section) {
+      document.getElementById("adventure-browse").style.display = section === "browse" ? "block" : "none";
+      document.getElementById("adventure-build").style.display = section === "build" ? "block" : "none";
+      document.getElementById("adventure-player").style.display = section === "player" ? "block" : "none";
+    }
+    window.showAdventureSection = showAdventureSection;
+
+    function postBoardMessage() {
+      var input = document.getElementById("board-input");
+      var text = input.value.trim();
+    
+      if (text === "") {
+        return;
+      }
+    
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      var replyToId = input.dataset.replyToId || null;
+    
+      push(ref(db, "messages/" + user.uid), {
+        sender: getDisplayName(user.email),
+        text: text,
+        time: Date.now(),
+        replyToId: replyToId
+      });
+    
+      input.value = "";
+      delete input.dataset.replyToId;
+      document.getElementById("board-status").innerText = "Posted!";
+    
+      var boardDiv = document.getElementById("board-messages");
+      boardDiv.insertAdjacentElement("afterend", document.getElementById("board-compose"));
+    
+      loadBoardMessages();
+      window.incrementStat("messagesPosted");
+    }
+    window.postBoardMessage = postBoardMessage;
+    
+    function loadBoardMessages() {
+      get(ref(db, "messages")).then(function(snapshot) {
+        var allMessages = [];
+    
+        snapshot.forEach(function(userNode) {
+          userNode.forEach(function(msgNode) {
+            var msg = msgNode.val();
+            msg.id = msgNode.key;
+            allMessages.push(msg);
+          });
+        });
+    
+        allMessages.sort(function(a, b) {
+          return a.time - b.time;
+        });
+    
+        var boardDiv = document.getElementById("board-messages");
+        boardDiv.innerHTML = "";
+    
+        var wrappersById = {};
+    
+        allMessages.forEach(function(msg) {
+          var wrapper = document.createElement("div");
+          wrapper.style.marginBottom = "8px";
+    
+          if (msg.replyToId) {
+            wrapper.style.marginLeft = "30px";
+            wrapper.style.borderLeft = "2px solid #7928ca";
+            wrapper.style.paddingLeft = "10px";
+          }
+    
+          var msgElement = document.createElement("p");
+          var initial = msg.sender.charAt(0).toUpperCase();
+          msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + " (" + msg.sender + ") " + msg.text;
+    
+          var replyBtn = document.createElement("button");
+          replyBtn.className = "secondary-btn";
+          replyBtn.innerText = "Reply";
+          replyBtn.style.fontSize = "0.7rem";
+          replyBtn.style.padding = "2px 8px";
+          replyBtn.style.marginLeft = "6px";
+          replyBtn.onclick = function() {
+            replyToMessage(msg.sender, msg.id, wrapper);
+          };
+    
+          msgElement.appendChild(replyBtn);
+          wrapper.appendChild(msgElement);
+    
+          wrappersById[msg.id] = wrapper;
+    
+          if (msg.replyToId && wrappersById[msg.replyToId]) {
+            wrappersById[msg.replyToId].insertAdjacentElement("afterend", wrapper);
+          } else {
+            boardDiv.appendChild(wrapper);
+          }
+        });
+      });
+    }
+    window.loadBoardMessages = loadBoardMessages;
+    
+    function replyToMessage(name, messageId, messageWrapper) {
+      var compose = document.getElementById("board-compose");
+      messageWrapper.insertAdjacentElement("afterend", compose);
+    
+      var textarea = document.getElementById("board-input");
+      textarea.dataset.replyToId = messageId;
+      textarea.value = "@" + name + " ";
+      textarea.focus();
+    }
+    window.replyToMessage = replyToMessage;
+
+    function loadMembers() {
+      get(ref(db, "stats")).then(function(statsSnapshot) {
+        var listDiv = document.getElementById("members-list");
+        listDiv.innerHTML = "";
+    
+        clubMembers.forEach(function(member) {
+          var uid = member.uid;
+          var name = member.name;
+    
+          var messagesPosted = statsSnapshot.child(uid).child("messagesPosted").exists() ? statsSnapshot.child(uid).child("messagesPosted").val() : 0;
+          var hangmanWins = statsSnapshot.child(uid).child("hangmanWins").exists() ? statsSnapshot.child(uid).child("hangmanWins").val() : 0;
+    
+          var card = document.createElement("div");
+          card.className = "prompt-box";
+    
+          var initial = name.charAt(0).toUpperCase();
+          card.innerHTML =
+            "<div style='display:flex; align-items:center; gap:10px;'>" +
+              "<div style='display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; flex-shrink:0;'>" + initial + "</div>" +
+              "<div>" +
+                "<strong>" + name + "</strong><br>" +
+                "<span style='font-size:0.85rem; color:#94a3b8;'>" + messagesPosted + " messages · " + hangmanWins + " hangman wins</span>" +
+              "</div>" +
+            "</div>";
+    
+          listDiv.appendChild(card);
+        });
+      });
+    }
+    window.loadMembers = loadMembers;
+    
+    // ----- Story Builder -----
+    var builderNodes = {};
+    
+    function addChoiceRow() {
+      var row = document.createElement("div");
+      row.innerHTML = "<input class='choice-text' placeholder='Choice text'> <input class='choice-next' placeholder='Next node ID'>";
+      document.getElementById("choice-rows").appendChild(row);
+    }
+    window.addChoiceRow = addChoiceRow;
+    
+    function addNodeToBuilder() {
+      var nodeId = document.getElementById("node-id-input").value.trim();
+      var nodeText = document.getElementById("node-text-input").value.trim();
+    
+      if (nodeId === "" || nodeText === "") {
+        document.getElementById("builder-status").innerText = "Add a node ID and some text first!";
+        return;
+      }
+    
+      var choiceRows = document.querySelectorAll("#choice-rows > div");
+      var choices = [];
+      choiceRows.forEach(function(row) {
+        var text = row.querySelector(".choice-text").value.trim();
+        var next = row.querySelector(".choice-next").value.trim();
+        if (text !== "" && next !== "") {
+          choices.push({ text: text, next: next });
+        }
+      });
+    
+      builderNodes[nodeId] = { text: nodeText, choices: choices };
+    
+      document.getElementById("node-id-input").value = "";
+      document.getElementById("node-text-input").value = "";
+      document.getElementById("choice-rows").innerHTML = "";
+      document.getElementById("builder-status").innerText = "Node '" + nodeId + "' saved!";
+    
+      renderBuilderNodeList();
+    }
+    window.addNodeToBuilder = addNodeToBuilder;
+    
+    function renderBuilderNodeList() {
+      var listDiv = document.getElementById("builder-node-list");
+      listDiv.innerHTML = "";
+      Object.keys(builderNodes).forEach(function(id) {
+        var p = document.createElement("p");
+        p.innerText = id + " (" + builderNodes[id].choices.length + " choices)";
+        listDiv.appendChild(p);
+      });
+    }
+    
+    function publishStory() {
+      var title = document.getElementById("story-title-input").value.trim();
+    
+      if (title === "" || !builderNodes.hasOwnProperty("start")) {
+        document.getElementById("publish-status").innerText = "Add a title and a 'start' node first!";
+        return;
+      }
+    
+      var user = auth.currentUser;
+      var authorName = user ? getDisplayName(user.email) : "Unknown";
+    
+      push(ref(db, "customStories"), {
+        title: title,
+        author: authorName,
+        startNode: "start",
+        nodes: builderNodes,
+        time: Date.now()
+      });
+    
+      document.getElementById("publish-status").innerText = "Story published! Check Browse Stories.";
+      builderNodes = {};
+      document.getElementById("story-title-input").value = "";
+      renderBuilderNodeList();
+    }
+    window.publishStory = publishStory;
+    
+    // ----- Browsing -----
+    function displayCustomStories(snapshot) {
+      var listDiv = document.getElementById("custom-story-list");
+      listDiv.innerHTML = "";
+    
+      snapshot.forEach(function(child) {
+        var story = child.val();
+        var card = document.createElement("div");
+        card.className = "prompt-box";
+    
+        var titleEl = document.createElement("h3");
+        titleEl.innerText = story.title + " — by " + story.author;
+        card.appendChild(titleEl);
+    
+        var playBtn = document.createElement("button");
+        playBtn.className = "action-btn";
+        playBtn.innerText = "Play";
+        playBtn.onclick = function() {
+          playCustomStory(story);
+        };
+        card.appendChild(playBtn);
+    
+        listDiv.appendChild(card);
+      });
+    }
+    onValue(ref(db, "customStories"), displayCustomStories);
+    
+    // ----- Player -----
+    var currentPlayingStory = null;
+    
+    function playCustomStory(story) {
+      currentPlayingStory = story;
+      document.getElementById("player-title").innerText = story.title;
+      showAdventureSection("player");
+      renderCustomNode(story.startNode);
+    }
+    
+    function renderCustomNode(nodeKey) {
+      var node = currentPlayingStory.nodes[nodeKey];
+      var textDiv = document.getElementById("player-text");
+      var choicesDiv = document.getElementById("player-choices");
+    
+      if (!node) {
+        textDiv.innerText = "Uh oh, this story has a broken link!";
+        choicesDiv.innerHTML = "";
+        return;
+      }
+    
+      textDiv.innerText = node.text;
+      choicesDiv.innerHTML = "";
+    
+      if (node.choices.length === 0) {
+        var theEnd = document.createElement("p");
+        theEnd.innerText = "THE END";
+        choicesDiv.appendChild(theEnd);
+        return;
+      }
+    
+      node.choices.forEach(function(choice) {
+        var btn = document.createElement("button");
+        btn.className = "cyoa-choice-btn";
+        btn.innerText = choice.text;
+        btn.onclick = function() {
+          renderCustomNode(choice.next);
+        };
+        choicesDiv.appendChild(btn);
+      });
+    }
+      
+    window.addEventListener("load", function() {
+      console.log("Firebase ready.");
+    });
+  </script>
+  <script>
+    // Global State Variables
+    var currentTimer = null;
+    var timerSeconds = 180;
+    var initialSeconds = 180;
+    var timerRunning = false;
+
+    // Story Starter Arrays
+    var characterList = [
+      "a quiet 5th grader",
+      "an energetic detective",
+      "a talented young artist",
+      "a curious librarian",
+      "a friendly neighborhood baker",
+      "a shy piano player"
+    ];
+
+    var settingList = [
+      "in an old neighborhood treehouse",
+      "inside a bustling city park",
+      "during a stormy afternoon at school",
+      "at a vibrant summer camp",
+      "inside a cozy hometown bookstore",
+      "on a quiet train ride"
+    ];
+
+    var plotList = [
+      "finds an ancient key with no lock.",
+      "discovers a map drawn on the back of a poster.",
+      "tries to solve the mystery of a missing pet.",
+      "receives an unaddressed letter in the mail.",
+      "hides a big secret from their best friend.",
+      "wins a contest with unexpected rules."
+    ];
+
+    var tabSel = document.getElementById("tab-sel");
+    function removeExpandOption() {
+      var expandOption = document.getElementById("expand-placeholder");
+      if (expandOption) {
+        expandOption.remove();
+      }
+    }
+    
+    function restoreExpandOption() {
+      var existing = document.getElementById("expand-placeholder");
+      if (!existing) {
+        var option = document.createElement("option");
+        option.id = "expand-placeholder";
+        option.innerText = "Expand";
+        tabSel.insertBefore(option, tabSel.firstChild);
+        tabSel.selectedIndex = 0;
+      }
+    }
+
+    // Word Ladder Sets
+    var wordLadderSets = [
+      {
+        words: ["CARD", "CARE", "BARE", "BARK", "BALL"],
+        changes: [1, 1, 1, 2],
+        meanings: ["to look after someone", "without any covering", "the sound a dog makes", "a spherical object"],
+        idiomOptions: ["Bark up the wrong tree", "Let the cat out of the bag", "Bite the bullet", "Break the ice", "On the ball"],
+        correctIdiom: "On the ball"
+      },
+      {
+        words: ["HAND", "HARD", "BARD", "BARN"],
+        changes: [1, 1, 1],
+        meanings: ["firm or solid, not soft", "a poet or storyteller", "a building that stores hay or animals"],
+        idiomOptions: ["Ring a bell", "Spill the beans", "Hit the hay", "Jump the gun"],
+        correctIdiom: "Hit the hay"
+      },
+      {
+        words: ["LARK", "LIAR", "LAMB", "LIMB"],
+        changes: [2, 3, 1],
+        meanings: ["an untrustworthy person", "a young sheep", "an apendage"],
+        idiomOptions: ["Raining cats and dogs", "A little bird told me", "The ball is in your court", "Cost an arm and a leg"],
+        correctIdiom: "Cost an arm and a leg"
+      },
+      {
+        words: ["CANE", "PAIN", "MAIN", "RAIN" ],
+        changes: [2, 1, 1],
+        meanings: ["An unpleasant feeling", "Most or center", "Precipitation"],
+        idiomOptions: ["Under the weather", "Seeing in black and white", "A little bird told me", "Jump the gun"],
+        correctIdiom: "Under the weather"
+      }
+    ];
+    
+    var currentLadderSet = null;
+    var currentLadderStep = 0;
+    var usedLadderSets = [];
+    
+    function startWordLadder() {
+      if (usedLadderSets.length >= wordLadderSets.length) {
+        usedLadderSets = [];
+      }
+    
+      var availableIndexes = [];
+      for (var i = 0; i < wordLadderSets.length; i++) {
+        if (usedLadderSets.indexOf(i) === -1) {
+          availableIndexes.push(i);
+        }
+      }
+    
+      var chosenIndex = availableIndexes[Math.floor(Math.random() * availableIndexes.length)];
+      usedLadderSets.push(chosenIndex);
+    
+      currentLadderSet = wordLadderSets[chosenIndex];
+      currentLadderStep = 0;
+    
+      document.getElementById("ladder-start").innerText = "Start word: " + currentLadderSet.words[0];
+      document.getElementById("ladder-steps").innerHTML = "";
+      document.getElementById("ladder-idiom-section").style.display = "none";
+      document.getElementById("ladder-idiom-result").innerText = "";
+    
+      showNextLadderStep();
+    }
+    
+    function showNextLadderStep() {
+      if (currentLadderStep >= currentLadderSet.changes.length) {
+        showIdiomSection();
+        return;
+      }
+    
+      var stepDiv = document.createElement("div");
+      stepDiv.style.marginBottom = "10px";
+    
+      var changeCount = currentLadderSet.changes[currentLadderStep];
+      var meaning = currentLadderSet.meanings[currentLadderStep];
+    
+      var label = document.createElement("p");
+      label.innerText = "Change " + changeCount + " letter" + (changeCount === 1 ? "" : "s") + " so this word means: " + meaning;
+      stepDiv.appendChild(label);
+    
+      var input = document.createElement("input");
+      input.placeholder = "Type your answer...";
+      input.style.marginRight = "6px";
+      stepDiv.appendChild(input);
+    
+      var btn = document.createElement("button");
+      btn.className = "secondary-btn";
+      btn.innerText = "Submit";
+      stepDiv.appendChild(btn);
+    
+      var feedback = document.createElement("p");
+      feedback.style.fontSize = "0.85rem";
+      stepDiv.appendChild(feedback);
+    
+      btn.onclick = function() {
+        checkLadderStep(input, feedback);
+      };
+    
+      input.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+          checkLadderStep(input, feedback);
+        }
+      });
+    
+      document.getElementById("ladder-steps").appendChild(stepDiv);
+    }
+    
+    function checkLadderStep(input, feedback) {
+      var answer = currentLadderSet.words[currentLadderStep + 1].toUpperCase();
+      var guess = input.value.trim().toUpperCase();
+    
+      if (guess === answer) {
+        feedback.style.color = "#00cc66";
+        feedback.innerText = "Correct!";
+        input.disabled = true;
+        currentLadderStep++;
+        showNextLadderStep();
+      } else {
+        feedback.style.color = "#ff0055";
+        feedback.innerText = "Not quite, try again!";
+      }
+    }
+    
+    function showIdiomSection() {
+      var section = document.getElementById("ladder-idiom-section");
+      section.style.display = "block";
+    
+      var select = document.getElementById("ladder-idiom-select");
+      select.innerHTML = "";
+    
+      var shuffledOptions = currentLadderSet.idiomOptions.slice();
+      for (var i = shuffledOptions.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = shuffledOptions[i];
+        shuffledOptions[i] = shuffledOptions[j];
+        shuffledOptions[j] = temp;
+      }
+    
+      shuffledOptions.forEach(function(idiom) {
+        var option = document.createElement("option");
+        option.value = idiom;
+        option.innerText = idiom;
+        select.appendChild(option);
+      });
+    }
+    
+    function checkIdiom() {
+      var select = document.getElementById("ladder-idiom-select");
+      var result = document.getElementById("ladder-idiom-result");
+    
+      if (select.value === currentLadderSet.correctIdiom) {
+        result.style.color = "#00cc66";
+        result.innerText = "Correct! Great job!";
+      } else {
+        result.style.color = "#ff0055";
+        result.innerText = "Not quite, the answer was: " + currentLadderSet.correctIdiom;
+      }
+    }
+
+    // Navigation function
+    function switchTab(tabId) {
+      var contents = document.getElementsByClassName("tab-content");
+      var navBtns = document.getElementsByClassName("nav-btn");
+      var i = 0;
+    
+      for (i = 0; i < contents.length; i++) {
+        contents[i].classList.remove("active");
+      }
+      for (i = 0; i < navBtns.length; i++) {
+        navBtns[i].classList.remove("active");
+      }
+    
+      document.getElementById(tabId).classList.add("active");
+    
+      // Update active state on button
+      for (i = 0; i < navBtns.length; i++) {
+        var onclickAttr = navBtns[i].getAttribute("onclick");
+        if (onclickAttr && onclickAttr.indexOf(tabId) !== -1) {
+          navBtns[i].classList.add("active");
+        }
+      }
+    
+      if (tabId === "home" || tabId === "messageboard") {
+        restoreExpandOption();
+      }
+      if (tabId === "messageboard") {
+        loadBoardMessages();
+        window.setTimeout(writeMessage, 5000);
+      }
+      if (tabId === "home") {
+        loadHomeRecords();
+        loadCharacterGallery();
+      }
+      if (tabId === "profile") {
+        loadProfile();
+      }
+      if (tabId === "members") {
+        loadMembers();
+      }
+    }
+
+    var clubMembers = [
+      { uid: "p8DMUSm5INc4XQTvxpY2o4sa6VV2", name: "Oz" },
+      { uid: "ho5ue7eArNe2oyuFyP6zRCmMUKE2", name: "Aadhya" },
+      { uid: "Jg95dq8UnyLaONF5uXbExu0rA4U2", name: "Gal" },
+      { uid: "SnnnvHXFV2cO6MyfB3rZP3Hi2rG3", name: "Teemo" },
+      { uid: "TVLZ6sPYILaO96bOYfjJvHAVbzz2", name: "Aokai" }
+    ];
+    
+    // Speed Writing Timer Functions
+    function setTimerDuration(minutes) {
+      if (timerRunning) {
+        resetTimer();
+      }
+      initialSeconds = minutes * 60;
+      timerSeconds = initialSeconds;
+      updateTimerDisplay();
+    }
+
+    // Character Name Generator Arrays
+    var nameFirstParts = [
+      "Emma", "Liam", "Olivia", "Noah", "Ava", "Ethan", "Sophia",
+      "Mason", "Isabella", "Lucas", "Mia", "Elijah", "Charlotte", "James"
+    ];
+    
+    var nameLastParts = [
+      "Bennett", "Carter", "Hayes", "Reed", "Foster", "Parker",
+      "Mitchell", "Grayson", "Collins", "Bishop", "Hale", "Sullivan"
+    ];
+    
+    var currentGeneratedName = "";
+    
+    function generateCharacterName() {
+      var first = nameFirstParts[Math.floor(Math.random() * nameFirstParts.length)];
+      var last = nameLastParts[Math.floor(Math.random() * nameLastParts.length)];
+      currentGeneratedName = first + " " + last;
+      document.getElementById("generatedName").innerText = currentGeneratedName;
+    }
+    
+    function useGeneratedName() {
+      if (currentGeneratedName === "") {
+        alert("Generate a name first!");
+        return;
+      }
+      document.getElementById("chara-name").value = currentGeneratedName;
+    }
+
+    // Silly Sentence Mixer Arrays
+    var sillySubjects = [
+      "A dinosaur",
+      "My grandma",
+      "A ninja penguin",
+      "The class hamster",
+      "A robot",
+      "A pirate",
+      "An alien",
+      "A talking sandwich"
+    ];
+    
+    var sillyVerbs = [
+      "secretly juggles",
+      "accidentally married",
+      "loudly sneezed on",
+      "tried to trade",
+      "quietly stole",
+      "dramatically hugged",
+      "mysteriously painted",
+      "clumsily tripped over"
+    ];
+    
+    var sillyObjects = [
+      "a pile of socks",
+      "the moon",
+      "seventeen tacos",
+      "a grumpy cat",
+      "a giant rubber duck",
+      "the principal's shoes",
+      "a bowl of spaghetti",
+      "a mysterious treasure chest"
+    ];
+    
+    function generateSillySentence() {
+      var randomSubject = sillySubjects[Math.floor(Math.random() * sillySubjects.length)];
+      var randomVerb = sillyVerbs[Math.floor(Math.random() * sillyVerbs.length)];
+      var randomObject = sillyObjects[Math.floor(Math.random() * sillyObjects.length)];
+    
+      var sentence = randomSubject + " " + randomVerb + " " + randomObject + "!";
+      document.getElementById("sillySentence").innerText = sentence;
+    }
+
+    function updateTimerDisplay() {
+      var mins = Math.floor(timerSeconds / 60);
+      var secs = timerSeconds % 60;
+      var minsStr = mins < 10 ? "0" + mins : "" + mins;
+      var secsStr = secs < 10 ? "0" + secs : "" + secs;
+      document.getElementById("timerDisplay").innerText = minsStr + ":" + secsStr;
+    }
+
+    function startTimer() {
+      var btn = document.getElementById("startBtn");
+      
+      if (!timerRunning) {
+        timerRunning = true;
+    
+        if (timerSeconds === initialSeconds) {
+          document.getElementById("speedWritingArea").value = "";
+          document.getElementById("wordCountDisplay").innerText = "Word count: 0";
+          document.getElementById("record-message").innerText = "";
+        }
+            
+        btn.innerText = "Pause";
+        btn.style.background = "linear-gradient(135deg, #ff0055, #ff5500)";
+        
+        currentTimer = setInterval(function() {
+          if (timerSeconds > 0) {
+            timerSeconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(currentTimer);
+            timerRunning = false;
+            btn.innerText = "Start Writing";
+            btn.style.background = "linear-gradient(135deg, #00f0ff, #0088ff)";
+            alert("Time's up! Great job writing. Take a moment to read over your work.");
+    
+            var finalText = document.getElementById("speedWritingArea").value.trim();
+            var finalWordCount = finalText === "" ? 0 : finalText.split(/\s+/).length;
+            var minutesUsed = initialSeconds / 60;
+            if (window.checkRecord) {
+              window.checkRecord(minutesUsed, finalWordCount);
+            }
+    
+            timerSeconds = initialSeconds;
+            updateTimerDisplay();
+          }
+        }, 1000);
+      } else {
+        clearInterval(currentTimer);
+        timerRunning = false;
+        btn.innerText = "Resume";
+        btn.style.background = "linear-gradient(135deg, #00f0ff, #0088ff)";
+      }
+    }
+    
+    function resetTimer() {
+      if (currentTimer) {
+        clearInterval(currentTimer);
+      }
+      timerRunning = false;
+      timerSeconds = initialSeconds;
+      updateTimerDisplay();
+      
+      var btn = document.getElementById("startBtn");
+      btn.innerText = "Start Writing";
+      btn.style.background = "linear-gradient(135deg, #00f0ff, #0088ff)";
+    }
+
+    // Word Count Tracker
+    function initWordCounter() {
+      var textarea = document.getElementById("speedWritingArea");
+      textarea.addEventListener("input", function() {
+        var text = textarea.value.trim();
+        var words = text === "" ? 0 : text.split(/\s+/).length;
+        document.getElementById("wordCountDisplay").innerText = "Word count: " + words;
+      });
+    }
+
+    // Story Starter Generator Function
+    function generateStoryStarter() {
+      var randomChar = characterList[Math.floor(Math.random() * characterList.length)];
+      var randomSetting = settingList[Math.floor(Math.random() * settingList.length)];
+      var randomPlot = plotList[Math.floor(Math.random() * plotList.length)];
+
+      var fullPrompt = "Story Idea: " + randomChar + " " + randomSetting + " " + randomPlot;
+      document.getElementById("generatedStoryStarter").innerText = fullPrompt;
+    }
+    
+    document.addEventListener("mousemove", function(e) {
+      var owlSvg = document.getElementById("owl");
+      var rect = owlSvg.getBoundingClientRect();
+      
+      // Find the middle of the owl on the screen
+      var owlX = rect.left + rect.width / 2;
+      var owlY = rect.top + rect.height / 2;
+      
+      // Calculate the direction to the mouse
+      var angle = Math.atan2(e.clientY - owlY, e.clientX - owlX);
+      
+      // Move the light blue dots up to 3 pixels in that direction
+      var distance = 3;
+      var moveX = Math.cos(angle) * distance;
+      var moveY = Math.sin(angle) * distance;
+      
+      // Select the light blue circles (#00f0ff) instead of the black pupils
+      var highlights = owlSvg.querySelectorAll("circle[fill='#00f0ff']");
+      for (var i = 0; i < highlights.length; i++) {
+        highlights[i].setAttribute("transform", "translate(" + moveX + "," + moveY + ")");
+      }
+    });
+
+    function blinkOwl() {
+      var eyes = document.querySelectorAll(".owl-eye");
+      eyes.forEach(function(eye) {
+        eye.classList.add("blinking");
+      });
+    
+      setTimeout(function() {
+        eyes.forEach(function(eye) {
+          eye.classList.remove("blinking");
+        });
+      }, 150);
+    }
+    
+    function scheduleNextBlink() {
+      var randomDelay = 3000 + Math.random() * 4000; // between 3-7 seconds
+      setTimeout(function() {
+        blinkOwl();
+        scheduleNextBlink();
+      }, randomDelay);
+    }
+    scheduleNextBlink();
+
+    function tiltOwl() {
+      var owlHead = document.getElementById("owl-head");
+      var randomTilt = (Math.random() * 30 - 15); // now between -15 and 15 degrees
+    
+      owlHead.style.transform = "rotate(" + randomTilt + "deg)";
+    
+      setTimeout(function() {
+        owlHead.style.transform = "rotate(0deg)";
+      }, 1000);
+    }
+    
+    function scheduleNextTilt() {
+      var randomDelay = 5000 + Math.random() * 5000; // between 5-10 seconds
+      setTimeout(function() {
+        tiltOwl();
+        scheduleNextTilt();
+      }, randomDelay);
+    }
+    
+    scheduleNextTilt();
+
+    var mottos = [
+      "Write. Share. Repeat.",
+      "The biggest stories start with the smallest ideas.",
+      "We love writing like a dog loves its toy.",
+      "Passion is the foundation for greatness.",
+      "Every blank page is an adventure waiting to happen.",
+      "Great stories start with a single word.",
+      "Imagination is the only limit here.",
+      "There's no wrong way to tell a good story.",
+      "Turn your wildest ideas into words.",
+      "A story a day keeps boredom away.",
+      "Your voice matters, so write it down.",
+      "First drafts don't have to be perfect, they just have to exist.",
+      "Every writer started exactly where you are now.",
+      "Ideas are everywhere, grab one and run with it.",
+      "The pen is mightier, especially in this club."
+    ];
+    
+    var lastMotto = -1;
+    var newMotto = -1;
+    
+    function readyMottoType() {
+      while (lastMotto === newMotto) {
+        newMotto = Math.floor(Math.random() * mottos.length);
+      }
+      lastMotto = newMotto;
+      MottoType(mottos[newMotto]);
+    }
+    
+    function MottoType(motto) {
+      var coMotto = document.getElementById("co-motto");
+      coMotto.textContent = "";
+      var i = 0;
+    
+      function typeNextLetter() {
+        if (i < motto.length) {
+          coMotto.textContent += motto[i];
+          i++;
+          setTimeout(typeNextLetter, 50);
+        } else {
+          setTimeout(readyMottoType, 3000);
+        }
+      }
+    
+      typeNextLetter();
+    }
+
+    function scrollToBottom() {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
+    
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    var lastSparkleTime = 0;
+    document.addEventListener("mousemove", function(e) {
+      var now = Date.now();
+      if (now - lastSparkleTime < 50) {
+        return;
+      }
+      lastSparkleTime = now;
+    
+      var sparkle = document.createElement("div");
+      sparkle.className = "sparkle";
+      sparkle.style.left = (e.clientX - 3) + "px";
+      sparkle.style.top = (e.clientY - 3) + "px";
+      document.body.appendChild(sparkle);
+    
+      setTimeout(function() {
+        sparkle.remove();
+      }, 600);
+    });
+
+    function checkBirthday() {
+      var today = new Date();
+      var isAugust = today.getMonth() === 7; // August is month index 7 (zero-indexed)
+      var isTwelfth = today.getDate() === 12;
+    
+      if (isAugust && isTwelfth) {
+        document.getElementById("birthday-banner").style.display = "block";
+      }
+    }
+    
+    var tabValueMap = {
+      "adventures": "num3",
+      "hangman": "num4",
+      "activities": "num5",
+      "profile": "num6",
+      "members": "num7"
+    };
+    
+    tabSel.addEventListener("change", function() {
+      removeExpandOption();
+    
+      if (tabSel.value === "num1") {
+        toggleTheme();
+        var activeTab = document.querySelector(".tab-content.active");
+        if (activeTab && (activeTab.id === "home" || activeTab.id === "messageboard")) {
+          restoreExpandOption();
+        } else {
+          switchTab(activeTab.id);
+          if (tabValueMap[activeTab.id]) {
+            tabSel.value = tabValueMap[activeTab.id];
+          }
+        }
+      } else if (tabSel.value === "num2") {
+        logout();
+      } else if (tabSel.value === "num3") {
+        switchTab("adventures");
+      } else if (tabSel.value === "num4") {
+        switchTab("hangman");
+      } else if (tabSel.value === "num5") {
+        switchTab("activities");
+      } else if (tabSel.value === "num6") {
+        switchTab("profile");
+      } else if (tabSel.value === "num7") {
+        switchTab("members")
+      }
+    });
+
+    var questOne = document.getElementById("quest-one");
+    var questTwo = document.getElementById("quest-two");
+    var quest = document.getElementById("quest");
+    var cellsCon = document.getElementById("cells");
+    var cellsPar = document.getElementById("cells-b");
+    
+    var questions = [
+      "What is |-5|?",
+      "What was the original name of Frankenstein's monster?",
+      "True or false: nutella has walnuts in it.",
+      "What is the name of our sun?",
+      "True or false: the inner core of Earth is solid.",
+      "What was the first human invention to break the sound barrier?"
+    ];
+    
+    var oneAns = ["The absolute value of -5", "Joe", "True", "Sol", "True", "A fighter jet"];
+    var twoAns = ["-5", "Adam", "False", "Helios", "False", "A whip"];
+    var correctSide = ["one", "two", "two", "one", "one", "two"];
+    
+    var cells = 15;
+    var currentQuestion = 0;
+    var restart = document.getElementById("restart");
+
+    // Hangman
+    var hangmanWords = [
+      "build", "work", "ipad", "pizza", "random", "read", "show", "give", "member", "human", "dog", "cat", "earth", "space", "cheese", "photo", "camera", "world", "food", "macaroni", "mcdonalds", "needoh", "leader", "ocean", "restaurant", "midnight", "organic", "garbage", "municipal", "federal", "provincial", "government", "toilet"
+    ];
+    var hangmanWord = "";
+    var hangmanGuessed = [];
+    var hangmanWrongCount = 0;
+    
+    function startHangman() {
+      hangmanWord = hangmanWords[Math.floor(Math.random() * hangmanWords.length)];
+      hangmanGuessed = [];
+      hangmanWrongCount = 0;
+    
+      renderHangmanWord();
+      renderHangmanStatus();
+      renderHangmanLetters();
+    }
+    
+    function renderHangmanWord() {
+      var display = "";
+      for (var i = 0; i < hangmanWord.length; i++) {
+        var letter = hangmanWord[i];
+        if (hangmanGuessed.indexOf(letter) !== -1) {
+          display += letter.toUpperCase() + " ";
+        } else {
+          display += "_ ";
+        }
+      }
+      document.getElementById("hangman-word-display").innerText = display.trim();
+    }
+    
+    function renderHangmanStatus() {
+      document.getElementById("hangman-status").innerText = "Wrong guesses: " + hangmanWrongCount + " / 10";
+    }
+    
+    function renderHangmanLetters() {
+      var container = document.getElementById("hangman-letters");
+      container.innerHTML = "";
+    
+      var alphabet = "abcdefghijklmnopqrstuvwxyz";
+      for (var i = 0; i < alphabet.length; i++) {
+        var letter = alphabet[i];
+        var btn = document.createElement("button");
+        btn.innerText = letter.toUpperCase();
+        btn.className = "secondary-btn";
+    
+        if (hangmanGuessed.indexOf(letter) !== -1) {
+          if (hangmanWord.indexOf(letter) !== -1) {
+            btn.style.background = "#00cc66";
+            btn.style.color = "#0b0d17";
+          } else {
+            btn.style.background = "#555555";
+            btn.style.color = "#999999";
+          }
+          btn.disabled = true;
+        }
+    
+        (function(currentLetter, currentBtn) {
+          currentBtn.onclick = function() {
+            guessHangmanLetter(currentLetter);
+          };
+        })(letter, btn);
+    
+        container.appendChild(btn);
+      }
+    }
+    
+    function guessHangmanLetter(letter) {
+      if (hangmanGuessed.indexOf(letter) !== -1) {
+        return;
+      }
+    
+      hangmanGuessed.push(letter);
+    
+      if (hangmanWord.indexOf(letter) === -1) {
+        hangmanWrongCount++;
+      }
+    
+      renderHangmanWord();
+      renderHangmanStatus();
+      renderHangmanLetters();
+      checkHangmanEnd();
+    }
+    
+    function checkHangmanEnd() {
+      var wordComplete = true;
+      for (var i = 0; i < hangmanWord.length; i++) {
+        if (hangmanGuessed.indexOf(hangmanWord[i]) === -1) {
+          wordComplete = false;
+        }
+      }
+    
+      if (wordComplete) {
+        document.getElementById("hangman-status").innerText = "🎉 You won! The word was " + hangmanWord.toUpperCase();
+        if (window.incrementStat) {
+          window.incrementStat("hangmanWins");
+        }
+      } else if (hangmanWrongCount >= 10) {
+          document.getElementById("hangman-status").innerText = "😢 Game over! The word was " + hangmanWord.toUpperCase();
+          var allButtons = document.querySelectorAll("#hangman-letters button");
+          allButtons.forEach(function(btn) {
             btn.disabled = true;
           });
       }
     }
- 
+
     var prompts = [
       "Type a message...",
       "Unleash your creativity...",
@@ -10,7 +2273,7 @@
       "Share something...",
       "Write something cool..."
     ]
- 
+
     var lastPrompt = 0;
     var thisPrompt = 0;
     
@@ -53,4 +2316,3 @@
   </script>
 </body>
 </html>
- 
