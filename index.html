@@ -1271,6 +1271,28 @@
     }
     window.postBoardMessage = postBoardMessage;
 
+    function editMessage(msg, msgElement) {
+      var newText = prompt("Edit your message:", msg.text);
+    
+      if (newText === null) {
+        return;
+      }
+    
+      newText = newText.trim();
+      if (newText === "") {
+        return;
+      }
+    
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      set(ref(db, "messages/" + user.uid + "/" + msg.id + "/text"), newText);
+      loadBoardMessages();
+    }
+    window.editMessage = editMessage;
+
     function getRelativeTime(timestamp) {
       var now = Date.now();
       var diffMs = now - timestamp;
@@ -1339,6 +1361,21 @@
           replyBtn.onclick = function() {
             replyToMessage(msg.sender, msg.id, wrapper);
           };
+
+          var editBtn = document.createElement("button");
+          editBtn.className = "secondary-btn";
+          editBtn.innerText = "Edit";
+          editBtn.style.fontSize = "0.7rem";
+          editBtn.style.padding = "2px 8px";
+          editBtn.style.marginLeft = "6px";
+          editBtn.onclick = function() {
+            editMessage(msg, msgElement);
+          };
+          
+          var user = auth.currentUser;
+          if (user && getDisplayName(user.email) === msg.sender) {
+            msgElement.appendChild(editBtn);
+          }
     
           msgElement.appendChild(replyBtn);
           wrapper.appendChild(msgElement);
