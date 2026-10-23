@@ -1271,6 +1271,42 @@
     }
     window.postBoardMessage = postBoardMessage;
 
+    function confirmDeleteMessage(msg) {
+      var confirmed = confirm("Delete this message? Any replies to it will be deleted too. This can't be undone.");
+      if (!confirmed) {
+        return;
+      }
+      deleteMessageAndReplies(msg.id);
+    }
+    
+    function deleteMessageAndReplies(messageId) {
+      get(ref(db, "messages")).then(function(snapshot) {
+        var toDelete = [];
+    
+        snapshot.forEach(function(userNode) {
+          userNode.forEach(function(msgNode) {
+            var m = msgNode.val();
+            if (m.replyToId === messageId) {
+              toDelete.push({ uid: userNode.key, id: msgNode.key });
+            }
+          });
+        });
+    
+        toDelete.forEach(function(item) {
+          deleteMessageAndReplies(item.id);
+          remove(ref(db, "messages/" + item.uid + "/" + item.id));
+        });
+    
+        var user = auth.currentUser;
+        if (user) {
+          remove(ref(db, "messages/" + user.uid + "/" + messageId)).then(function() {
+            loadBoardMessages();
+          });
+        }
+      });
+    }
+    window.confirmDeleteMessage = confirmDeleteMessage;
+
     function editMessage(msg, msgElement) {
       var newText = prompt("Edit your message:", msg.text);
     
@@ -1372,11 +1408,23 @@
             editMessage(msg, msgElement);
           };
           
+          var deleteBtn = document.createElement("button");
+          deleteBtn.className = "secondary-btn";
+          deleteBtn.innerText = "Delete";
+          deleteBtn.style.fontSize = "0.7rem";
+          deleteBtn.style.padding = "2px 8px";
+          deleteBtn.style.marginLeft = "6px";
+          deleteBtn.style.color = "#ff0055";
+          deleteBtn.onclick = function() {
+            confirmDeleteMessage(msg);
+          };
+          
           var user = auth.currentUser;
           if (user && getDisplayName(user.email) === msg.sender) {
             msgElement.appendChild(editBtn);
+            msgElement.appendChild(deleteBtn);
           }
-    
+          
           msgElement.appendChild(replyBtn);
           wrapper.appendChild(msgElement);
     
