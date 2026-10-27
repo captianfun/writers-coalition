@@ -618,6 +618,7 @@
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('messageboard')">Chat</button>
+      <button class="nav-btn" onclick="switchTab('vote')">Vote</button>
       <select class="nav-btn" id="tab-sel" autocomplete="off">
         <option id="expand-placeholder">Expand</option>
         <option value="num1" id="theme-toggle">☀️ Light Mode</option>
@@ -857,6 +858,24 @@
       </div>
     </div>
 
+    <div id="vote" class="tab-content">
+      <div class="card">
+        <h2>Vote</h2>
+        <h3>Best fantasy writer</h3>
+        <div class="list-members" id="fantasy"></div>
+        <h3>Best sci-fi writer</h3>
+        <div class="list-members" id="sci-fi"></div>
+        <h3>Most descriptive writer</h3>
+        <div class="list-members" id="descriptive"></div>
+        <h3>Best first-person writer</h3>
+        <div class="list-members" id="first"></div>
+        <h3>Best third-person writer</h3>
+        <div class="list-members" id="third"></div>
+    
+        <button class="action-btn" id="vote-submit-btn" onclick="submitVotes()" style="display:none; margin-top:1rem;">Submit</button>
+      </div>
+    </div>
+
   </main>
 
   <!-- Footer -->
@@ -872,7 +891,7 @@
    <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-auth.js";
-    import { getDatabase, ref, push, onValue, get, set, remove } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
+    import { getDatabase, ref, push, onValue, get, set, remove, runTransaction, update } from "https://www.gstatic.com/firebasejs/12.17.1/firebase-database.js";
     
     var firebaseConfig = {
       apiKey: "AIzaSyD_3RVuR8gKoGlUFT5i1bViGFvHjeJyLxc",
@@ -1480,6 +1499,81 @@
       });
     }
     window.loadMembers = loadMembers;
+
+    var voteCategories = ["fantasy", "sci-fi", "descriptive", "first", "third"];
+    var myCurrentVotes = {};
+    
+    function loadVotingTab() {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      get(ref(db, "votes")).then(function(snapshot) {
+        myCurrentVotes = {};
+    
+        voteCategories.forEach(function(category) {
+          var categorySnapshot = snapshot.child(category).child(user.uid);
+          if (categorySnapshot.exists()) {
+            myCurrentVotes[category] = categorySnapshot.val();
+          }
+        });
+    
+        voteCategories.forEach(function(category) {
+          renderVoteCategory(category);
+        });
+    
+        updateSubmitVisibility();
+      });
+    }
+    window.loadVotingTab = loadVotingTab;
+    
+    function renderVoteCategory(category) {
+      var container = document.getElementById(category);
+      container.innerHTML = "";
+    
+      clubMembers.forEach(function(member) {
+        var btn = document.createElement("button");
+        btn.className = myCurrentVotes[category] === member.uid ? "action-btn" : "secondary-btn";
+        btn.innerText = member.name;
+        btn.onclick = function() {
+          selectVote(category, member.uid);
+        };
+    
+        container.appendChild(btn);
+      });
+    }
+    
+    function selectVote(category, memberUid) {
+      myCurrentVotes[category] = memberUid;
+      renderVoteCategory(category);
+      updateSubmitVisibility();
+    }
+    
+    function updateSubmitVisibility() {
+      var allVoted = voteCategories.every(function(category) {
+        return myCurrentVotes.hasOwnProperty(category);
+      });
+    
+      document.getElementById("vote-submit-btn").style.display = allVoted ? "inline-block" : "none";
+    }
+    
+    function submitVotes() {
+      var user = auth.currentUser;
+      if (!user) {
+        return;
+      }
+    
+      var updates = {};
+      voteCategories.forEach(function(category) {
+        updates["votes/" + category + "/" + user.uid] = myCurrentVotes[category];
+      });
+    
+      update(ref(db), updates).then(function() {
+        switchTab("home");
+      });
+    }
+    window.submitVotes = submitVotes;
     
     // ----- Story Builder -----
     var builderNodes = {};
@@ -1880,6 +1974,9 @@
       }
       if (tabId === "members") {
         loadMembers();
+      }
+      if (tabId === "vote") {
+        loadVotingTab();
       }
     }
 
