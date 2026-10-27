@@ -1532,7 +1532,14 @@
       var container = document.getElementById(category);
       container.innerHTML = "";
     
+      var user = auth.currentUser;
+      var myName = user ? getDisplayName(user.email) : null;
+    
       clubMembers.forEach(function(member) {
+        if (member.name === myName) {
+          return;
+        }
+    
         var btn = document.createElement("button");
         btn.className = myCurrentVotes[category] === member.uid ? "action-btn" : "secondary-btn";
         btn.innerText = member.name;
