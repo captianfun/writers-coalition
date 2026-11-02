@@ -2128,12 +2128,6 @@
 
     // Word Count Tracker
     function initWordCounter() {
-      var textarea = document.getElementById("speedWritingArea");
-      textarea.addEventListener("input", function() {
-        var text = textarea.value.trim();
-        var words = text === "" ? 0 : text.split(/\s+/).length;
-        document.getElementById("wordCountDisplay").innerText = "Word count: " + words;
-      });
     }
 
     // Story Starter Generator Function
