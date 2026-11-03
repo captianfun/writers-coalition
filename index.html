@@ -1937,7 +1937,6 @@
       }
       if (tabId === "messageboard") {
         loadBoardMessages();
-        window.setTimeout(writeMessage, 5000);
         startMessageLoop();
       }
       if (tabId === "home") {
@@ -2469,6 +2468,8 @@
       startHangman();
       restoreExpandOption();
       startWordLadder();
+
+      window.setTimeout(writeMessage, 5000);
     
       document.getElementById("email").addEventListener("keypress", function(e) {
         if (e.key === "Enter") {
