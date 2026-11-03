@@ -1323,6 +1323,8 @@
     }
     
     function loadBoardMessages() {
+      var input = document.getElementById("board-input");
+      if (input.dataset.replyToId) return;
       get(ref(db, "messages")).then(function(snapshot) {
         var allMessages = [];
     
@@ -1897,7 +1899,7 @@
     function startMessageLoop() {
       if (messageLoopInterval) return; // don't start a second loop
       messageLoopInterval = window.setInterval(function () {
-        var tab = document.getElementsByClassName("active")[0];
+        var tab = document.querySelector(".tab-content.active");
         if (!tab || tab.id !== "messageboard") {
           clearInterval(messageLoopInterval);
           messageLoopInterval = null;
