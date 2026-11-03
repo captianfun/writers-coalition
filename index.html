@@ -1050,18 +1050,6 @@
     window.checkRecord = checkRecord;
     
     function loadHomeRecords() {
-      get(ref(db, "records")).then(function(snapshot) {
-        var best = {};
-    
-        snapshot.forEach(function(userNode) {
-          userNode.forEach(function(durationNode) {
-            var minutes = durationNode.key;
-            var val = durationNode.val();
-            if (!best[minutes] || val.words > best[minutes].words) {
-              best[minutes] = val;
-            }
-          });
-        });
     }
     window.loadHomeRecords = loadHomeRecords;
 
