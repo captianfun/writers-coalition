@@ -794,11 +794,12 @@
     
         <button class="secondary-btn" onclick="scrollToTop()" style="margin-top:0.5rem; margin-bottom:0.5rem;">Go to Top ↑</button>
     
-        <div id="board-compose">
-          <textarea id="board-input" placeholder="Type a message..." maxlength="500"></textarea>
-          <button class="action-btn" onclick="postBoardMessage()">Post</button>
-          <p id="board-status" style="font-size:0.85rem; color:#94a3b8;"></p>
-        </div>
+       <div id="board-compose">
+        <textarea id="board-input" placeholder="Type a message..." maxlength="500"></textarea>
+        <button class="action-btn" onclick="postBoardMessage()">Post</button>
+        <button class="secondary-btn" id="cancel-reply-btn" onclick="cancelReply()" style="display:none;">Cancel Reply</button>
+        <p id="board-status" style="font-size:0.85rem; color:#94a3b8;"></p>
+      </div>
       </div>
     </div>
 
@@ -1418,8 +1419,24 @@
       textarea.dataset.replyToId = messageId;
       textarea.value = "@" + name + " ";
       textarea.focus();
+    
+      document.getElementById("cancel-reply-btn").style.display = "inline-block";
     }
     window.replyToMessage = replyToMessage;
+
+    function cancelReply() {
+      var compose = document.getElementById("board-compose");
+      var boardMessages = document.getElementById("board-messages");
+    
+      boardMessages.insertAdjacentElement("afterend", compose);
+    
+      var textarea = document.getElementById("board-input");
+      delete textarea.dataset.replyToId;
+      textarea.value = "";
+    
+      document.getElementById("cancel-reply-btn").style.display = "none";
+    }
+    window.cancelReply = cancelReply;
 
     function loadMembers() {
       get(ref(db, "stats")).then(function(statsSnapshot) {
