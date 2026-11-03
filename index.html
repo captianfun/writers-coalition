@@ -1926,6 +1926,21 @@
       }
     }
 
+    var messageLoopInterval = null;
+    
+    function startMessageLoop() {
+      if (messageLoopInterval) return; // don't start a second loop
+      messageLoopInterval = window.setInterval(function () {
+        var tab = document.getElementsByClassName("active")[0];
+        if (!tab || tab.id !== "messageboard") {
+          clearInterval(messageLoopInterval);
+          messageLoopInterval = null;
+          return;
+        }
+        loadBoardMessages();
+      }, 1000);
+    }
+
     // Navigation function
     function switchTab(tabId) {
       var contents = document.getElementsByClassName("tab-content");
@@ -1955,6 +1970,7 @@
       if (tabId === "messageboard") {
         loadBoardMessages();
         window.setTimeout(writeMessage, 5000);
+        startMessageLoop();
       }
       if (tabId === "home") {
         loadHomeRecords();
