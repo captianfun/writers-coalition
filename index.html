@@ -1062,28 +1062,6 @@
             }
           });
         });
-    
-        var listDiv = document.getElementById("records-list");
-        listDiv.innerHTML = "";
-    
-        var allDurations = ["1", "3", "5"];
-    
-        allDurations.forEach(function(minutes) {
-          var p = document.createElement("p");
-    
-          if (best[minutes]) {
-            var record = best[minutes];
-            p.innerText = "Record for " + minutes + " minute" + (minutes === "1" ? "" : "s") + ": " + record.words + " words (" + record.author + ")";
-          } else {
-            p.innerText = "Record for " + minutes + " minute" + (minutes === "1" ? "" : "s") + ": not set yet";
-            p.style.color = "#64748b";
-          }
-    
-          listDiv.appendChild(p);
-        });
-      }).catch(function(error) {
-        console.log("Records load error:", error.message);
-      });
     }
     window.loadHomeRecords = loadHomeRecords;
 
