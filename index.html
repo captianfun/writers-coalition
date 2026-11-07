@@ -1235,6 +1235,7 @@
     
       var boardDiv = document.getElementById("board-messages");
       boardDiv.insertAdjacentElement("afterend", document.getElementById("board-compose"));
+      document.getElementById("cancel-reply-btn").style.display = "none";
     
       loadBoardMessages();
       window.incrementStat("messagesPosted");
