@@ -59,7 +59,7 @@
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('messageboard')">Chat</button>
       <button class="nav-btn" onclick="switchTab('vote')">Vote</button>
-      <button class="nav-btn" id="stylesw" onclick="function swichStyle() {if (document.getElementById('stylesw').textContent == 'Turn off style') { document.getElementById('stylesh').href='skim.css'; document.getElementById('stylesw').textContent = 'Turn on style'} else {document.getElementById('stylesh').href='writing.css'; document.getElementById('stylesw').textContent = 'Turn off style'} }">Turn off style</button>
+      <button class="nav-btn" id="stylesw" onclick="if (document.getElementById('stylesw').textContent == 'Turn off style') { document.getElementById('stylesh').href='skim.css'; document.getElementById('stylesw').textContent = 'Turn on style'} else {document.getElementById('stylesh').href='writing.css'; document.getElementById('stylesw').textContent = 'Turn off style'}">Turn off style</button>
       <select class="nav-btn" id="tab-sel" autocomplete="off">
         <option id="expand-placeholder">Expand</option>
         <option value="num1" id="theme-toggle">☀️ Light Mode</option>
