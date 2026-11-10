@@ -58,7 +58,6 @@
     <nav>
       <button class="nav-btn active" onclick="switchTab('home')">Home</button>
       <button class="nav-btn" onclick="switchTab('messageboard')">Chat</button>
-      <button class="nav-btn" onclick="switchTab('vote')">Vote</button>
       <button class="nav-btn" id="stylesw" onclick="if (document.getElementById('stylesw').textContent == 'Turn off style') { document.getElementById('stylesh').href='skim.css'; document.getElementById('stylesw').textContent = 'Turn on style'} else {document.getElementById('stylesh').href='writing.css'; document.getElementById('stylesw').textContent = 'Turn off style'}">Turn off style</button>
       <select class="nav-btn" id="tab-sel" autocomplete="off">
         <option id="expand-placeholder">Expand</option>
@@ -351,29 +350,21 @@
         }
         window.incrementStat = incrementStat;
     
-    function getProfileTagline(messagesPosted, hangmanWins, characterCount) {
-      var titles = [];
-    
-      if (characterCount >= 5) {
-        titles.push("Prolific Character Creator");
-      }
-      if (hangmanWins >= 100) {
-        titles.push("Hangman Champion");
-      }
-      if (messagesPosted >= 50) {
-        titles.push("Chatty Club Member");
-      }
-      if (messagesPosted === 0 && hangmanWins === 0 && characterCount === 0) {
-        titles.push("New to the Club");
-      }
-    
-      if (titles.length === 0) {
-        titles.push("Member of The Writers Coalition");
-      }
-    
-      console.log("messagesPosted:", messagesPosted, "hangmanWins:", hangmanWins, "characterCount:", characterCount, "titles:", titles);
-    
-      return titles[Math.floor(Math.random() * titles.length)];
+    function getProfileTagline() {
+        var displayname = getDisplayName(user.email);
+        if (displayname == "Oz") {
+          return "Master Sci-Fi";
+        } else if (displayname == "Teemo") {
+          return "Master of the First-Person";
+        } else if (displayname == "Aokai") {
+          return "The third-person Highness";
+        } else if (displayname == "Aadhya") {
+          return "The fantasy Master";
+        } else if (displayname == "Ned") {
+          return "The descriptive Hurricane";
+        } else {
+          return "Awesome Club Member";
+        }
     }
 
     function loadProfile() {
