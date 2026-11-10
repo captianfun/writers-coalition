@@ -398,7 +398,7 @@
     
         document.getElementById("profile-messages-count").innerText = "Messages posted: " + messagesPosted;
         document.getElementById("profile-hangman-wins").innerText = "Hangman games won: " + hangmanWins;
-        document.getElementById("profile-tagline").innerText = getProfileTagline(messagesPosted, hangmanWins, characterCount);
+        document.getElementById("profile-tagline").innerText = getProfileTagline();
       });
     
       get(ref(db, "characters")).then(function(snapshot) {
