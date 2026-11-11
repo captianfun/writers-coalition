@@ -577,6 +577,11 @@
         }
       });
     }
+
+    function loadPersonal() {
+      loadProfile();
+      loadBoardMessages();
+    }
   
     function handleAuthChange(user) {
       var loginBox = document.getElementById("login-box");
@@ -588,7 +593,7 @@
         applyStoredTheme(user);
         loadHomeRecords();
         loadCharacterGallery();
-        window.onload();
+        loadPersonal();
       } else {
         loginBox.style.display = "block";
         siteContent.style.display = "none";
@@ -1912,8 +1917,6 @@
       startHangman();
       restoreExpandOption();
       startWordLadder();
-      loadProfile();
-      loadBoardMessages();
 
       window.setTimeout(writeMessage, 5000);
     
