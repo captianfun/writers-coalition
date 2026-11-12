@@ -349,8 +349,7 @@
         }
         window.incrementStat = incrementStat;
     
-    function getProfileTagline() {
-        var displayname = getDisplayName(auth.currentUser.email);
+    function getProfileTagline(displayname) {
         if (displayname == "Oz") {
           return "Master Sci-Fi";
         } else if (displayname == "Teemo") {
@@ -397,7 +396,7 @@
     
         document.getElementById("profile-messages-count").innerText = "Messages posted: " + messagesPosted;
         document.getElementById("profile-hangman-wins").innerText = "Hangman games won: " + hangmanWins;
-        document.getElementById("profile-tagline").innerText = getProfileTagline();
+        document.getElementById("profile-tagline").innerText = getProfileTagline(displayName);
       });
     
       get(ref(db, "characters")).then(function(snapshot) {
@@ -881,6 +880,7 @@
     
           var messagesPosted = statsSnapshot.child(uid).child("messagesPosted").exists() ? statsSnapshot.child(uid).child("messagesPosted").val() : 0;
           var hangmanWins = statsSnapshot.child(uid).child("hangmanWins").exists() ? statsSnapshot.child(uid).child("hangmanWins").val() : 0;
+          var ProTitle = getProfileTagline(name);
     
           var card = document.createElement("div");
           card.className = "prompt-box";
@@ -891,6 +891,7 @@
               "<div style='display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; flex-shrink:0;'>" + initial + "</div>" +
               "<div>" +
                 "<strong>" + name + "</strong><br>" +
+                "<span style='font-size:0.95rem; color:#94a3b8; font-weight:bold;'>" + ProTitle + "</span>" +
                 "<span style='font-size:0.85rem; color:#94a3b8;'>" + messagesPosted + " messages · " + hangmanWins + " hangman wins</span>" +
               "</div>" +
             "</div>";
