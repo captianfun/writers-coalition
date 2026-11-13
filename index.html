@@ -303,6 +303,7 @@
         <div id="ai-look">WC</div>
         <p id="prompt-resp"></p>
         <textarea style="resize:vertical;" id="prompt-in"></textarea>
+        <button class="action-btn" id="sub-prompt">Submit</button>
       </div>
     </div>
   </main>
@@ -1738,7 +1739,8 @@
       "hangman": "num4",
       "activities": "num5",
       "profile": "num6",
-      "members": "num7"
+      "members": "num7",
+      "calli": "num8"
     };
     
     tabSel.addEventListener("change", function() {
@@ -1932,6 +1934,10 @@
       }
       getText(topic);
     }
+
+    document.getElementById("sub-prompt").addEventListener("click", function() {
+      getTopic(Aprompt.value);
+    });
 
     var prompts = [
       "Type a message...",
