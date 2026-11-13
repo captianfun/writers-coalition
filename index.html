@@ -1901,7 +1901,7 @@
       }
     }
 
-    var prompt = document.getElementById("prompt-in");
+    var Aprompt = document.getElementById("prompt-in");
     var resp = document.getElementById("prompt-resp");
     function getText(topic) {
       var text = "Sorry, I do not know about this.";
@@ -1910,23 +1910,24 @@
       } else if (topic === "aokai") {
         text = "Aokai is the author of Outcast, World of Cubes 1, 2, and 3, A Needoh Quintet, and more (most of which he dropped and hasn't printed). No offence, Aokai. His most recent book is outcast, which you''ll have to read. That is all. I will see you next time.";
       } else if (topic === "oz") {
-        text = "Oz wrote the first ever book series in the class library, coded this website, is working on the Diary of a Needoh movie series, knows 3D animation, and is currently working on two books at the same time. He's written The pencil Theft, PAWS 1, 2, and 3, Clash of the Gods, A crazy day in the House of Commons, The Dragon, Ninjas and Lightning, Trojan War, and the Diary of a Minecraft Wolf series. He is also president of the Writers Coalition. That is all. I will see you next time.
+        text = "Oz wrote the first ever book series in the class library, coded this website, is working on the Diary of a Needoh movie series, knows 3D animation, and is currently working on two books at the same time. He's written The pencil Theft, PAWS 1, 2, and 3, Clash of the Gods, A crazy day in the House of Commons, The Dragon, Ninjas and Lightning, Trojan War, and the Diary of a Minecraft Wolf series. He is also president of the Writers Coalition. That is all. I will see you next time.";
       } else if (topic === "aadhya") {
-        text - "Aadhya is the author of The Guy series, Air Canada, and more. He's the fantasy expert in the club and is very good at writing. I am quite sorry this report is so short. I can make it longer, but to do that I need personal information, which Aadhya probably won't allow me to give.";
+        text = "Aadhya is the author of The Guy series, Air Canada, and more. He's the fantasy expert in the club and is very good at writing. I am quite sorry this report is so short. I can make it longer, but to do that I need personal information, which Aadhya probably won't allow me to give.";
       }
       resp.textContent = text;
     }
     
     function getTopic(text) {
       resp.textContent = "";
+      text = text.toLowerCase();
       var topic = "sowwy";
-      if (text.includes("teemo")) {
+      if (text.split(/\W+/).includes("teemo")) {
         topic = "teemo";
-      } else if (text.includes("aokai")) {
+      } else if (text.split(/\W+/).includes("aokai")) {
         topic = "aokai";
-      } else if (text.includes("oz")) {
+      } else if (text.split(/\W+/).includes("oz")) {
         topic = "oz";
-      } else if (text.includes("aadhya")) {
+      } else if (text.split(/\W+/).includes("aadhya")) {
         topic = "aadhya";
       }
       getText(topic);
@@ -1969,11 +1970,11 @@
           login();
         }
       });
-      prompt.addEventListener("keypress", function(e) {
+      Aprompt.addEventListener("keypress", function(e) {
         if (e.key === "Enter") {
-          getTopic(prompt.value);
+          getTopic(Aprompt.value);
         }
-      }
+      });
       document.getElementById("password").addEventListener("keypress", function(e) {
         if (e.key === "Enter") {
           login();
