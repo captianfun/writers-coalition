@@ -299,9 +299,9 @@
       <div class="card">
         <h2>Calliope 3</h2>
         <h3>The Writers Coalition AI</h3>
-        <div id="ai-look"></div>
-        <p id="promt-resp"></p>
-        <textarea style="resize:vertical;" id="promt-in"></textarea>
+        <div id="ai-look">WC</div>
+        <p id="prompt-resp"></p>
+        <textarea style="resize:vertical;" id="prompt-in"></textarea>
       </div>
     </div>
   </main>
@@ -1419,8 +1419,7 @@
       { uid: "p8DMUSm5INc4XQTvxpY2o4sa6VV2", name: "Oz" },
       { uid: "ho5ue7eArNe2oyuFyP6zRCmMUKE2", name: "Aadhya" },
       { uid: "SnnnvHXFV2cO6MyfB3rZP3Hi2rG3", name: "Teemo" },
-      { uid: "TVLZ6sPYILaO96bOYfjJvHAVbzz2", name: "Aokai" },
-      { uid: "iDHpeWulhRbjmCGvXrcVOiDv0e83", name: "Ned"}
+      { uid: "TVLZ6sPYILaO96bOYfjJvHAVbzz2", name: "Aokai" }
     ];
     
     // Speed Writing Timer Functions
@@ -1899,6 +1898,37 @@
       }
     }
 
+    var prompt = document.getElementById("prompt-in");
+    var resp = document.getElementById("prompt-resp");
+    function getText(topic) {
+      var text = "Sorry, I do not know about this.";
+      if (topic === "teemo") {
+        text = "Teemo is the writer of the Diary of a Needoh series, Two short stories about Random Stuff, Full Titin Word, and more. His books are so popular that the Diary of a Needoh movie series is in production. That is all. I will see you next time.";
+      } else if (topic === "aokai") {
+        text = "Aokai is the author of Outcast, World of Cubes 1, 2, and 3, A Needoh Quintet, and more (most of which he dropped and hasn't printed). No offence, Aokai. His most recent book is outcast, which you''ll have to read. That is all. I will see you next time.";
+      } else if (topic === "oz") {
+        text = "Oz wrote the first ever book series in the class library, coded this website, is working on the Diary of a Needoh movie series, knows 3D animation, and is currently working on two books at the same time. He's written The pencil Theft, PAWS 1, 2, and 3, Clash of the Gods, A crazy day in the House of Commons, The Dragon, Ninjas and Lightning, Trojan War, and the Diary of a Minecraft Wolf series. He is also president of the Writers Coalition. That is all. I will see you next time.
+      } else if (topic === "aadhya") {
+        text - "Aadhya is the author of The Guy series, Air Canada, and more. He's the fantasy expert in the club and is very good at writing. I am quite sorry this report is so short. I can make it longer, but to do that I need personal information, which Aadhya probably won't allow me to give.";
+      }
+      resp.textContent = text;
+    }
+    
+    function getTopic(text) {
+      resp.textContent = "";
+      var topic = "sowwy";
+      if (text.includes("teemo")) {
+        topic = "teemo";
+      } else if (text.includes("aokai")) {
+        topic = "aokai";
+      } else if (text.includes("oz")) {
+        topic = "oz";
+      } else if (text.includes("aadhya")) {
+        topic = "aadhya";
+      }
+      getText(topic);
+    }
+
     var prompts = [
       "Type a message...",
       "Unleash your creativity...",
@@ -1936,6 +1966,11 @@
           login();
         }
       });
+      prompt.addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+          getTopic(prompt.value);
+        }
+      }
       document.getElementById("password").addEventListener("keypress", function(e) {
         if (e.key === "Enter") {
           login();
