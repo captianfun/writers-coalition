@@ -649,6 +649,82 @@
     }
     window.showAdventureSection = showAdventureSection;
 
+    function getText(topic) {
+      var resp = document.getElementById("prompt-resp");
+      var text = "Sorry, I do not know about this.";
+      if (topic === "teemo") {
+        text = "Teemo is the writer of the Diary of a Needoh series, Two short stories about Random Stuff, Full Titin Word, and more. His books are so popular that the Diary of a Needoh movie series is in production. That is all. I will see you next time.";
+      } else if (topic === "aokai") {
+        text = "Aokai is the author of Outcast, World of Cubes 1, 2, and 3, A Needoh Quintet, and more (most of which he dropped and hasn't printed). No offence, Aokai. His most recent book is outcast, which you''ll have to read. That is all. I will see you next time.";
+      } else if (topic === "oz") {
+        text = "Oz wrote the first ever book series in the class library, coded this website, is working on the Diary of a Needoh movie series, knows 3D animation, and is currently working on two books at the same time. He's written The pencil Theft, PAWS 1, 2, and 3, Clash of the Gods, A crazy day in the House of Commons, The Dragon, Ninjas and Lightning, Trojan War, and the Diary of a Minecraft Wolf series. He is also president of the Writers Coalition. That is all. I will see you next time.";
+      } else if (topic === "aadhya") {
+        text = "Aadhya is the author of The Guy series, Air Canada, and more. He's the fantasy expert in the club and is very good at writing. I am quite sorry this report is so short. I can make it longer, but to do that I need personal information, which Aadhya probably won't allow me to give.";
+      }
+      resp.textContent = text;
+    }
+    
+    function getTopic(text) {
+      var resp = document.getElementById("prompt-resp");
+      resp.textContent = "";
+    
+      var words = text.toLowerCase().split(/\W+/);
+      var topic = "sowwy";
+      if (words.includes("teemo")) {
+        topic = "teemo";
+      } else if (words.includes("aokai")) {
+        topic = "aokai";
+      } else if (words.includes("oz")) {
+        topic = "oz";
+      } else if (words.includes("aadhya")) {
+        topic = "aadhya";
+      }
+    
+      // A club member matched, so answer right away
+      if (topic !== "sowwy") {
+        getText(topic);
+        return;
+      }
+    
+      // Otherwise, check the character library
+      resp.textContent = "Thinking...";
+      findCharacter(text);
+    }
+    window.getTopic = getTopic;
+    
+    function cleanUp(str) {
+      return str.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    }
+    
+    function findCharacter(promptText) {
+      var resp = document.getElementById("prompt-resp");
+      var paddedPrompt = " " + cleanUp(promptText) + " ";
+    
+      get(ref(db, "characters")).then(function(snapshot) {
+        var matches = [];
+    
+        snapshot.forEach(function(child) {
+          var character = child.val();
+          var cleanName = cleanUp(character.name || "");
+          if (cleanName !== "" && paddedPrompt.includes(" " + cleanName + " ")) {
+            matches.push(character);
+          }
+        });
+    
+        if (matches.length === 0) {
+          getText("sowwy");
+          return;
+        }
+    
+        var answers = matches.map(function(c) {
+          return c.name + " (created by " + c.author + "): " + c.info;
+        });
+        resp.innerText = answers.join("\n\n");
+      }).catch(function() {
+        resp.textContent = "Sorry, I couldn't reach the character library right now.";
+      });
+    }
+
     function postBoardMessage() {
       var input = document.getElementById("board-input");
       var text = input.value.trim();
@@ -1905,38 +1981,8 @@
 
     var Aprompt = document.getElementById("prompt-in");
     var resp = document.getElementById("prompt-resp");
-    function getText(topic) {
-      var text = "Sorry, I do not know about this.";
-      if (topic === "teemo") {
-        text = "Teemo is the writer of the Diary of a Needoh series, Two short stories about Random Stuff, Full Titin Word, and more. His books are so popular that the Diary of a Needoh movie series is in production. That is all. I will see you next time.";
-      } else if (topic === "aokai") {
-        text = "Aokai is the author of Outcast, World of Cubes 1, 2, and 3, A Needoh Quintet, and more (most of which he dropped and hasn't printed). No offence, Aokai. His most recent book is outcast, which you''ll have to read. That is all. I will see you next time.";
-      } else if (topic === "oz") {
-        text = "Oz wrote the first ever book series in the class library, coded this website, is working on the Diary of a Needoh movie series, knows 3D animation, and is currently working on two books at the same time. He's written The pencil Theft, PAWS 1, 2, and 3, Clash of the Gods, A crazy day in the House of Commons, The Dragon, Ninjas and Lightning, Trojan War, and the Diary of a Minecraft Wolf series. He is also president of the Writers Coalition. That is all. I will see you next time.";
-      } else if (topic === "aadhya") {
-        text = "Aadhya is the author of The Guy series, Air Canada, and more. He's the fantasy expert in the club and is very good at writing. I am quite sorry this report is so short. I can make it longer, but to do that I need personal information, which Aadhya probably won't allow me to give.";
-      }
-      resp.textContent = text;
-    }
-    
-    function getTopic(text) {
-      resp.textContent = "";
-      text = text.toLowerCase();
-      var topic = "sowwy";
-      if (text.split(/\W+/).includes("teemo")) {
-        topic = "teemo";
-      } else if (text.split(/\W+/).includes("aokai")) {
-        topic = "aokai";
-      } else if (text.split(/\W+/).includes("oz")) {
-        topic = "oz";
-      } else if (text.split(/\W+/).includes("aadhya")) {
-        topic = "aadhya";
-      }
-      getText(topic);
-    }
-
     document.getElementById("sub-prompt").addEventListener("click", function() {
-      getTopic(Aprompt.value);
+      window.getTopic(Aprompt.value);
     });
 
     var prompts = [
@@ -1979,7 +2025,7 @@
       Aprompt.addEventListener("keypress", function(e) {
         if (e.key === "Enter") {
           e.preventDefault();
-          getTopic(Aprompt.value);
+          window.getTopic(Aprompt.value);
         }
       });
       document.getElementById("password").addEventListener("keypress", function(e) {
