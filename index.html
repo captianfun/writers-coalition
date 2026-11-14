@@ -300,6 +300,7 @@
       <div class="card">
         <h2>Calliope 3</h2>
         <h3>The Writers Coalition AI</h3>
+        <ul id="topics-list"></ul>
         <div id="ai-look">WC</div>
         <p id="prompt-resp"></p>
         <textarea style="resize:vertical;" id="prompt-in"></textarea>
@@ -655,13 +656,13 @@
       if (topic === "teemo") {
         text = "Teemo is the writer of the Diary of a Needoh series, Two short stories about Random Stuff, Full Titin Word, and more. His books are so popular that the Diary of a Needoh movie series is in production. That is all. I will see you next time.";
       } else if (topic === "aokai") {
-        text = "Aokai is the author of Outcast, World of Cubes 1, 2, and 3, A Needoh Quintet, and more (most of which he dropped and hasn't printed). No offence, Aokai. His most recent book is outcast, which you''ll have to read. That is all. I will see you next time.";
+        text = "Aokai is the author of Outcast, World of Cubes 1, 2, and 3, A Needoh Quintet, and more (most of which he dropped and hasn't printed). No offence, Aokai. His most recent book is outcast, which you'll have to read. That is all. I will see you next time.";
       } else if (topic === "oz") {
         text = "Oz wrote the first ever book series in the class library, coded this website, is working on the Diary of a Needoh movie series, and knows 3D animation. He's written The pencil Theft, PAWS 1, 2, and 3, Clash of the Gods, A crazy day in the House of Commons, The Dragon, Ninjas and Lightning, Trojan War, and the Diary of a Minecraft Wolf series. He is also president of the Writers Coalition. That is all. I will see you next time.";
       } else if (topic === "aadhya") {
         text = "Aadhya is the author of The Guy series, Air Canada, and more. He's the fantasy expert in the club and is very good at writing. Aadhya likes planes and is from Indian culture. He also likes memes and greek myths. That is all. I will see you next time.";
       } else if (topic === "calli") {
-        text = "*Ghasp* You searched about ME? Thank you! I, Calliope 3, am the WC ai model. I'm named after one of the nine muses from greek myths, Calliope. She was the muse of epic poetry (aka books) so, that is why am named Calliope 3! (The 3 is just to sound cool.) I know about many things. I'm wise! That is all. I will see you next time.";
+        text = "*Gasp* You searched about ME? Thank you! I, Calliope 3, am the WC ai model. I'm named after one of the nine muses from greek myths, Calliope. She was the muse of epic poetry (aka books) so, that is why I am named Calliope 3! (The 3 is just to sound cool.) I know about many things. I'm wise! That is all. I will see you next time.";
       }
       resp.textContent = text;
     }
@@ -695,6 +696,25 @@
       findCharacter(text);
     }
     window.getTopic = getTopic;
+
+    var topics = [
+      "Calliope 3",
+      "Aadhya",
+      "Teemo",
+      "Oz",
+      "Aokai",
+      "Characters that people have made"
+    ];
+
+    function loadTopicsList() {
+      var list = document.getElementById("topics-list");
+      for (var i = 0; i < topics.length; i++) {
+        var li = document.createElement("li");
+        li.textContent = topics[i];
+        list.appendChild(li);
+      }
+    }
+    loadTopicsList();
     
     function cleanUp(str) {
       return str.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
@@ -721,7 +741,7 @@
         }
     
         var answers = matches.map(function(c) {
-          return c.name + " (created by " + c.author + "): " + c.info + " That is all. I will see you next time.";
+          return c.name + " (created by " + c.author + "): " + c.info;
         });
         resp.innerText = answers.join("\n\n");
       }).catch(function() {
