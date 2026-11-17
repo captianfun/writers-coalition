@@ -868,8 +868,13 @@
     
     function loadBoardMessages() {
       var input = document.getElementById("board-input");
-      if (input.dataset.replyToId) return;
+      if (!input || input.dataset.replyToId) return;
+    
       get(ref(db, "messages")).then(function(snapshot) {
+        // Re-check: the user may have clicked Reply while we were waiting
+        var inputNow = document.getElementById("board-input");
+        if (!inputNow || inputNow.dataset.replyToId) return;
+    
         var allMessages = [];
     
         snapshot.forEach(function(userNode) {
