@@ -907,14 +907,17 @@
     
           if (msg.replyToId) {
             wrapper.style.marginLeft = "30px";
-            wrapper.style.borderLeft = "2px solid #7928ca";
+            // Updated reply border from sage/turquoise (#81b29a) to Warm Caramel Brown (#b07d4f)
+            wrapper.style.borderLeft = "2px solid #b07d4f";
             wrapper.style.paddingLeft = "10px";
           }
     
           var msgElement = document.createElement("p");
           var initial = msg.sender.charAt(0).toUpperCase();
-          msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + " (" + msg.sender + ") | " + msg.text + " <span style='color:#64748b; font-size:0.75rem;'>· " + getRelativeTime(msg.time) + "</span>";
-
+          // Updated mini-avatar gradient to warm gold & terracotta (#f2cc8f -> #e07a5f) with dark oak text (#231709)
+          // Updated timestamp text from cool slate (#64748b) to warm parchment muted (#a89f91)
+          msgElement.innerHTML = "<span title='" + msg.sender + "' style='display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:50%; background:linear-gradient(135deg, #f2cc8f, #e07a5f); color:#231709; font-weight:bold; font-size:0.75rem; margin-right:6px; cursor:default;'>" + initial + "</span>" + " (" + msg.sender + ") | " + msg.text + " <span style='color:#a89f91; font-size:0.75rem;'>· " + getRelativeTime(msg.time) + "</span>";
+    
           var replyBtn = document.createElement("button");
           replyBtn.className = "secondary-btn";
           replyBtn.innerText = "Reply";
@@ -924,7 +927,7 @@
           replyBtn.onclick = function() {
             replyToMessage(msg.sender, msg.id, wrapper);
           };
-
+    
           var editBtn = document.createElement("button");
           editBtn.className = "secondary-btn";
           editBtn.innerText = "Edit";
