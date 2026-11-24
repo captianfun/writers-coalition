@@ -283,9 +283,9 @@ margin-bottom: 1rem;
 
 .prompt-box {
 background: #1e130a;
-border-left: 5px solid #b07d4f; / Warm Caramel Brown */
-padding: 1rem;
-border-radius: 0 8px 8px 0;
+border-left: 5px solid #b07d4f; /* Warm Caramel Brown */
+padding: 1.2rem;
+border-radius: 0 8px 8px 0; /* Ensures rounded corners on the right side */
 margin-bottom: 1rem;
 font-size: 1.05rem;
 color: #f4ebd0;
