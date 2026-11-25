@@ -1014,12 +1014,12 @@
     
           var initial = name.charAt(0).toUpperCase();
           card.innerHTML =
-            "<div style='display:flex; align-items:center; gap:10px;'>" +
-              "<div style='display:inline-flex; align-items:center; justify-content:center; width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #00f0ff, #7928ca); color:#0b0d17; font-weight:bold; flex-shrink:0;'>" + initial + "</div>" +
+            "<div class='member-row'>" +
+              "<div class='member-avatar'>" + initial + "</div>" +
               "<div>" +
-                "<strong>" + name + "</strong><br>" +
-                "<span style='font-size:0.95rem; color:#94a3b8; font-weight:bold;'>" + ProTitle + "</span><br>" +
-                "<span style='font-size:0.85rem; color:#94a3b8;'>" + messagesPosted + " messages · " + hangmanWins + " hangman wins</span>" +
+                "<strong class='member-name'>" + name + "</strong><br>" +
+                "<span class='member-title'>" + ProTitle + "</span><br>" +
+                "<span class='member-stats'>" + messagesPosted + " messages · " + hangmanWins + " hangman wins</span>" +
               "</div>" +
             "</div>";
     
@@ -1535,7 +1535,8 @@
     var clubMembers = [
       { uid: "p8DMUSm5INc4XQTvxpY2o4sa6VV2", name: "Oz" },
       { uid: "ho5ue7eArNe2oyuFyP6zRCmMUKE2", name: "Aadhya" },
-      { uid: "SnnnvHXFV2cO6MyfB3rZP3Hi2rG3", name: "Teemo" }
+      { uid: "SnnnvHXFV2cO6MyfB3rZP3Hi2rG3", name: "Teemo" },
+      { uid: "xJMyYbBkSSN7sH1swcazKjYguXa2", name: "Gal" }
     ];
     
     // Speed Writing Timer Functions
