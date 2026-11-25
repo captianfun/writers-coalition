@@ -6,6 +6,31 @@ margin: 0;
 padding: 0;
 }
 
+/* Members Tab */
+.member-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.member-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f2cc8f, #e07a5f); /* same as profile avatar */
+  color: #231709;
+  font-weight: bold;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.member-name  { color: #f2cc8f; }
+.member-title { font-size: 0.95rem; color: #a89f91; font-weight: bold; }
+.member-stats { font-size: 0.85rem; color: #a89f91; }
+
 body {
 background-color: #231709; /* Dark Oak Wood /
 color: #f4ebd0; / Warm Parchment Text /
